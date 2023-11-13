@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                 @id @default(autoincrement())
+  email             String              @unique
+  name              String
+  UserFolder        UserFolder[]
+  CheckIn           CheckIn[]
+  FileStatistic     FileStatistic[]
+  UserFolderRequest UserFolderRequest[]
+
+  @@map("users")
+}
+
+model Folder {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  logo              String
+  files             File[]
+  UserFolder        UserFolder[]
+  UserFolderRequest UserFolderRequest[]
+
+  @@map("folders")
+}
+
+model FolderRole {
+  id         Int          @id @default(autoincrement())
+  name       String
+  UserFolder UserFolder[]
+
+  @@map("folder_roles")
+}
+
+model UserFolder {
+  id             Int        @id @default(autoincrement())
+  user           User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id        Int
+  folder         Folder     @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  folder_id      Int
+  folder_role    FolderRole @relation(fields: [folder_role_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  folder_role_id Int
+
+  @@map("users_folders")
+}
+
+model File {
+  id         Int       @id @default(autoincrement())
+  name       String
+  size       Int
+  path       String
+  extention  String
+  deleted_at DateTime?
+  created_at DateTime  @default(now())
+
+  folder_id     Int
+  Folder        Folder          @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  CheckIn       CheckIn[]
+  FileStatistic FileStatistic[]
+
+  @@map("files")
+}
+
+model CheckIn {
+  id Int @id @default(autoincrement())
+
+  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id Int
+  file    File @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  file_id Int
+
+  @@map("check_in")
+}
+
+model FileStatistic {
+  id Int @id @default(autoincrement())
+
+  text       String
+  created_at DateTime @default(now())
+
+  file    File @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  file_id Int
+  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id Int
+
+  @@map("file_statistics")
+}
+
+model UserFolderRequest {
+  id Int @id @default(autoincrement())
+
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id   Int
+  folder    Folder @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  folder_id Int
+
+  @@map("user_folder_requests")
+}
