@@ -1,43 +1,41 @@
 // src/google-drive/google-drive.service.ts
+import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
+import { InitializeOnPreviewAllowlist } from '@nestjs/core';
+import { Queue } from 'bull';
+import { log } from 'console';
 import { google, drive_v3 } from 'googleapis';
+import { EnvEnum } from 'src/my-config/env-enum';
+import { MyConfigService } from 'src/my-config/my-config.service';
 import { Readable } from 'stream';
+import { CreateFolderProps } from './props/create-folder.props';
 
 @Injectable()
 export class GoogleDriveService {
-  private readonly oAuth2Client: any;
+  private oAuth2Client: any;
+  private drive: any;
+  constructor(private myConfigService: MyConfigService) {
+    this.initializeOAuth2Client();
+  }
 
-  constructor() {
-    // Initialize your OAuth2 client in the constructor
-    const credentials = {
-      installed: {
-        client_id:
-          '1015794938517-i97tc3lltovl802glur19brbsdls9827.apps.googleusercontent.com',
-        client_secret: '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',
-        refresh_token:
-          '1//04ACr_qhgorPNCgYIARAAGAQSNwF-L9Irt2ijx1bCpA-Xi7tPwTJFrO4M3s-ZM3tS7fOU6ezUDREqJv5j4j5BsxQBXrsk1kfLed8',
-        redirect_uris: ['urn:ietf:wg:oauth:2.0:oob', 'http://localhost'],
-      },
-    };
-    const { client_secret, client_id, redirect_uris } = credentials.installed;
+  private async initializeOAuth2Client(): Promise<void> {
     this.oAuth2Client = new google.auth.OAuth2(
-      client_id,
-      client_secret,
-      redirect_uris[0],
+      this.myConfigService.get(EnvEnum.GOOGLE_DRIVE_CLIENT_ID),
+      this.myConfigService.get(EnvEnum.GOOGLE_DRIVE_CLIENT_SECRET),
+      this.myConfigService.get(EnvEnum.GOOGLE_DRIVE_REDIRECT_URL_1),
     );
-    
-    // Set the credentials
     this.oAuth2Client.setCredentials({
-      refresh_token:
-        '1//04ACr_qhgorPNCgYIARAAGAQSNwF-L9Irt2ijx1bCpA-Xi7tPwTJFrO4M3s-ZM3tS7fOU6ezUDREqJv5j4j5BsxQBXrsk1kfLed8',
+      refresh_token: this.myConfigService.get(
+        EnvEnum.GOOGLE_DRIVE_REFRESH_TOKEN,
+      ),
     });
+    this.drive = google.drive({ version: 'v3', auth: this.oAuth2Client });
   }
 
   async uploadFile(file, folder) {
     if (!this.oAuth2Client) {
       throw new Error('OAuth2 client is not initialized.');
     }
-    const drive = google.drive({ version: 'v3', auth: this.oAuth2Client });
 
     // name and location file
     const fileMetadata: drive_v3.Schema$File = {
@@ -58,10 +56,17 @@ export class GoogleDriveService {
 
     try {
       // send to google drive
-      const file = await drive.files.create({
+      const file = await this.drive.files.create({
         requestBody: fileMetadata,
         media: media,
         fields: 'id',
+        parents: [], // Specify parent folder IDs if needed
+        permissions: [
+          {
+            role: 'reader',
+            type: 'anyone',
+          },
+        ],
       });
 
       const fileId = file?.data.id;
@@ -76,11 +81,28 @@ export class GoogleDriveService {
       throw new Error('Failed to upload file to Google Drive.');
     }
   }
-  async updateFilePermissions(fileId: string): Promise<void> {
-    const drive = google.drive({ version: 'v3', auth: this.oAuth2Client });
+  async createFolder({
+    folderName,
+    parentFolderId,
+  }: CreateFolderProps): Promise<string> {
+    const requestBody: any = {
+      name: folderName,
+      mimeType: 'application/vnd.google-apps.folder',
+    };
+    if (this.myConfigService.get(EnvEnum.GOOGLE_DRIVE_NEST_JS_FOLDER)) {
+      requestBody.parents = [parentFolderId];
+    }
 
+    const response = await this.drive.files.create({
+      requestBody,
+    });
+    log(response.data);
+    return response.data.id;
+  }
+  async updateFilePermissions(fileId: string): Promise<void> {
+    return  ;
     try {
-      await drive.permissions.create({
+      await this.drive.permissions.create({
         fileId: fileId,
         requestBody: {
           role: 'reader',
