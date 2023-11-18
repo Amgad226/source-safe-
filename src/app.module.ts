@@ -11,6 +11,7 @@ import { MyConfigService } from './my-config/my-config.service';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/access-auth.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthGuard } from './auth/guards/access-auth.guard';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
+    JwtModule
   ],
   controllers: [AppController, DiskSpaceController],
   providers: [
