@@ -13,7 +13,7 @@ import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class RefreshAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private myConfigService: MyConfigService,
@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),
       });
-      log(this.myConfigService.get(EnvEnum.ACCESS_SECRET), payload);
+      log(this.myConfigService.get(EnvEnum.REFRESH_SECRET), payload);
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request['user'] = payload;

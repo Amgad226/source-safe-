@@ -13,7 +13,7 @@ import { Public } from './decorators/public.decorators';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Public()
+  // @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();
