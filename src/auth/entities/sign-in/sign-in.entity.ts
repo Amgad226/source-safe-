@@ -1,12 +1,11 @@
-import { User } from "../user-entity";
+import { UserEntity } from '../common/user-entity';
+import { TokensEntity } from '../create-token.entity';
 
 export class SignInEntity {
-
-    accessToken: string;
-
-    refreshToken: string;
-
-    user: User;
-
+  tokens: TokensEntity;
+  user: UserEntity;
+  constructor({ user, tokens }) {
+    this.tokens = new TokensEntity(tokens);
+    this.user = new UserEntity(user);
+  }
 }
-

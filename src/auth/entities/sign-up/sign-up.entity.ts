@@ -1,12 +1,7 @@
-import { User } from "../user-entity";
+import { UserEntity } from '../common/user-entity';
+import { TokensEntity } from '../create-token.entity';
 
 export class SignUpEntity {
-
-    accessToken: string;
-
-    refreshToken: string;
-
-    user: User;
-
+  tokens: TokensEntity;
+  user: UserEntity;
 }
-

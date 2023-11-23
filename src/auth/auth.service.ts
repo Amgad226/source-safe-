@@ -15,8 +15,10 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { log } from 'console';
-import { SignInResponse } from './entities/sign-in/sign-in.response';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { SignInEntity } from './entities/sign-in/sign-in.entity';
+import { UserEntity } from './entities/common/user-entity';
+import { TokensEntity } from './entities/create-token.entity';
 @Injectable()
 export class AuthService {
   constructor(
@@ -26,23 +28,20 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async signIn({ email, password }: SignInDto) {
+  async signIn({ email, password }: SignInDto): Promise<SignInEntity> {
     const user = await this.prisma.user.findFirstOrThrow({
       where: {
         email,
       },
     });
+    log(typeof user);
     const isPasswordMatch = await argon.verify(user.password, password);
     if (!isPasswordMatch) {
       throw new HttpException('Wrong credential', 401);
     }
     const payload = { user_id: user.id, user_email: user.email };
     const tokens = await this.createTokens(payload);
-
-    return {
-      user,
-      tokens,
-    };
+    return new SignInEntity({ tokens, user });
   }
 
   async signUp({ email, name, password }: SignUpDto) {

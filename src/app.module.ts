@@ -9,9 +9,10 @@ import { GoogleDriveModule } from './google-drive/google-drive.module';
 import { GoogleDriveService } from './google-drive/google-drive.service';
 import { MyConfigService } from './my-config/my-config.service';
 import { UsersModule } from './users/users.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/access-auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { ResponseInterceptor } from './interceptors/response.interceptor';
 
 @Module({
   imports: [
@@ -35,6 +36,10 @@ import { JwtModule } from '@nestjs/jwt';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    // {
+      // provide: APP_INTERCEPTOR,
+      // useClass: ResponseInterceptor,
+    // },
     AppService,
     GoogleDriveService,
     MyConfigService,
