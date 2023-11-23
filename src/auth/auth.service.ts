@@ -86,6 +86,9 @@ export class AuthService {
     }
   }
 
+  async user() :Promise<UserEntity> {
+    return await this.prisma.user.findFirst(); 
+  }
   private async createTokens(payload) {
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: this.myConfigService.get(EnvEnum.ACCESS_EXPIRE),

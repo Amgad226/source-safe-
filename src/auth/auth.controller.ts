@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   UseInterceptors,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -46,5 +47,12 @@ export class AuthController {
   @Post('token-by-refresh')
   newTokensByRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authService.newTokensByRefresh(refreshTokenDto);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Get('user')
+  user() {
+    return this.authService.user();
   }
 }
