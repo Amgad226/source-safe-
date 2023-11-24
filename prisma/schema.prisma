@@ -14,7 +14,7 @@ model User {
   id                Int                 @id @default(autoincrement())
   email             String              @unique
   name              String
-  password              String
+  password          String
   UserFolder        UserFolder[]
   CheckIn           CheckIn[]
   FileStatistic     FileStatistic[]
@@ -105,4 +105,11 @@ model UserFolderRequest {
   folder_id Int
 
   @@map("user_folder_requests")
+}
+
+model BlackListToken {
+  id    Int    @id @default(autoincrement())
+  token String
+
+  @@map("black_list_tokens")
 }

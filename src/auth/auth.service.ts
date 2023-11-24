@@ -17,6 +17,8 @@ import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
 import { SignUpEntity } from './entities/sign-up/sign-up.entity';
+import { RedisService } from 'src/redis/redis.service';
+import { TokensEntity } from './entities/create-token.entity';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +26,7 @@ export class AuthService {
     private jwtService: JwtService,
     private myConfigService: MyConfigService,
     private prisma: PrismaService,
+    private redis: RedisService,
   ) {}
 
   async signIn({ email, password }: SignInDto): Promise<SignInEntity> {
@@ -65,25 +68,44 @@ export class AuthService {
       user_id: user.id,
       user_email: user.email,
     });
-    // return {
-    // tokens,
-    // user,
-    // } ;
-    //
     return new SignUpEntity({
       tokens,
       user,
     });
   }
-  async newTokensByRefresh({ refresh }: RefreshTokenDto) {
+  async newTokensByRefresh({
+    refresh,
+  }: RefreshTokenDto): Promise<TokensEntity> {
     try {
       const payload = await this.jwtService.verifyAsync(refresh, {
         secret: this.myConfigService.get(EnvEnum.REFRESH_SECRET),
       });
-      log(payload);
-      return await this.createTokens({
+      const tokens = await this.createTokens({
         user_id: payload.user_id,
         user_email: payload.user_email,
+      });
+      return new TokensEntity(tokens);
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
+  async singOut(token) {
+    return await this.singOut(token);
+  }
+  private async storeTokenInBlackList(token): Promise<boolean> {
+    await this.redis.addToBlacklist(token);
+    await this.prisma.blackListToken.create({
+      data: {
+        token,
+      },
+    });
+    return true;
+  }
+
+  private async checkAccessToken(token) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),
       });
     } catch {
       throw new UnauthorizedException();
