@@ -13,6 +13,9 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from '../auth/guards/access-auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { BaseModuleController } from '../base-module/base-module.controller';
+import { RedisService } from 'src/redis/redis.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [
@@ -28,7 +31,8 @@ import { BaseModuleController } from '../base-module/base-module.controller';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
-    JwtModule
+    JwtModule,
+    RedisModule,
   ],
   controllers: [AppController, DiskSpaceController, BaseModuleController],
   providers: [
@@ -39,6 +43,9 @@ import { BaseModuleController } from '../base-module/base-module.controller';
     AppService,
     GoogleDriveService,
     MyConfigService,
+    RedisService,
+    PrismaService,
   ],
+  exports: [RedisService, PrismaService],
 })
 export class AppModule {}

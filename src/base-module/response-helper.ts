@@ -1,11 +1,11 @@
-import { HttpStatusCodeEnum } from './response-status-code.enum';
+import { HttpStatus } from '@nestjs/common';
 import { ResponseInterface } from './response.interface';
 export class GeneralResponse {
   data: any | null;
-  status: HttpStatusCodeEnum;
+  status: HttpStatus;
   message: string;
   public constructor({ data, message, status }: ResponseInterface) {
-    this.status = status ?? HttpStatusCodeEnum.OK;
+    this.status = status ?? HttpStatus.OK;
     this.message = message ?? 'general message';
     this.data = data ?? null;
   }

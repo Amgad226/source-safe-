@@ -1,51 +1,50 @@
 import {
-  Injectable,
-  Dependencies,
-  UnauthorizedException,
   BadRequestException,
+  ForbiddenException,
   HttpException,
+  Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 
-import { UsersService } from '../user/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { MyConfigService } from 'src/my-config/my-config.service';
-import { EnvEnum } from 'src/my-config/env-enum';
 import * as argon from 'argon2';
-import { SignUpDto } from './dto/sign-up.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { SignInDto } from './dto/sign-in.dto';
 import { log } from 'console';
+import { EnvEnum } from 'src/my-config/env-enum';
+import { MyConfigService } from 'src/my-config/my-config.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
-import { UserEntity } from './entities/common/user-entity';
-import { TokensEntity } from './entities/create-token.entity';
-import { UsersEntity } from './entities/common/users-entity';
-import { BaseEntity } from 'src/base-module/base-entity';
+import { SignUpEntity } from './entities/sign-up/sign-up.entity';
+
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
     private myConfigService: MyConfigService,
     private prisma: PrismaService,
   ) {}
 
   async signIn({ email, password }: SignInDto): Promise<SignInEntity> {
-    const user = await this.prisma.user.findFirstOrThrow({
+    const user = await this.prisma.user.findFirst({
       where: {
         email,
       },
     });
+    if (user == null) {
+      throw new BadRequestException('user not found');
+    }
     const isPasswordMatch = await argon.verify(user.password, password);
     if (!isPasswordMatch) {
-      throw new HttpException('Wrong credential', 401);
+      throw new UnauthorizedException('Wrong credential');
     }
     const payload = { user_id: user.id, user_email: user.email };
     const tokens = await this.createTokens(payload);
     return new SignInEntity({ tokens, user });
   }
 
-  async signUp({ email, name, password }: SignUpDto) {
+  async signUp({ email, name, password }: SignUpDto): Promise<SignUpEntity> {
     const userExists = await this.prisma.user.findFirst({
       where: {
         email,
@@ -62,15 +61,19 @@ export class AuthService {
         password: hashedPassword,
       },
     });
-    const { accessToken, refreshToken } = await this.createTokens({
+    const tokens = await this.createTokens({
       user_id: user.id,
       user_email: user.email,
     });
-    return {
-      data: { accessToken, refreshToken, user },
-      message: 'user created successfully',
-      status: 201,
-    };
+    // return {
+    // tokens,
+    // user,
+    // } ;
+    //
+    return new SignUpEntity({
+      tokens,
+      user,
+    });
   }
   async newTokensByRefresh({ refresh }: RefreshTokenDto) {
     try {

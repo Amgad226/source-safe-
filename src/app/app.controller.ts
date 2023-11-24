@@ -1,17 +1,17 @@
-import { Controller, Get, Post, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { AppService } from './app.service';
 import { Public } from '../decorators/public.decorators';
+import { User } from 'src/decorators/user-decorator';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Public()
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getUserByToken(@User() user) {
+    return user;
   }
 
   @Post('/upload')

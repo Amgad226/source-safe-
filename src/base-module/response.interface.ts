@@ -1,7 +1,7 @@
-import { HttpStatusCodeEnum } from './response-status-code.enum';
+import { HttpStatus } from '@nestjs/common';
 
 export class ResponseInterface <T=any>{
   message: string;
-  status: HttpStatusCodeEnum;
+  status: HttpStatus;
   data: T;
 }

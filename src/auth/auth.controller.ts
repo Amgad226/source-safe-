@@ -1,23 +1,18 @@
 import {
   Body,
   Controller,
-  Post,
   HttpCode,
   HttpStatus,
-  UseInterceptors,
-  Get,
+  Post
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/sign-up.dto';
-import { Public } from 'src/decorators/public.decorators';
-import { SignInDto } from './dto/sign-in.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { GeneralResponse } from 'src/base-module/response-helper';
-import { HttpStatusCodeEnum } from 'src/base-module/response-status-code.enum';
-import { ResponseInterface } from 'src/base-module/response.interface';
-import { SignInEntity } from './entities/sign-in/sign-in.entity';
-import { UserEntity } from './entities/common/user-entity';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
+import { ResponseInterface } from 'src/base-module/response.interface';
+import { Public } from 'src/decorators/public.decorators';
+import { AuthService } from './auth.service';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { SignInEntity } from './entities/sign-in/sign-in.entity';
 
 @Controller('auth')
 export class AuthController extends BaseModuleController {
@@ -34,7 +29,7 @@ export class AuthController extends BaseModuleController {
     return this.returnResponse({
       data: await this.authService.signIn(signInDto),
       message: 'from controller ',
-      status: HttpStatusCodeEnum.OK,
+      status: HttpStatus.OK,
     });
   }
 
@@ -51,5 +46,4 @@ export class AuthController extends BaseModuleController {
   newTokensByRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authService.newTokensByRefresh(refreshTokenDto);
   }
-
 }
