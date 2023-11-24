@@ -1,24 +1,21 @@
 import {
   BadRequestException,
-  ForbiddenException,
-  HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
-import { log } from 'console';
 import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RedisService } from 'src/redis/redis.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
+import { TokensEntity } from './entities/create-token.entity';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
 import { SignUpEntity } from './entities/sign-up/sign-up.entity';
-import { RedisService } from 'src/redis/redis.service';
-import { TokensEntity } from './entities/create-token.entity';
 
 @Injectable()
 export class AuthService {
@@ -89,10 +86,10 @@ export class AuthService {
       throw new UnauthorizedException();
     }
   }
-  async singOut(token) {
+  async singOut(token: string) {
     return await this.singOut(token);
   }
-  private async storeTokenInBlackList(token): Promise<boolean> {
+  private async storeTokenInBlackList(token:string): Promise<boolean> {
     await this.redis.addToBlacklist(token);
     await this.prisma.blackListToken.create({
       data: {
@@ -102,7 +99,7 @@ export class AuthService {
     return true;
   }
 
-  private async checkAccessToken(token) {
+  private async checkAccessToken(token:string) {
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),
@@ -112,7 +109,7 @@ export class AuthService {
     }
   }
 
-  private async createTokens(payload) {
+  private async createTokens(payload:any) {
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: this.myConfigService.get(EnvEnum.ACCESS_EXPIRE),
       secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),
