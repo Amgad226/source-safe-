@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { GeneralResponse } from 'src/helpers/response-helper';
-import { HttpStatusCodeEnum } from 'src/helpers/response-status-code.enum';
-import { ResponseInterface } from '../helpers/response.interface';
+import { GeneralResponse } from 'src/base-module/response-helper';
+import { HttpStatusCodeEnum } from 'src/base-module/response-status-code.enum';
+import { ResponseInterface } from '../base-module/response.interface';
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
   intercept(

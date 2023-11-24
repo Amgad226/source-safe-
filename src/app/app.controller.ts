@@ -1,19 +1,14 @@
-import {
-  Controller,
-  Get,
-  Post,
-  UseInterceptors
-} from '@nestjs/common';
+import { Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { AppService } from './app.service';
-import { Public } from './decorators/public.decorators';
+import { Public } from '../decorators/public.decorators';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // @Public()
+  @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();

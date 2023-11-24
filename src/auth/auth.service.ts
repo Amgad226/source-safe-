@@ -6,7 +6,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../user/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { EnvEnum } from 'src/my-config/env-enum';
@@ -19,6 +19,8 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
 import { UserEntity } from './entities/common/user-entity';
 import { TokensEntity } from './entities/create-token.entity';
+import { UsersEntity } from './entities/common/users-entity';
+import { BaseEntity } from 'src/base-module/base-entity';
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,7 +36,6 @@ export class AuthService {
         email,
       },
     });
-    log(typeof user);
     const isPasswordMatch = await argon.verify(user.password, password);
     if (!isPasswordMatch) {
       throw new HttpException('Wrong credential', 401);
@@ -86,9 +87,6 @@ export class AuthService {
     }
   }
 
-  async user() :Promise<UserEntity> {
-    return await this.prisma.user.findFirst(); 
-  }
   private async createTokens(payload) {
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: this.myConfigService.get(EnvEnum.ACCESS_EXPIRE),

@@ -3,16 +3,16 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { DiskSpaceController } from './disk-space.controller';
-import { GoogleDriveModule } from './google-drive/google-drive.module';
-import { GoogleDriveService } from './google-drive/google-drive.service';
-import { MyConfigService } from './my-config/my-config.service';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from '../auth/auth.module';
+import { DiskSpaceController } from '../disk-space.controller';
+import { GoogleDriveModule } from '../google-drive/google-drive.module';
+import { GoogleDriveService } from '../google-drive/google-drive.service';
+import { MyConfigService } from '../my-config/my-config.service';
+import { UsersModule } from '../user/users.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthGuard } from './auth/guards/access-auth.guard';
+import { AuthGuard } from '../auth/guards/access-auth.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { ResponseInterceptor } from './interceptors/response.interceptor';
+import { BaseModuleController } from '../base-module/base-module.controller';
 
 @Module({
   imports: [
@@ -30,16 +30,12 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
     UsersModule,
     JwtModule
   ],
-  controllers: [AppController, DiskSpaceController],
+  controllers: [AppController, DiskSpaceController, BaseModuleController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    // {
-      // provide: APP_INTERCEPTOR,
-      // useClass: ResponseInterceptor,
-    // },
     AppService,
     GoogleDriveService,
     MyConfigService,

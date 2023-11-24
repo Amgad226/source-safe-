@@ -12,15 +12,18 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { Public } from 'src/decorators/public.decorators';
 import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { GeneralResponse } from 'src/helpers/response-helper';
-import { HttpStatusCodeEnum } from 'src/helpers/response-status-code.enum';
-import { ResponseInterface } from 'src/helpers/response.interface';
+import { GeneralResponse } from 'src/base-module/response-helper';
+import { HttpStatusCodeEnum } from 'src/base-module/response-status-code.enum';
+import { ResponseInterface } from 'src/base-module/response.interface';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
-import { returnResponse } from 'src/helpers/response-fuunction';
+import { UserEntity } from './entities/common/user-entity';
+import { BaseModuleController } from 'src/base-module/base-module.controller';
 
 @Controller('auth')
-export class AuthController {
-  constructor(private authService: AuthService) {}
+export class AuthController extends BaseModuleController {
+  constructor(private authService: AuthService) {
+    super();
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)
@@ -28,7 +31,7 @@ export class AuthController {
   async signIn(
     @Body() signInDto: SignInDto,
   ): Promise<ResponseInterface<SignInEntity>> {
-    return returnResponse({
+    return this.returnResponse({
       data: await this.authService.signIn(signInDto),
       message: 'from controller ',
       status: HttpStatusCodeEnum.OK,
@@ -49,10 +52,4 @@ export class AuthController {
     return this.authService.newTokensByRefresh(refreshTokenDto);
   }
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Get('user')
-  user() {
-    return this.authService.user();
-  }
 }

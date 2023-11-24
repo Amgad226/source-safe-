@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { UserEntity } from 'src/auth/entities/common/user-entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   public users: any;
-  constructor() {
+    
+  constructor(private prisma: PrismaService,) {
     this.users = [
       {
         userId: 1,
@@ -16,6 +19,11 @@ export class UsersService {
         password: 'amgad123',
       },
     ];
+  }
+
+  async user() {
+    let usersFromDatabase = await this.prisma.user.findMany();
+    return UserEntity.collect(usersFromDatabase);
   }
 
   async findOne(username) {
