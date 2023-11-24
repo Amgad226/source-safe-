@@ -1,6 +1,7 @@
 // redis.service.ts
 
 import { Injectable } from '@nestjs/common';
+import { log } from 'console';
 import Redis from 'ioredis';
 
 @Injectable()
@@ -19,11 +20,14 @@ export class RedisService {
 
   async addToBlacklist(token: string): Promise<void> {
     // Add the token to the blacklist set
-    await this.redisClient.sadd('blacklist:tokens', token);
+    if (!(await this.isTokenBlacklisted(token))) {
+      await this.redisClient.sadd('blacklist:tokens', token);
+    }
   }
 
   async isTokenBlacklisted(token: string): Promise<boolean> {
     // Check if the token exists in the blacklist set
+    log( (await this.redisClient.sismember('blacklist:tokens', token)) === 1)
     return (await this.redisClient.sismember('blacklist:tokens', token)) === 1;
   }
 }

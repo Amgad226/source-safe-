@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/decorators/public.decorators';
 import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,6 +20,7 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService,
     private myConfigService: MyConfigService,
     private reflector: Reflector,
+    private redis: RedisService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -28,7 +31,6 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -41,6 +43,9 @@ export class AuthGuard implements CanActivate {
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
+    }
+    if ((await this.redis.isTokenBlacklisted(token)) == true) {
+      throw new UnauthorizedException('black list');
     }
     return true;
   }
