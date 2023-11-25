@@ -13,6 +13,7 @@ import { MyConfigService } from 'src/my-config/my-config.service';
 import { GoogleDriveService } from './google-drive.service';
 import { CreateFolderProps } from './props/create-folder.props';
 import { CreateFolderDto } from './dto/create-folder.dto';
+import { Public } from 'src/decorators/public.decorators';
 
 @Controller('google-drive')
 export class GoogleDriveController {
@@ -21,6 +22,7 @@ export class GoogleDriveController {
     private go: GoogleDriveService,
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {}
+  @Public()
   @Post('/upload-drive')
   @UseInterceptors(FileInterceptor('file'))
   async uploadToDrive(@UploadedFile() file: Express.Multer.File) {

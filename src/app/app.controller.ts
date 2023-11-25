@@ -20,7 +20,7 @@ export class AppController {
       storage: diskStorage({
         destination: './upload',
         filename: (req, file, cb) => {
-          cb(null, `${file.originalname} amgad `);
+          cb(null, `${file.originalname} ${Date.now()} `);
         },
       }),
     }),

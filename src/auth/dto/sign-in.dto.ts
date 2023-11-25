@@ -1,8 +1,3 @@
-export class CreateUserDto {
-  readonly name: string;
-  readonly email: string;
-  readonly password: string;
-}
 import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class SignInDto {

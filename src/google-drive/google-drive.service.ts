@@ -1,14 +1,12 @@
 // src/google-drive/google-drive.service.ts
-import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
-import { InitializeOnPreviewAllowlist } from '@nestjs/core';
-import { Queue } from 'bull';
-import { log } from 'console';
-import { google, drive_v3 } from 'googleapis';
+import * as fs from 'fs';
+import { drive_v3, google } from 'googleapis';
 import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { Readable } from 'stream';
-import { CreateFolderProps } from './props/create-folder.props';
+import { CreateFolderProps, FileProps } from './props/create-folder.props';
+import { log } from 'console';
 
 @Injectable()
 export class GoogleDriveService {
@@ -32,53 +30,54 @@ export class GoogleDriveService {
     this.drive = google.drive({ version: 'v3', auth: this.oAuth2Client });
   }
 
-  async uploadFile(file, folder) {
-    if (!this.oAuth2Client) {
-      throw new Error('OAuth2 client is not initialized.');
-    }
+  async uploadFileToDrive({
+    localPath,
+    filename, // the file name with his mime type with timestamp
+    mimetype,
+    folderDriveId,
+    originalname, // the file name with his mime type
+  }: FileProps): Promise<string> {
+    const fileBuffer = fs.readFileSync(localPath);
 
-    // name and location file
-    const fileMetadata: drive_v3.Schema$File = {
-      name: file.originalname,
-      parents: [folder],
+    const fileMetadata = {
+      name: originalname, // Set your desired file name
+      parents: [folderDriveId], // Set the parent folder ID
     };
 
-    // the file info
     const media = {
-      mimeType: file.mimetype,
+      mimeType: mimetype, // Set your file's MIME type\
+
       body: new Readable({
         read() {
-          this.push(Buffer.from(file.buffer));
+          this.push(Buffer.from(fileBuffer.buffer));
           this.push(null);
         },
       }),
     };
 
     try {
-      // send to google drive
+      // Upload the file to Google Drive
       const file = await this.drive.files.create({
         requestBody: fileMetadata,
         media: media,
         fields: 'id',
-        parents: [], // Specify parent folder IDs if needed
-        permissions: [
-          {
-            role: 'reader',
-            type: 'anyone',
-          },
-        ],
       });
 
       const fileId = file?.data.id;
 
-      // update Permission for this file to make it public
+      // Update permissions for the uploaded file to make it public
       await this.updateFilePermissions(fileId);
 
-      // get public link instead of embedded link
-      return this.getShareableLink(fileId);
+      // Get the public link instead of the embedded link
+      const publicLink = await this.getShareableLink(fileId);
+
+      return publicLink;
     } catch (error) {
-      console.error('Error uploading file:', error.message);
-      throw new Error('Failed to upload file to Google Drive.');
+      console.error(
+        'Error uploading local file to Google Drive:',
+        error.message,
+      );
+      throw new Error('Failed to upload local file to Google Drive.');
     }
   }
   async createFolder({
@@ -89,18 +88,14 @@ export class GoogleDriveService {
       name: folderName,
       mimeType: 'application/vnd.google-apps.folder',
     };
-    if (this.myConfigService.get(EnvEnum.GOOGLE_DRIVE_NEST_JS_FOLDER)) {
-      requestBody.parents = [parentFolderId];
-    }
-
-    const response = await this.drive.files.create({
+    requestBody.parents = [parentFolderId];
+    const folderDriveData = await this.drive.files.create({
       requestBody,
     });
-    log(response.data);
-    return response.data.id;
+
+    return folderDriveData.data.id;
   }
-  async updateFilePermissions(fileId: string): Promise<void> {
-    return  ;
+  private async updateFilePermissions(fileId: string): Promise<void> {
     try {
       await this.drive.permissions.create({
         fileId: fileId,
@@ -109,16 +104,12 @@ export class GoogleDriveService {
           type: 'anyone',
         },
       });
-
-      console.log('File permissions updated successfully.');
     } catch (error) {
       console.error('Error updating file permissions:', error.message);
       throw new Error('Failed to update file permissions.');
     }
   }
   private getShareableLink(fileId: string): string {
-    console.log(fileId);
-
     return `https://drive.google.com/uc?id=${fileId}`;
   }
 }

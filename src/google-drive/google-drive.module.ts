@@ -5,6 +5,7 @@ import { MyConfigModule } from 'src/my-config/my-config.module';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { GoogleDriveController } from './google-drive.controller';
 import { GoogleDriveConsumer } from './google-drive.processor';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { GoogleDriveConsumer } from './google-drive.processor';
     }),
     MyConfigModule
   ],
-  providers: [GoogleDriveConsumer,GoogleDriveService],
+  providers: [GoogleDriveConsumer,GoogleDriveService,PrismaService],
   controllers: [GoogleDriveController],
 })
 export class GoogleDriveModule {}

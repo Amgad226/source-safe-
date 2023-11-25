@@ -16,9 +16,12 @@ import { BaseModuleController } from '../base-module/base-module.controller';
 import { RedisService } from 'src/redis/redis.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisModule } from 'src/redis/redis.module';
+import { FolderModule } from 'src/folder/folder.module';
+import { FileModule } from 'src/file/file.module';
 
 @Module({
   imports: [
+
     BullModule.forRootAsync({
       useFactory: () => ({
         redis: {
@@ -33,6 +36,8 @@ import { RedisModule } from 'src/redis/redis.module';
     UsersModule,
     JwtModule,
     RedisModule,
+    FolderModule,
+    FileModule
   ],
   controllers: [AppController, DiskSpaceController, BaseModuleController],
   providers: [

@@ -27,7 +27,6 @@ export class RedisService {
 
   async isTokenBlacklisted(token: string): Promise<boolean> {
     // Check if the token exists in the blacklist set
-    log( (await this.redisClient.sismember('blacklist:tokens', token)) === 1)
     return (await this.redisClient.sismember('blacklist:tokens', token)) === 1;
   }
 }

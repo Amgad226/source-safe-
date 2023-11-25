@@ -26,7 +26,11 @@ model User {
 model Folder {
   id                Int                 @id @default(autoincrement())
   name              String
-  logo              String
+  logo              String?
+  driveFolderID     String?
+  folder_id         Int?
+  parentFolder      Folder?             @relation("ChildFolders", fields: [folder_id], references: [id])
+  childFolders      Folder[]            @relation("ChildFolders")
   files             File[]
   UserFolder        UserFolder[]
   UserFolderRequest UserFolderRequest[]
@@ -55,29 +59,38 @@ model UserFolder {
 }
 
 model File {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
-  size       Int
-  path       String
   extention  String
-  deleted_at DateTime?
-  created_at DateTime  @default(now())
+  created_at DateTime @default(now())
 
   folder_id     Int
   Folder        Folder          @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  CheckIn       CheckIn[]
   FileStatistic FileStatistic[]
 
   @@map("files")
 }
 
+model FileVerion {
+  id         Int       @id @default(autoincrement())
+  path       String
+  name       String
+  size       Int
+  deleted_at DateTime?
+  created_at DateTime  @default(now())
+  CheckIn    CheckIn[]
+
+  @@map("file_verions")
+}
+
 model CheckIn {
   id Int @id @default(autoincrement())
 
-  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id Int
-  file    File @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  file_id Int
+  user           User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id        Int
+  file_verion_id Int
+  file_verion    FileVerion @relation(fields: [file_verion_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  fileVerionId   Int?
 
   @@map("check_in")
 }
