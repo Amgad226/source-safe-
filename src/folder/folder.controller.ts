@@ -19,6 +19,8 @@ import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderService } from './folder.service';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
+import { TokenPayload } from 'src/decorators/user-decorator';
+import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
@@ -45,6 +47,7 @@ export class FolderController extends BaseModuleController {
   async create(
     @Body() { name, parentFolderId }: CreateFolderDto,
     @UploadedFile() logo,
+    @TokenPayload() tokenPayload: TokenPayloadProps,
   ) {
     const parentFolderIdNumber = parentFolderId as number;
 
@@ -68,6 +71,7 @@ export class FolderController extends BaseModuleController {
     const newDbFolder = await this.folderService.create(
       { name, parentFolderId: 1 },
       fileDetails,
+      tokenPayload,
     );
 
     this.googleDriveQueue.add(

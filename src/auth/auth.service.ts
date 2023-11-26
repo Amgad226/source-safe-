@@ -16,6 +16,7 @@ import { TokensEntity } from './entities/create-token.entity';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
 import { SignUpEntity } from './entities/sign-up/sign-up.entity';
 import { BlacklistTokenService } from 'src/blacklist-token/blacklist-token.service';
+import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 
 @Injectable()
 export class AuthService {
@@ -39,8 +40,10 @@ export class AuthService {
     if (!isPasswordMatch) {
       throw new UnauthorizedException('Wrong credential');
     }
-    const payload = { user_id: user.id, user_email: user.email };
-    const tokens = await this.createTokens(payload);
+
+    const tokens = await this.createTokens({
+      user: { id: user.id, email: user.email, name: user.name },
+    });
     return new SignInEntity({ tokens, user });
   }
 
@@ -62,8 +65,7 @@ export class AuthService {
       },
     });
     const tokens = await this.createTokens({
-      user_id: user.id,
-      user_email: user.email,
+      user: { id: user.id, email: user.email, name: user.name },
     });
     return new SignUpEntity({
       tokens,
@@ -78,8 +80,7 @@ export class AuthService {
         secret: this.myConfigService.get(EnvEnum.REFRESH_SECRET),
       });
       const tokens = await this.createTokens({
-        user_id: payload.user_id,
-        user_email: payload.user_email,
+        user: { id: payload.id, email: payload.email, name: payload.name },
       });
       return new TokensEntity(tokens);
     } catch {
@@ -102,7 +103,7 @@ export class AuthService {
     }
   }
 
-  private async createTokens(payload: any) {
+  private async createTokens(payload: TokenPayloadProps) {
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: this.myConfigService.get(EnvEnum.ACCESS_EXPIRE),
       secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),

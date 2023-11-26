@@ -8,6 +8,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FileProps } from 'src/google-drive/props/create-folder.props';
+import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 
 @Injectable()
 export class FolderService {
@@ -22,14 +23,22 @@ export class FolderService {
   async create(
     { name, parentFolderId }: CreateFolderDto,
     fileDetails: FileProps,
+    tokenPayload: TokenPayloadProps,
   ) {
-
     const folder = await this.prisma.folder.create({
       data: {
         logo: fileDetails.filename,
-        // name,
         name,
-        folder_id: parentFolderId,
+        parentFolder: {
+          connect: { id: 1 },
+        },
+      },
+    });
+    await this.prisma.userFolder.create({
+      data: {
+        folder_id: folder.id,
+        folder_role_id: 1, // FIXME must get admin folder role by query
+        user_id: tokenPayload.user.id,
       },
     });
     return folder;
