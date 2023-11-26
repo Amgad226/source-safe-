@@ -10,6 +10,9 @@ async function bootstrap() {
   app.use('/upload', express.static(join(__dirname, '..', 'upload'))); 
 
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
+
   await app.listen(3000);
+
 }
 bootstrap();
