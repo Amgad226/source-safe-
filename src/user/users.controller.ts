@@ -15,6 +15,6 @@ export class UsersController extends BaseModuleController {
   @Get('user')
   async user(): Promise<ResponseInterface<UserEntity>> {
     const user = await this.userService.user();
-    return this.returnResponse({ data: user });
+    return this.successResponse({ data: user });
   }
 }

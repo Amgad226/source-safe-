@@ -1,18 +1,18 @@
-import { Controller } from '@nestjs/common';
-import { GeneralResponse } from 'src/base-module/response-helper';
+import { Controller, HttpStatus } from '@nestjs/common';
 import { ResponseInterface } from 'src/base-module/response.interface';
 
 @Controller('base-module')
 export class BaseModuleController {
-  returnResponse({
-    data,
-    message,
-    status,
-  }: Partial<ResponseInterface<typeof data>>): ResponseInterface<typeof data> {
-    return new GeneralResponse({
+  
+  successResponse({
+    data = null,
+    message = 'general message',
+    status = HttpStatus.OK,
+  }): ResponseInterface<typeof data> {
+    return {
       data,
       message,
       status,
-    });
+    };
   }
 }
