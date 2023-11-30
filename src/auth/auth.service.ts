@@ -121,4 +121,24 @@ export class AuthService {
 
     return { refreshToken, accessToken };
   }
+
+  async accessToken({ email, password }: SignInDto) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (user == null) {
+      throw new BadRequestException('user not found');
+    }
+    const isPasswordMatch = await argon.verify(user.password, password);
+    if (!isPasswordMatch) {
+      throw new UnauthorizedException('Wrong credential');
+    }
+
+    const tokens = await this.createTokens({
+      user: { id: user.id, email: user.email, name: user.name },
+    });
+    return tokens.accessToken;
+  }
 }
