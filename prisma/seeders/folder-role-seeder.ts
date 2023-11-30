@@ -1,16 +1,14 @@
-import { PrismaClient } from '@prisma/client';
-import * as argon from 'argon2';
+import { log } from "console";
 
-const prisma = new PrismaClient();
+export async function folderRoleSeeder(prisma) {
 
-export async function folderRoleSeeder() {
-  prisma.folderRole.create({
+  await prisma.folderRole.create({
     data: {
       name: 'admin',
     },
   });
 
-  prisma.folderRole.create({
+  await  prisma.folderRole.create({
     data: {
       name: 'user',
     },
