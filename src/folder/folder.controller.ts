@@ -3,8 +3,10 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   UploadedFile,
@@ -13,21 +15,18 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
 import { diskStorage } from 'multer';
+import { BaseModuleController } from 'src/base-module/base-module.controller';
+import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayload } from 'src/decorators/user-decorator';
 import { FileProps } from 'src/google-drive/props/create-folder.props';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderService } from './folder.service';
-import { BaseModuleController } from 'src/base-module/base-module.controller';
-import { TokenPayload } from 'src/decorators/user-decorator';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
   constructor(
     private readonly folderService: FolderService,
-    private prisma: PrismaService,
-
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {
     super();
@@ -46,39 +45,42 @@ export class FolderController extends BaseModuleController {
   )
   async create(
     @Body() { name, parentFolderId }: CreateFolderDto,
-    @UploadedFile() logo,
+    @UploadedFile(
+      new ParseFilePipe({
+        fileIsRequired: true,
+        errorHttpStatusCode: 400,
+        validators: [new FileTypeValidator({ fileType: /(jpg|jpeg|png)/ })],
+      }),
+    )
+    logo,
     @TokenPayload() tokenPayload: TokenPayloadProps,
   ) {
-    const parentFolderIdNumber = parentFolderId as number;
-
-    const parentDbFolder = await this.prisma.folder.findFirst({
-      where: {
-        id: 1, //FIXME  must put parentFolderIdNumber
-      },
-    });
-    // return logo;
-    const foldersImagesDriveId = '10NqH9S1H25YWJ9R8qa0Wj0qa5bstiA3_'; // the folders images drive id
     const parentFolderDriveId =
-      parentDbFolder.driveFolderID ?? '1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw'; // if the folder not found store in the root folder
+      await this.folderService.getParentFolderDriveIds(parentFolderId);
 
-    let fileDetails: FileProps = {
-      folderDriveId: foldersImagesDriveId, //  google drive folder id
-      localPath: logo.path, // stored image path in local storage
-      filename: logo.filename, // the file name with his mime type with timestamp
-      mimetype: logo.mimetype, // file mime type
-      originalname: logo.originalname, // the file name with his mime type
+    const foldersImagesDriveId = '10NqH9S1H25YWJ9R8qa0Wj0qa5bstiA3_';
+
+    const fileDetails: FileProps = {
+      folderDriveId: foldersImagesDriveId,
+      localPath: logo.path,
+      filename: logo.filename,
+      mimetype: logo.mimetype,
+      originalname: logo.originalname,
+      DbFileId: null,
     };
+
     const newDbFolder = await this.folderService.create(
-      { name, parentFolderId: 1 },
+      { name, parentFolderIdDb: parentFolderDriveId.DbFolderId },
       fileDetails,
       tokenPayload,
     );
+    fileDetails.DbFileId = newDbFolder.id;
 
     this.googleDriveQueue.add(
       'create-folder',
       {
         folderName: name,
-        parentFolderId: parentFolderDriveId,
+        parentFolderId: parentFolderDriveId.DriveFolderId,
         folderIdDb: newDbFolder.id,
       },
       {
@@ -87,13 +89,12 @@ export class FolderController extends BaseModuleController {
       },
     );
 
-    fileDetails.DbFileId = newDbFolder.id;
     this.googleDriveQueue.add('upload-file', fileDetails, {
       removeOnComplete: true,
       removeOnFail: false,
     });
 
-    return 'file uploaded successfully '; //FIXME - must return general response not string in response
+    return 'file uploaded successfully ';
   }
 
   @Get()
