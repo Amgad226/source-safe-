@@ -5,8 +5,7 @@ export async function folderSeeder(prisma) {
     data: {
       name: 'root folder',
       logo: '',
-      folder_id: null,
-      driveFolderId: '1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw',
+      driveFolderID: '1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw',
     },
   });
 }
