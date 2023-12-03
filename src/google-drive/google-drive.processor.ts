@@ -29,8 +29,8 @@ export class GoogleDriveConsumer {
       where: { id: file.DbFileId },
       data: { logo: link },
     });
-    const imagePath = path.join(__dirname, '../', '../', file.localPath);
-
+    const imagePath = path.join(__dirname, '../', '../','../', file.localPath);
+console.log(imagePath)
     try {
     //   // Check if the file exists before attempting to delete
       await fs.promises.access(imagePath);
