@@ -55,7 +55,11 @@ export class FolderService {
     parentFolderId: number | string,
   ): Promise<{ DriveFolderId: string; DbFolderId: number }> {
     let drive_folderId = '1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw';
-    let DbFolderId = 1;
+    let rootDbFolderId = await this.prisma.folder.findFirst({
+      where: { name: 'root folder', driveFolderID: drive_folderId },
+      select: { id: true },
+    });
+    let DbFolderId = rootDbFolderId.id;
     if (parentFolderId != null) {
       const folder_db = await this.resolveParentFolderId(parentFolderId);
       drive_folderId = folder_db.driveFolderID;
