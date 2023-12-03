@@ -22,6 +22,7 @@ import { FileProps } from 'src/google-drive/props/create-folder.props';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderService } from './folder.service';
+import { ResponseInterface } from 'src/base-module/response.interface';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
@@ -54,7 +55,7 @@ export class FolderController extends BaseModuleController {
     )
     logo,
     @TokenPayload() tokenPayload: TokenPayloadProps,
-  ) {
+  ) : Promise<ResponseInterface>{
     const parentFolderDriveId =
       await this.folderService.getParentFolderDriveIds(parentFolderId);
 
@@ -94,7 +95,10 @@ export class FolderController extends BaseModuleController {
       removeOnFail: false,
     });
 
-    return 'file uploaded successfully ';
+    return this.successResponse({
+      message: 'folder created successfully and will upload it to cloud ',
+      status: 200,
+    });
   }
 
   @Get()
