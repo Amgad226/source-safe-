@@ -11,6 +11,7 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
@@ -23,6 +24,8 @@ import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderService } from './folder.service';
 import { ResponseInterface } from 'src/base-module/response.interface';
+import { ExistsInDatabase } from 'src/validator/a';
+import { Prisma } from '@prisma/client';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
@@ -55,7 +58,7 @@ export class FolderController extends BaseModuleController {
     )
     logo,
     @TokenPayload() tokenPayload: TokenPayloadProps,
-  ) : Promise<ResponseInterface>{
+  ): Promise<ResponseInterface> {
     const parentFolderDriveId =
       await this.folderService.getParentFolderDriveIds(parentFolderId);
 
@@ -102,13 +105,28 @@ export class FolderController extends BaseModuleController {
   }
 
   @Get()
-  async findAll() {
-    return await this.folderService.findAll();
+  async findAll(@TokenPayload() tokenPayload: TokenPayloadProps) {
+    const folders = await this.folderService.findAll(tokenPayload);
+
+    return this.successResponse({
+      message: 'your folders',
+      status: 200,
+      data: folders,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.folderService.findOne(+id);
+  // @UsePipes(ExistsInDatabase('folder')) // Assuming 'folder' is the Prisma entity or table name
+  async findOne(
+    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @Param('id') id: string,
+  ) {
+    const folder = await this.folderService.findOne(+id, tokenPayload);
+    return this.successResponse({
+      message: 'folder info',
+      status: 200,
+      data: folder,
+    });
   }
 
   @Patch(':id')

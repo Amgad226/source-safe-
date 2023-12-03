@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -10,6 +11,7 @@ import { FileProps } from 'src/google-drive/props/create-folder.props';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateFolderDto } from './dto/update-folder.dto';
+import { FolderEntity } from './entities/folder.entity';
 
 @Injectable()
 export class FolderService {
@@ -91,11 +93,38 @@ export class FolderService {
 
     return parentDbFolder;
   }
-  async findAll() {
-    return `This action returns all folder`;
+  async findAll({ user }: TokenPayloadProps) {
+    return FolderEntity.collect(
+      await this.prisma.folder.findMany({
+        where: {
+          UserFolder: {
+            some: {
+              user_id: {
+                equals: user.id,
+              },
+            },
+          },
+        },
+      }),
+    );
   }
 
-  findOne(id: number) {
+  async findOne(id: number, { user }: TokenPayloadProps) {
+    const folder = await this.prisma.folder.findUnique({ where: { id } });
+
+    if (!folder) {
+      throw new NotFoundException(`Folder with ID ${id} not found`);
+    }
+
+    const checkIfHasPermission = await this.prisma.userFolder.findFirst({
+      where: {
+        folder_id: id,
+        user_id: user.id,
+      },
+    });
+    if(checkIfHasPermission==null){
+      throw new ForbiddenException('you cant seed this folder info')
+    }
     return `This action returns a #${id} folder`;
   }
 
