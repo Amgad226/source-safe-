@@ -3,15 +3,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { AppService } from './app.service';
 import { Public } from '../decorators/public.decorators';
-import { User } from 'src/decorators/user-decorator';
+import { TokenPayload } from 'src/decorators/user-decorator';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getUserByToken(@User() user) {
-    return user;
+  getUserByToken(@TokenPayload() tokenPayload) {
+    return tokenPayload;
   }
 
   @Post('/upload')

@@ -47,6 +47,15 @@ export class AuthController extends BaseModuleController {
       status: HttpStatus.CREATED,
     });
   }
+  @Public()
+
+  @Post('access-token')
+  async accessToken(
+    @Body() signUpDto: SignInDto,
+  ){
+    return  await this.authService.accessToken(signUpDto)
+  }
+
 
   @Public()
   @HttpCode(HttpStatus.CREATED)
