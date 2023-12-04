@@ -1,0 +1,1018 @@
+{
+	"info": {
+		"_postman_id": "e4444f22-514c-4266-b65a-fb7d34b7dde1",
+		"name": "nest js",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18446610"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/user/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "sign-in",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/auth/sign-in",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "sign-in",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-in",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"from controller \",\n    \"data\": {\n        \"tokens\": {\n            \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODMwODgxLCJleHAiOjE3MDA5MTcyODF9.YgD_st875whOnF0HfuftUKcug6000_hqoJfa3Ss1bt4\",\n            \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpveExDSjFjMlZ5WDJWdFlXbHNJam9pWVcxbllXUkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3T0RNd09EZ3hMQ0psZUhBaU9qRTNNREE1TVRjeU9ERjkuWWdEX3N0ODc1d2hPbkYwSGZ1ZnRVS2N1ZzYwMDBfaHFvSmZhM1NzMWJ0NCIsImlhdCI6MTcwMDgzMDg4MSwiZXhwIjoxNzAxNDM1NjgxfQ.yFIF-kzZg_rdIAopoN2vM2Tjd-KM2y8eYIVtYD5mArk\"\n        },\n        \"user\": {\n            \"id\": 1,\n            \"email\": \"amgad@gmail.com\",\n            \"name\": \"amgad123\"\n        }\n    }\n}"
+						},
+						{
+							"name": "user not found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-in",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"message\": \"user not found\",\n    \"error\": \"Bad Request\"\n}"
+						},
+						{
+							"name": "wrong password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amdgad123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-in",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Wrong credential\",\n    \"error\": \"Unauthorized\"\n}"
+						}
+					]
+				},
+				{
+					"name": "sign-up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"amgad123@gmail.com\",\r\n    \"password\": \"amgad123\",\r\n    \"name\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/auth/sign-up",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "sign-up",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"amgad@gmail.com\",\r\n    \"password\": \"amgad123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-up",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-up"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"tokens\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1OSwidXNlcl9lbWFpbCI6ImFtZ2FkMTJkZHd3d3d3d3d3d3d3ZDNAZ21haWwuY29tIiwiaWF0IjoxNzAwODMxMTI4LCJleHAiOjE3MDA5MTc1Mjh9._6T8M0RJk1uWP6VNHAcEKsC27FGyPdsACS71QJXhdjU\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1OSwidXNlcl9lbWFpbCI6ImFtZ2FkMTJkZHd3d3d3d3d3d3d3ZDNAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpvMU9Td2lkWE5sY2w5bGJXRnBiQ0k2SW1GdFoyRmtNVEprWkhkM2QzZDNkM2QzZDNkM1pETkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3T0RNeE1USTRMQ0psZUhBaU9qRTNNREE1TVRjMU1qaDkuXzZUOE0wUkprMXVXUDZWTkhBY0VLc0MyN0ZHeVBkc0FDUzcxUUpYaGRqVSIsImlhdCI6MTcwMDgzMTEyOCwiZXhwIjoxNzAxNDM1OTI4fQ.J0yLQfh97BC7PrFjVCERspn90OmKLl7wqhG0npHda-o\"\n    },\n    \"user\": {\n        \"id\": 59,\n        \"email\": \"amgad12ddwwwwwwwwwwwd3@gmail.com\",\n        \"name\": \"new namedd\"\n    }\n}"
+						},
+						{
+							"name": "user already exists",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"amgad@gmail.com\",\r\n    \"password\": \"amgad123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-up",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-up"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"statusCode\": 400,\r\n    \"message\": \"email already exists\",\r\n    \"error\": \"Bad Request\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "get access token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/auth/access-token",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"access-token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get access token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/access-token",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"access-token"
+									]
+								}
+							},
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0MSwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxMzU1NjIwLCJleHAiOjE3MDE0NDIwMjB9.12c_8ZD1ue0WawhHu7GS78DUVBKeK636n-vRk3JpDbU"
+						}
+					]
+				},
+				{
+					"name": "tokens by refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpveExDSjFjMlZ5WDJWdFlXbHNJam9pWVcxbllXUkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3TlRFME5EazJMQ0psZUhBaU9qRTNNREEyTURBNE9UWjkuWGFfd1dtVzk1N1ZkbHVLRHJNX0NGX1lmLWJ3YW5GS255cTEtWjR5djU1YyIsImlhdCI6MTcwMDUxNDQ5NiwiZXhwIjoxNzAxMTE5Mjk2fQ.wkXhzAokT12inRLmlAPHbO2pNduCxwarcsRvdZd-KrY\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/auth/token-by-refresh",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"token-by-refresh"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "tokens by refresh",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpveExDSjFjMlZ5WDJWdFlXbHNJam9pWVcxbllXUkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3TlRFME5EazJMQ0psZUhBaU9qRTNNREEyTURBNE9UWjkuWGFfd1dtVzk1N1ZkbHVLRHJNX0NGX1lmLWJ3YW5GS255cTEtWjR5djU1YyIsImlhdCI6MTcwMDUxNDQ5NiwiZXhwIjoxNzAxMTE5Mjk2fQ.wkXhzAokT12inRLmlAPHbO2pNduCxwarcsRvdZd-KrY\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/token-by-refresh",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"token-by-refresh"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 201,\n    \"message\": \"tokens generated by refresh\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODYwMDM3LCJleHAiOjE3MDA5NDY0Mzd9.2ruJTcj2trq8WGEd4C5F03oxeqe_zOHSHpHvll5Rzuw\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpveExDSjFjMlZ5WDJWdFlXbHNJam9pWVcxbllXUkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3T0RZd01ETTNMQ0psZUhBaU9qRTNNREE1TkRZME16ZDkuMnJ1SlRjajJ0cnE4V0dFZDRDNUYwM294ZXFlX3pPSFNIcEh2bGw1Unp1dyIsImlhdCI6MTcwMDg2MDAzNywiZXhwIjoxNzAxNDY0ODM3fQ.OH3b8cGoF3S5xXMreMguL61kV21pDDafIl6cs86BEsw\"\n    }\n}"
+						},
+						{
+							"name": "refresh expired",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpveExDSjFjMlZ5WDJWdFlXbHNJam9pWVcxbllXUkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3TlRFME5EazJMQ0psZUhBaU9qRTNNREEyTURBNE9UWjkuWGFfd1dtVzk1N1ZkbHVLRHJNX0NGX1lmLWJ3YW5GS255cTEtWjR5djU1YyIsImlhdCI6MTcwMDUxNDQ5NiwiZXhwIjoxNzAxMTE5Mjk2fQ.wkXhzAokT12inRLmlAPHbO2pNduCxwarcsRvdZd-KrY\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/token-by-refresh",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"token-by-refresh"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Unauthorized\"\n}"
+						},
+						{
+							"name": "bad",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiYWNjZXNzVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYMmxrSWpveExDSjFjMlZ5WDJWdFlXbHNJam9pWVcxbllXUkFaMjFoYVd3dVkyOXRJaXdpYVdGMElqb3hOekF3TlRFME5EazJMQ0psZUhBaU9qRTNNREEyTURBNE9UWjkuWGFfd1dtVzk1N1ZkbHVLRHJNX0NGX1lmLWJ3YW5GS255cTEtWjR5djU1YyIsImlhdCI6MTcwMDUxNDQ5NiwiZXhwIjoxNzAxMTE5Mjk2fQ.wkXhzAokT12inRLmlAPHbO2pNduCxwarcsRvdZd-KrY\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/token-by-refresh",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"token-by-refresh"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"message\": [\n        \"refresh must be a string\",\n        \"refresh should not be empty\"\n    ],\n    \"error\": \"Bad Request\"\n}"
+						}
+					]
+				},
+				{
+					"name": "sign out",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODU1MTUwLCJleHAiOjE3MDA5NDE1NTB9.Is_GTM7M1sAqn2d0uH637G6vWEDmZOF-Cv4AGrNWM24",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/auth/sign-out",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"sign-out"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "sign out",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-out",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-out"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"logout successfully\",\n    \"data\": true\n}"
+						},
+						{
+							"name": "sign out",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3000/auth/sign-out",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"sign-out"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"black list\",\n    \"error\": \"Unauthorized\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Folder",
+			"item": [
+				{
+					"name": "get folders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/folder",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"folder"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get folders",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:3000/folder",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"folder"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 16,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1pIB6d5zF0pbOKFkhq4FSoXgYZdEfCEj6\"\n        },\n        {\n            \"id\": 17,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1YzSyg1meAr3RnY2Pnj7yThEV31Pr2j92\"\n        },\n        {\n            \"id\": 18,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1mxiA8ipKQTKExCb_BPCq9uKF5bftmWpJ\"\n        },\n        {\n            \"id\": 19,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1HHme0IQMR-MOSHdtyNNeQ--2y0VBNdaA\"\n        },\n        {\n            \"id\": 20,\n            \"folder_id\": 10,\n            \"name\": \"amgad folder to reomve\",\n            \"logo\": \"https://drive.google.com/uc?id=1gOkr6sk5QcGZi_1R2Pm5fSoujLttGBev\"\n        }\n    ],\n    \"message\": \"your folders\",\n    \"status\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "create folder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODYxODI1LCJleHAiOjE3MDA5NDgyMjV9.T33bNLiyHrMGryFvFL3s7TJmR7Qmqo306O6hwfJPWSs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "folder name",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/C:/Users/ASUS/Pictures/Screenshot 2022-10-07 154428.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/folder",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"folder"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create folder",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "folder name",
+											"type": "text"
+										},
+										{
+											"key": "logo",
+											"type": "file",
+											"src": "/C:/Users/ASUS/Pictures/Screenshot 2022-10-07 154428.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3000/folder",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3000",
+									"path": [
+										"folder"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": null,\n    \"message\": \"folder created successfully and will upload it to cloud \",\n    \"status\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "get folder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/folder/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"folder",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete folder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/folder/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"folder",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/upload file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/ASUS/Pictures/360_F_509351710_XXexdkdaFVAwGtZM2YCLAz1JEa2i080m.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/upload",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/upload file Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/upload-drive",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"upload-drive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user inside token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODMzNTg0LCJleHAiOjE3MDA5MTk5ODR9.Y2NuHdzt7SCNvrwRXyO8n0wtlrAmrVhut5FZ23BaynU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get access token Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/auth/access-token",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"access-token"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get access token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/auth/access-token",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"access-token"
+							]
+						}
+					},
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0MSwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxMzU1NjIwLCJleHAiOjE3MDE0NDIwMjB9.12c_8ZD1ue0WawhHu7GS78DUVBKeK636n-vRk3JpDbU"
+				}
+			]
+		}
+	]
+}
