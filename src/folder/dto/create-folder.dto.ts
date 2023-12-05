@@ -10,7 +10,7 @@ export class CreateFolderDto {
   name: string;
 
   // @IsNotEmpty()
-  readonly file: Express.Multer.File;
+  readonly logo: Express.Multer.File;
 
   @IsOptional()
   @Transform(({ value }) => {
