@@ -9,6 +9,8 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "scripts": {
+    "db":"docker compose --file=docker-compose-db.yaml up -d",
+    "docker":"docker compose up -d",
     "dev": "nest start --watch",
     "build": "nest build",
     "seed": " npx prisma db seed ",
