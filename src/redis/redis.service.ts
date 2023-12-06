@@ -3,15 +3,17 @@
 import { Injectable } from '@nestjs/common';
 import { log } from 'console';
 import Redis from 'ioredis';
+import { EnvEnum } from 'src/my-config/env-enum';
+import { MyConfigService } from 'src/my-config/my-config.service';
 
 @Injectable()
 export class RedisService {
   private readonly redisClient: Redis;
 
-  constructor() {
+  constructor(private myConfigService: MyConfigService) {
     // Create a Redis client with default configuration
     this.redisClient = new Redis({
-      host: 'localhost',
+      host: myConfigService.get(EnvEnum.REDIS_HOST),
       port: 6379,
       db: 1,
       name: 'blacklist-tokens',
