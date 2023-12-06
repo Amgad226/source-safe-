@@ -13,6 +13,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderEntity } from './entities/folder.entity';
 import { AddUsersDto } from './dto/add-users.dto';
+import { log } from 'console';
 
 @Injectable()
 export class FolderService {
@@ -130,16 +131,6 @@ export class FolderService {
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {
-    const folder = await this.prisma.folder.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!folder) {
-      throw new NotFoundException('Folder not found');
-    }
-
     await this.prisma.userFolder.deleteMany({
       where: {
         folder_id: id,
@@ -160,18 +151,55 @@ export class FolderService {
     }
 
     // Create userFolder entries for the specified users_ids
-    const userFolderData = users_ids.map((user_id) => ({
-      folder_id: id,
-      user_id,
-      folder_role_id: folder_user_role.id,
-    }));
+    const userFolderData = await Promise.all(
+      users_ids.map(async (user_id) => {
+        log(id,user_id)
+        const userFolderExist = await this.prisma.userFolder.findFirst({
+          where: {
+            folder_id: id,
+            user_id,
+          },
+          select: {
+            id: true,
+          },
+        });
+        log(userFolderExist)
+        if (userFolderExist) {
+          return null;
+        }
 
-    await this.prisma.userFolder.createMany({
-      data: userFolderData,
-    });
+        const userFolderRequestExist =
+          await this.prisma.userFolderRequest.findFirst({
+            where: {
+              folder_id: id,
+              user_id,
+            },
+            select: {
+              id: true,
+            },
+          });
+        log(userFolderRequestExist)
+
+        if (userFolderRequestExist) {
+          return null;
+        }
+        return {
+          folder_id: id,
+          user_id,
+        };
+      }),
+    );
+
+    // Filter out null values
+    const filteredUserFolderData = userFolderData.filter(Boolean);
+
+    // Now, filteredUserFolderData contains the desired result
+
+    log(userFolderData);
+    return (await this.prisma.userFolderRequest.createMany({
+      data: filteredUserFolderData
+    })).count;
   }
-
-
 
   update(id: number, updateFolderDto: UpdateFolderDto) {
     return `This action updates a #${id} folder`;

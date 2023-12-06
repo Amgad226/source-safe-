@@ -136,9 +136,9 @@ export class FolderController extends BaseModuleController {
     @Param('id') id: number,
     @Body() addUsersDto: AddUsersDto,
   ): Promise<ResponseInterface> {
+    const request_users_count = await this.folderService.addUsers(+id, addUsersDto);
     return this.successResponse({
-      message: 'users added to folder successfully',
-      data: await this.folderService.addUsers(+id, addUsersDto),
+      message: `${request_users_count} users added to request folder successfully`,
       status: 201,
     });
   }
