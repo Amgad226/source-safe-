@@ -21,6 +21,51 @@ services:
     volumes:
       - redis_data:/data
 
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:debug
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://my_user:my_password@postgres:5432/my_database?schema=public
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
+      - ACCESS_SECRET=amgadwattariskingalkinoog
+      - REFRESH_SECRET=amgadwattariskingalkinoog
+      - REFRESH_EXPIRE=7d
+      - GOOGLE_DRIVE_NEST_JS_FOLDER=1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw
+      - GOOGLE_DRIVE_NEST_JS_FOLDERS_IMAGES_ID=10NqH9S1H25YWJ9R8qa0Wj0qa5bstiA3_
+      - GOOGLE_DRIVE_CLIENT_ID=1015794938517-i97tc3lltovl802glur19brbsdls9827.apps.googleusercontent.com
+      - GOOGLE_DRIVE_CLIENT_SECRET=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
+      - GOOGLE_DRIVE_REFRESH_TOKEN=1//04ACr_qhgorPNCgYIARAAGAQSNwF-L9Irt2ijx1bCpA-Xi7tPwTJFrO4M3s-ZM3tS7fOU6ezUDREqJv5j4j5BsxQBXrsk1kfLed8
+      - GOOGLE_DRIVE_REDIRECT_URL_1=urn:ietf:wg:oauth:2.0:oob
+      - GOOGLE_DRIVE_REDIRECT_URL_2=http://localhost
+
+    ports:
+      - "3000"
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - postgres
+      - redis
+      - api
+    ports:
+      - "80:80"
+
 volumes:
   redis_data:
   postgres_data:
+
+
+networks:
+  your_network_name:
+    driver: bridge
