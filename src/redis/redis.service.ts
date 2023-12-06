@@ -10,10 +10,10 @@ import { MyConfigService } from 'src/my-config/my-config.service';
 export class RedisService {
   private readonly redisClient: Redis;
 
-  constructor(private myConfigService: MyConfigService) {
+  constructor() {
     // Create a Redis client with default configuration
     this.redisClient = new Redis({
-      host: myConfigService.get(EnvEnum.REDIS_HOST),
+      host: 'localhost',
       port: 6379,
       db: 1,
       name: 'blacklist-tokens',

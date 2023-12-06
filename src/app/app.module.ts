@@ -1,5 +1,5 @@
 import { BullModule } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,17 +19,21 @@ import { RedisModule } from 'src/redis/redis.module';
 import { FolderModule } from 'src/folder/folder.module';
 import { FileModule } from 'src/file/file.module';
 import { EnvEnum } from 'src/my-config/env-enum';
+import { MyConfigModule } from 'src/my-config/my-config.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     BullModule.forRootAsync({
-      useFactory: async (myConfigService: MyConfigService) => ({
+      useFactory:  () => ({
         redis: {
-          host: myConfigService.get(EnvEnum.REDIS_HOST) ?? 'redis_container',
+          host:  'localhost',
           port:  6379,
         },
       }),
-      inject: [MyConfigService],
     }),
     GoogleDriveModule,
     ConfigModule.forRoot({ isGlobal: true }),
