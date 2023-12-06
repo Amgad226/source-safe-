@@ -12,21 +12,64 @@
 				{
 					"name": "get user",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0OSwiZW1haWwiOiJhbWdhZDEyM0BnbWFpbC5jb20iLCJuYW1lIjoiMSJ9LCJpYXQiOjE3MDE4OTU4NzMsImV4cCI6MTcwMjUwMDY3M30.56QIOdxIl5lMGpRAjEfYQKSmf9pOf452wpFFltlHfbY",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3000/user/user",
-							"protocol": "http",
+							"raw": "{{url}}/user/folder-requests",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"user",
-								"user"
+								"folder-requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reject join folder:folder_user_request_id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/reject-join-folder/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"reject-join-folder",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "accept join folder:folder_user_request_id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/accept-join-folder/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"accept-join-folder",
+								"1"
 							]
 						}
 					},
@@ -54,7 +97,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+							"raw": "{\r\n    \"email\":\"amgad123@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -62,15 +105,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/auth/sign-in",
-							"protocol": "http",
+							"raw": "{{url}}/auth/sign-in",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"sign-in"
@@ -206,15 +244,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/auth/sign-up",
-							"protocol": "http",
+							"raw": "{{url}}/auth/sign-up",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"sign-up"
@@ -325,15 +358,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/auth/access-token",
-							"protocol": "http",
+							"raw": "{{url}}/auth/access-token",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"access-token"
@@ -401,15 +429,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/auth/token-by-refresh",
-							"protocol": "http",
+							"raw": "{{url}}/auth/token-by-refresh",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"token-by-refresh"
@@ -556,7 +579,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODU1MTUwLCJleHAiOjE3MDA5NDE1NTB9.Is_GTM7M1sAqn2d0uH637G6vWEDmZOF-Cv4AGrNWM24",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0OSwiZW1haWwiOiJhbWdhZDEyM0BnbWFpbC5jb20iLCJuYW1lIjoiMSJ9LCJpYXQiOjE3MDE4OTIyMDIsImV4cCI6MTcwMTk3ODYwMn0.3POW0eqI5qmlT7KjtMovUcllcC3rQD1YhMEImTZ71RA",
 									"type": "string"
 								}
 							]
@@ -564,15 +587,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3000/auth/sign-out",
-							"protocol": "http",
+							"raw": "{{url}}/auth/sign-out",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"auth",
 								"sign-out"
@@ -719,7 +737,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODYxODI1LCJleHAiOjE3MDA5NDgyMjV9.T33bNLiyHrMGryFvFL3s7TJmR7Qmqo306O6hwfJPWSs",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0OSwiZW1haWwiOiJhbWdhZDEyM0BnbWFpbC5jb20iLCJuYW1lIjoiMSJ9LCJpYXQiOjE3MDE4OTM5MDEsImV4cCI6MTcwMjQ5ODcwMX0.9Eon6OeVBb364PhRJ7q5UdP-57nWtDyAm1Rkb6_CzY0",
 									"type": "string"
 								}
 							]
@@ -731,26 +749,33 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "folder name",
+									"value": "amgad folder to reomve",
 									"type": "text"
 								},
 								{
 									"key": "logo",
 									"type": "file",
-									"src": "/C:/Users/ASUS/Pictures/Screenshot 2022-10-07 154428.png"
+									"src": "/C:/Users/ASUS/Pictures/EDIT_copy.jpg"
+								},
+								{
+									"key": "parentFolderId",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "logo",
+									"value": "d",
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/folder",
-							"protocol": "http",
+							"raw": "{{url}}/folder",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"folder"
 							]
@@ -831,27 +856,199 @@
 					"response": []
 				},
 				{
-					"name": "delete folder",
+					"name": "add users to folder",
 					"request": {
-						"method": "DELETE",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0OSwiZW1haWwiOiJhbWdhZDEyM0BnbWFpbC5jb20iLCJuYW1lIjoiMSJ9LCJpYXQiOjE3MDE4OTU4NzMsImV4cCI6MTcwMjUwMDY3M30.56QIOdxIl5lMGpRAjEfYQKSmf9pOf452wpFFltlHfbY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"users_ids\":[47 ,48]\r\n}\r\n//// if you send user id that already joined to folder or already have request to folder i will ignore it ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/folder/1",
-							"protocol": "http",
+							"raw": "{{url}}/folder/10/add-users",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
 								"folder",
-								"1"
+								"10",
+								"add-users"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "add users to folder",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"users_ids\":[47]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/folder/10/add-users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"10",
+										"add-users"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": null,\n    \"message\": \"0 users added to request folder successfully\",\n    \"status\": 201\n}\n// if you send user id that already joined to folder or already have request to folder i will ignore it "
+						},
+						{
+							"name": "folder not found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"users_ids\":[47]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/folder/122220/add-users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"122220",
+										"add-users"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"Folder not found\",\r\n    \"error\": \"Not Found\"\r\n}"
+						},
+						{
+							"name": "user in array not found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"users_ids\":[417]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/folder/10/add-users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"10",
+										"add-users"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Number of not founded users in the users_ids array is 1\",\n    \"error\": \"Not Found\"\n}"
+						},
+						{
+							"name": "send string in array",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"users_ids\":[427, \"das\"]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/folder/10/add-users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"10",
+										"add-users"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"message\": \"Invalid user ID(s) in the array\",\n    \"error\": \"Bad Request\"\n}"
+						}
+					]
 				}
 			]
 		},
@@ -871,15 +1068,10 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:3000/upload",
-					"protocol": "http",
+					"raw": "{{url}}/upload",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"{{url}}"
 					],
-					"port": "3000",
 					"path": [
 						"upload"
 					]
@@ -893,15 +1085,10 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:3000/upload-drive",
-					"protocol": "http",
+					"raw": "{{url}}/upload-drive",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"{{url}}"
 					],
-					"port": "3000",
 					"path": [
 						"upload-drive"
 					]
@@ -925,15 +1112,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:3000",
-					"protocol": "http",
+					"raw": "{{url}}",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "3000"
+						"{{url}}"
+					]
 				}
 			},
 			"response": []
@@ -945,7 +1127,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+					"raw": "{\r\n    \"email\":\"amgad123@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -953,15 +1135,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:3000/auth/access-token",
-					"protocol": "http",
+					"raw": "{{url}}/auth/access-token",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"{{url}}"
 					],
-					"port": "3000",
 					"path": [
 						"auth",
 						"access-token"
@@ -1013,6 +1190,20 @@
 					"body": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0MSwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxMzU1NjIwLCJleHAiOjE3MDE0NDIwMjB9.12c_8ZD1ue0WawhHu7GS78DUVBKeK636n-vRk3JpDbU"
 				}
 			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
