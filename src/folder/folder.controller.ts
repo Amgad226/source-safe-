@@ -9,6 +9,7 @@ import {
   ParseFilePipe,
   Patch,
   Post,
+  Put,
   UploadedFile,
   UseInterceptors,
   UsePipes,
@@ -26,6 +27,7 @@ import { FolderService } from './folder.service';
 import { ResponseInterface } from 'src/base-module/response.interface';
 import { ExistsInDatabase } from 'src/validator/a';
 import { Prisma } from '@prisma/client';
+import { AddUsersDto } from './dto/add-users.dto';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
@@ -129,13 +131,15 @@ export class FolderController extends BaseModuleController {
     });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFolderDto: UpdateFolderDto) {
-    return this.folderService.update(+id, updateFolderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.folderService.remove(+id);
+  @Put(':id/add-users')
+  async addUsers(
+    @Param('id') id: number,
+    @Body() addUsersDto: AddUsersDto,
+  ): Promise<ResponseInterface> {
+    return this.successResponse({
+      message: 'users added to folder successfully',
+      data: await this.folderService.addUsers(+id, addUsersDto),
+      status: 201,
+    });
   }
 }

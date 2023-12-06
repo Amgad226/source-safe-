@@ -12,6 +12,7 @@ import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderEntity } from './entities/folder.entity';
+import { AddUsersDto } from './dto/add-users.dto';
 
 @Injectable()
 export class FolderService {
@@ -122,11 +123,55 @@ export class FolderService {
         user_id: user.id,
       },
     });
-    if(checkIfHasPermission==null){
-      throw new ForbiddenException('you cant seed this folder info')
+    if (checkIfHasPermission == null) {
+      throw new ForbiddenException('you cant seed this folder info');
     }
     return `This action returns a #${id} folder`;
   }
+
+  async addUsers(id: number, { users_ids }: AddUsersDto) {
+    const folder = await this.prisma.folder.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!folder) {
+      throw new NotFoundException('Folder not found');
+    }
+
+    await this.prisma.userFolder.deleteMany({
+      where: {
+        folder_id: id,
+      },
+    });
+
+    const folder_user_role = await this.prisma.folderRole.findFirst({
+      where: {
+        name: 'user',
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!folder_user_role) {
+      throw new NotFoundException('Folder role "user" not found');
+    }
+
+    // Create userFolder entries for the specified users_ids
+    const userFolderData = users_ids.map((user_id) => ({
+      folder_id: id,
+      user_id,
+      folder_role_id: folder_user_role.id,
+    }));
+
+    await this.prisma.userFolder.createMany({
+      data: userFolderData,
+    });
+  }
+
+
 
   update(id: number, updateFolderDto: UpdateFolderDto) {
     return `This action updates a #${id} folder`;
