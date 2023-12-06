@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
-import * as argon from 'argon2';
 import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -36,7 +35,7 @@ export class AuthService {
     if (user == null) {
       throw new BadRequestException('user not found');
     }
-    const isPasswordMatch = await argon.verify(user.password, password);
+    const isPasswordMatch = user.password ==password;
     if (!isPasswordMatch) {
       throw new UnauthorizedException('Wrong credential');
     }
@@ -56,7 +55,7 @@ export class AuthService {
     if (userExists != null) {
       throw new BadRequestException('email already exists');
     }
-    const hashedPassword = await argon.hash(password);
+    const hashedPassword = password;
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -131,7 +130,7 @@ export class AuthService {
     if (user == null) {
       throw new BadRequestException('user not found');
     }
-    const isPasswordMatch = await argon.verify(user.password, password);
+    const isPasswordMatch =user.password== password;
     if (!isPasswordMatch) {
       throw new UnauthorizedException('Wrong credential');
     }

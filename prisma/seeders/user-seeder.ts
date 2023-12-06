@@ -1,4 +1,3 @@
-import * as argon from 'argon2';
 
 export async function userSeeder(prisma) {
   const amgad = await prisma.user.upsert({
@@ -7,7 +6,7 @@ export async function userSeeder(prisma) {
     create: {
       email: 'amgad@gmail.com',
       name: 'amgad alwattar',
-      password: await argon.hash('amgad123'),
+      password: 'amgad123',
     },
   });
   const ayham = await prisma.user.upsert({
@@ -16,7 +15,7 @@ export async function userSeeder(prisma) {
     create: {
       email: 'ayham@gmail.com',
       name: 'ayham hammami',
-      password: await argon.hash('amgad123'),
+      password: 'amgad123',
     },
   });
 }
