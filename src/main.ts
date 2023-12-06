@@ -4,15 +4,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 import * as express from 'express'; // Import express module
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use('/upload', express.static(join(__dirname, '..', 'upload'))); 
+  app.use('/upload', express.static(join(__dirname, '..', 'upload')));
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 
-  await app.listen(3000);
-
+  await app.listen(5000);
 }
 bootstrap();

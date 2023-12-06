@@ -79,7 +79,7 @@ export class AuthService {
         secret: this.myConfigService.get(EnvEnum.REFRESH_SECRET),
       });
       const tokens = await this.createTokens({
-        user: { id: payload.id, email: payload.email, name: payload.name },
+        user: payload.user,
       });
       return new TokensEntity(tokens);
     } catch {
