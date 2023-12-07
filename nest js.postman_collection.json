@@ -1,82 +1,11 @@
 {
 	"info": {
 		"_postman_id": "e4444f22-514c-4266-b65a-fb7d34b7dde1",
-		"name": "nest js",
+		"name": "source safe",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18446610"
 	},
 	"item": [
-		{
-			"name": "user",
-			"item": [
-				{
-					"name": "get user",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0OSwiZW1haWwiOiJhbWdhZDEyM0BnbWFpbC5jb20iLCJuYW1lIjoiMSJ9LCJpYXQiOjE3MDE4OTU4NzMsImV4cCI6MTcwMjUwMDY3M30.56QIOdxIl5lMGpRAjEfYQKSmf9pOf452wpFFltlHfbY",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/user/folder-requests",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"user",
-								"folder-requests"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "reject join folder:folder_user_request_id",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/user/reject-join-folder/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"user",
-								"reject-join-folder",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "accept join folder:folder_user_request_id",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/user/accept-join-folder/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"user",
-								"accept-join-folder",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
 		{
 			"name": "auth",
 			"item": [
@@ -97,7 +26,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"amgad123@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
+							"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -674,6 +603,338 @@
 			"name": "Folder",
 			"item": [
 				{
+					"name": "user",
+					"item": [
+						{
+							"name": "all users in system",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1MiwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxOTczNzUyLCJleHAiOjE3MDI1Nzg1NTJ9.wC22FHZNGKrUmcgVYItf9ayzVk2-8JIiVPbVHYD8XZQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/users?items_per_page=3&page=1&search=a",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "items_per_page",
+											"value": "3"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "search",
+											"value": "a"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "all users in system",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/users?items_per_page=3&page=1&search=a",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"users"
+											],
+											"query": [
+												{
+													"key": "items_per_page",
+													"value": "3"
+												},
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "search",
+													"value": "a"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "292"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"124-uYHpirN8KkrT6SZth82bNLCn4jY\""
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 07 Dec 2023 21:01:36 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 52,\n                \"email\": \"amgad@gmail.com\",\n                \"name\": \"amgad alwattar\"\n            },\n            {\n                \"id\": 53,\n                \"email\": \"ayham@gmail.com\",\n                \"name\": \"ayham hammami\"\n            },\n            {\n                \"id\": 54,\n                \"email\": \"mohamad@gmail.com\",\n                \"name\": \"mohamad\"\n            }\n        ],\n        \"pagination\": {\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 3\n        }\n    },\n    \"message\": \"general message\",\n    \"status\": 200\n}"
+								}
+							]
+						},
+						{
+							"name": "all users not in this folder",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1MiwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxOTYyNzc2LCJleHAiOjE3MDI1Njc1NzZ9.Vy1QWRjj_m0EUy7H4VRv48Nvrci7QJCQLv1zKf04azI",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/users/not-in-folder/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"not-in-folder",
+										"1"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "users/not-in-folder/",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/users/not-in-folder/1",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"users",
+												"not-in-folder",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "174"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"ae-/1BojMn/dOpY51NZdryYT/oz0uE\""
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 07 Dec 2023 20:37:14 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 54,\n                \"email\": \"mohamad@gmail.com\",\n                \"name\": \"mohamad\"\n            }\n        ],\n        \"pagination\": {\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    },\n    \"message\": \"general message\",\n    \"status\": 200\n}"
+								}
+							]
+						},
+						{
+							"name": "my folder-requests",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1MiwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxOTgzNjgyLCJleHAiOjE3MDI1ODg0ODJ9.aIFbvvWI66WNm2GTyjD3yS0z_jRQRkUAnHWgmPN0V9I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/my-folder-requests",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"my-folder-requests"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "my folder-requests",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/my-folder-requests",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"my-folder-requests"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "248"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"f8-d4tE1IP2OhJAS6tdbSODyNANt7c\""
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 07 Dec 2023 21:50:52 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 10,\n                \"folder\": {\n                    \"id\": 61,\n                    \"folder_id\": null,\n                    \"name\": \"root folder\",\n                    \"logo\": \"\",\n                    \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\"\n                }\n            }\n        ],\n        \"pagination\": {\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    },\n    \"message\": \"general message\",\n    \"status\": 200\n}"
+								}
+							]
+						},
+						{
+							"name": "reject join folder:folder_user_request_id",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/reject-join-folder/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"reject-join-folder",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "accept join folder:folder_user_request_id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1MywiZW1haWwiOiJheWhhbUBnbWFpbC5jb20iLCJuYW1lIjoiYXloYW0gaGFtbWFtaSJ9LCJpYXQiOjE3MDE5NzA1MTMsImV4cCI6MTcwMjU3NTMxM30.Mrw-al-9ZLBVPhziO5CTxR1qAAQrdXSlYwlJJ_Ya7Ok",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/accept-join-folder/9",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"accept-join-folder",
+										"9"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "get folders",
 					"request": {
 						"method": "GET",
@@ -725,7 +986,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"data\": [\n        {\n            \"id\": 16,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1pIB6d5zF0pbOKFkhq4FSoXgYZdEfCEj6\"\n        },\n        {\n            \"id\": 17,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1YzSyg1meAr3RnY2Pnj7yThEV31Pr2j92\"\n        },\n        {\n            \"id\": 18,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1mxiA8ipKQTKExCb_BPCq9uKF5bftmWpJ\"\n        },\n        {\n            \"id\": 19,\n            \"folder_id\": 10,\n            \"name\": \"new folder to final test \",\n            \"logo\": \"https://drive.google.com/uc?id=1HHme0IQMR-MOSHdtyNNeQ--2y0VBNdaA\"\n        },\n        {\n            \"id\": 20,\n            \"folder_id\": 10,\n            \"name\": \"amgad folder to reomve\",\n            \"logo\": \"https://drive.google.com/uc?id=1gOkr6sk5QcGZi_1R2Pm5fSoujLttGBev\"\n        }\n    ],\n    \"message\": \"your folders\",\n    \"status\": 200\n}"
+							"body": "{\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 61,\n                \"folder_id\": null,\n                \"name\": \"root folder\",\n                \"logo\": \"\",\n                \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\"\n            }\n        ],\n        \"pagination\": {\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    },\n    \"message\": \"your folders\",\n    \"status\": 200\n}"
 						}
 					]
 				},
@@ -1053,157 +1314,98 @@
 			]
 		},
 		{
-			"name": "/upload file",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/ASUS/Pictures/360_F_509351710_XXexdkdaFVAwGtZM2YCLAz1JEa2i080m.jpg"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{url}}/upload",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"upload"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/upload file Copy",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/upload-drive",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"upload-drive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get user inside token",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoiYW1nYWRAZ21haWwuY29tIiwiaWF0IjoxNzAwODMzNTg0LCJleHAiOjE3MDA5MTk5ODR9.Y2NuHdzt7SCNvrwRXyO8n0wtlrAmrVhut5FZ23BaynU",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}",
-					"host": [
-						"{{url}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get access token Copy",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"amgad123@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/auth/access-token",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"auth",
-						"access-token"
-					]
-				}
-			},
-			"response": [
+			"name": "file{ working into it}",
+			"item": [
 				{
-					"name": "get access token",
-					"originalRequest": {
+					"name": "all files in folder",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "create file",
+					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"amgad@gmail.com\",\r\n    \"password\":\"amgad123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "file name ",
+									"type": "text"
+								},
+								{
+									"key": "folder_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/auth/access-token",
-							"protocol": "http",
+							"raw": "{{url}}/file",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{url}}"
 							],
-							"port": "3000",
 							"path": [
-								"auth",
-								"access-token"
+								"file"
 							]
 						}
 					},
-					"_postman_previewlanguage": "text",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"name": "Content-Type",
-							"description": "",
-							"type": "text"
+					"response": []
+				},
+				{
+					"name": "/upload file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/ASUS/Pictures/360_F_509351710_XXexdkdaFVAwGtZM2YCLAz1JEa2i080m.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/upload",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"upload"
+							]
 						}
-					],
-					"cookie": [],
-					"body": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0MSwiZW1haWwiOiJhbWdhZEBnbWFpbC5jb20iLCJuYW1lIjoiYW1nYWQgYWx3YXR0YXIifSwiaWF0IjoxNzAxMzU1NjIwLCJleHAiOjE3MDE0NDIwMjB9.12c_8ZD1ue0WawhHu7GS78DUVBKeK636n-vRk3JpDbU"
+					},
+					"response": []
+				},
+				{
+					"name": "/upload file Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/upload-drive",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"upload-drive"
+							]
+						}
+					},
+					"response": []
 				}
 			]
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}",
-					"host": [
-						"{{url}}"
-					]
-				}
-			},
-			"response": []
 		}
 	]
 }
