@@ -131,11 +131,7 @@ export class FolderService {
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {
-    await this.prisma.userFolder.deleteMany({
-      where: {
-        folder_id: id,
-      },
-    });
+
 
     const folder_user_role = await this.prisma.folderRole.findFirst({
       where: {
@@ -153,7 +149,6 @@ export class FolderService {
     // Create userFolder entries for the specified users_ids
     const userFolderData = await Promise.all(
       users_ids.map(async (user_id) => {
-        log(id,user_id)
         const userFolderExist = await this.prisma.userFolder.findFirst({
           where: {
             folder_id: id,
@@ -163,7 +158,6 @@ export class FolderService {
             id: true,
           },
         });
-        log(userFolderExist)
         if (userFolderExist) {
           return null;
         }
@@ -178,7 +172,6 @@ export class FolderService {
               id: true,
             },
           });
-        log(userFolderRequestExist)
 
         if (userFolderRequestExist) {
           return null;
@@ -195,10 +188,11 @@ export class FolderService {
 
     // Now, filteredUserFolderData contains the desired result
 
-    log(userFolderData);
-    return (await this.prisma.userFolderRequest.createMany({
-      data: filteredUserFolderData
-    })).count;
+    return (
+      await this.prisma.userFolderRequest.createMany({
+        data: filteredUserFolderData,
+      })
+    ).count;
   }
 
   update(id: number, updateFolderDto: UpdateFolderDto) {
