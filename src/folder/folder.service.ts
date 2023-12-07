@@ -14,6 +14,7 @@ import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderEntity } from './entities/folder.entity';
 import { AddUsersDto } from './dto/add-users.dto';
 import { log } from 'console';
+import { collectDataBy } from 'src/base-module/base-entity';
 
 @Injectable()
 export class FolderService {
@@ -96,19 +97,18 @@ export class FolderService {
     return parentDbFolder;
   }
   async findAll({ user }: TokenPayloadProps) {
-    return FolderEntity.collect(
-      await this.prisma.folder.findMany({
-        where: {
-          UserFolder: {
-            some: {
-              user_id: {
-                equals: user.id,
-              },
+    const folders = await this.prisma.folder.findMany({
+      where: {
+        UserFolder: {
+          some: {
+            user_id: {
+              equals: user.id,
             },
           },
         },
-      }),
-    );
+      },
+    });
+    return collectDataBy(FolderEntity, folders);
   }
 
   async findOne(id: number, { user }: TokenPayloadProps) {
@@ -131,8 +131,6 @@ export class FolderService {
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {
-
-
     const folder_user_role = await this.prisma.folderRole.findFirst({
       where: {
         name: 'user',

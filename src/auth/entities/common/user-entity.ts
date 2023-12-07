@@ -10,8 +10,4 @@ export class UserEntity extends BaseEntity {
     this.email = email;
     this.name = name;
   }
-
-  static collect(items: any | any[]) {
-    return super.collectData<UserEntity>(UserEntity, items);
-  }
 }

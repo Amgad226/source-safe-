@@ -15,7 +15,4 @@ export class FolderEntity extends BaseEntity {
     this.driveFolderID = driveFolderID;
   }
 
-  static collect(items: any | any[]) {
-    return super.collectData<FolderEntity>(FolderEntity, items);
-  }
 }
