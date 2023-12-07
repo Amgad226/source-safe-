@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -7,31 +6,32 @@ import {
 import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class UsersService {
-  public users: any;
+  constructor(private prisma: PrismaService) {}
 
-  constructor(private prisma: PrismaService, private redis: RedisService) {
-    this.users = [
-      {
-        userId: 1,
-        username: 'amgad',
-        password: 'amgad123',
-      },
-      {
-        userId: 2,
-        username: 'ayham',
-        password: 'amgad123',
-      },
-    ];
+  async users() {
+    let users = await this.prisma.user.findMany({});
+    return UserEntity.collect(users);
   }
 
-  async user() {
-    this.redis.addToBlacklist('e12ee12qwedwkcabweye1x');
-    let usersFromDatabase = await this.prisma.user.findMany();
-    return UserEntity.collect(usersFromDatabase);
+  async usersNotInFolder(folder_id: number) {
+    let users = await this.prisma.user.findMany({
+      where: {
+        UserFolder: {
+          every: {
+            folder_id,
+          },
+        },
+        UserFolderRequest: {
+          every: {
+            folder_id,
+          },
+        },
+      },
+    });
+    return UserEntity.collect(users);
   }
 
   async folderRequest({ user }: TokenPayloadProps) {
@@ -112,9 +112,5 @@ export class UsersService {
         user_id: TokenPayloadProps.user.id,
       },
     });
-  }
-
-  async findOne(username) {
-    return this.users.find((user) => user.username === username);
   }
 }

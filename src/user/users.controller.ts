@@ -2,25 +2,31 @@ import { Controller, Get, Param, Post } from '@nestjs/common';
 import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
 import { ResponseInterface } from 'src/base-module/response.interface';
-import { Public } from 'src/decorators/public.decorators';
-import { UsersService } from './users.service';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
+import { UsersService } from './users.service';
 
-@Controller('user')
+@Controller()
 export class UsersController extends BaseModuleController {
   constructor(private userService: UsersService) {
     super();
   }
 
-  @Public()
-  @Get('user')
+  @Get('users')
   async user(): Promise<ResponseInterface<UserEntity>> {
-    const user = await this.userService.user();
+    const user = await this.userService.users();
     return this.successResponse({ data: user });
   }
 
-  @Get('folder-requests')
+  @Get('users/not-in-folder/:folder_id')
+  async usersNotInFolder(
+    @Param('folder_id') folder_id: string,
+  ): Promise<ResponseInterface<UserEntity>> {
+    const user = await this.userService.usersNotInFolder(+folder_id);
+    return this.successResponse({ data: user });
+  }
+
+  @Get('my-folder-requests')
   async folderRequest(
     @TokenPayload() tokenPayload: TokenPayloadProps,
   ): Promise<ResponseInterface> {
@@ -40,7 +46,6 @@ export class UsersController extends BaseModuleController {
     return this.successResponse({});
   }
 
-
   @Post('reject-join-folder/:folder_user_request_id')
   async rejectJoinFolder(
     @TokenPayload() tokenPayload: TokenPayloadProps,
@@ -52,6 +57,4 @@ export class UsersController extends BaseModuleController {
     );
     return this.successResponse({});
   }
-
-  
 }
