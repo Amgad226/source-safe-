@@ -10,6 +10,7 @@ import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FolderRequestEntity } from './entity/folder-request.entity';
 
 @Injectable()
 export class UsersService {
@@ -48,13 +49,25 @@ export class UsersService {
     return new PaginatorEntity(UserEntity, paginated_users);
   }
 
-  async folderRequest({ user }: TokenPayloadProps) {
-    const foldersRequests = await this.prisma.userFolderRequest.findMany({
-      where: {
-        user_id: user.id,
-      },
-    });
-    return foldersRequests;
+  async folderRequest(
+    { user }: TokenPayloadProps,
+    params: QueryParamsInterface,
+  ) {
+    const foldersRequests =
+      await PaginatorHelper<Prisma.UserFolderRequestFindManyArgs>({
+        model: this.prisma.userFolderRequest,
+        ...params,
+        relations: {
+          where: {
+            user_id: user.id,
+          },
+          include: {
+            folder: true,
+          },
+        },
+      });
+      return new PaginatorEntity(FolderRequestEntity, foldersRequests);
+
   }
 
   private async findFolderUserRequestByAuthUser(
