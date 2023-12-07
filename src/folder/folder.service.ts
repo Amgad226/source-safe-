@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { Folder } from '@prisma/client';
+import { Folder, Prisma } from '@prisma/client';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 import { FileProps } from 'src/google-drive/props/create-folder.props';
@@ -15,6 +15,9 @@ import { FolderEntity } from './entities/folder.entity';
 import { AddUsersDto } from './dto/add-users.dto';
 import { log } from 'console';
 import { collectDataBy } from 'src/base-module/base-entity';
+import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
+import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
+import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 
 @Injectable()
 export class FolderService {
@@ -96,19 +99,23 @@ export class FolderService {
 
     return parentDbFolder;
   }
-  async findAll({ user }: TokenPayloadProps) {
-    const folders = await this.prisma.folder.findMany({
-      where: {
-        UserFolder: {
-          some: {
-            user_id: {
-              equals: user.id,
+  async findAll({ user }: TokenPayloadProps, params: QueryParamsInterface) {
+    const folders = await PaginatorHelper<Prisma.FolderFindManyArgs>({
+      model: this.prisma.folder,
+      ...params,
+      relations: {
+        where: {
+          UserFolder: {
+            some: {
+              user_id: {
+                equals: user.id,
+              },
             },
           },
         },
       },
     });
-    return collectDataBy(FolderEntity, folders);
+    return new PaginatorEntity(FolderEntity, folders);
   }
 
   async findOne(id: number, { user }: TokenPayloadProps) {

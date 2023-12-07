@@ -2,32 +2,28 @@ import { InjectQueue } from '@nestjs/bull';
 import {
   Body,
   Controller,
-  Delete,
   FileTypeValidator,
   Get,
   Param,
   ParseFilePipe,
-  Patch,
   Post,
   Put,
   UploadedFile,
-  UseInterceptors,
-  UsePipes,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
 import { diskStorage } from 'multer';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
+import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
+import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
+import { ResponseInterface } from 'src/base-module/response.interface';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { FileProps } from 'src/google-drive/props/create-folder.props';
-import { CreateFolderDto } from './dto/create-folder.dto';
-import { UpdateFolderDto } from './dto/update-folder.dto';
-import { FolderService } from './folder.service';
-import { ResponseInterface } from 'src/base-module/response.interface';
-import { ExistsInDatabase } from 'src/validator/a';
-import { Prisma } from '@prisma/client';
 import { AddUsersDto } from './dto/add-users.dto';
+import { CreateFolderDto } from './dto/create-folder.dto';
+import { FolderService } from './folder.service';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
@@ -107,8 +103,11 @@ export class FolderController extends BaseModuleController {
   }
 
   @Get()
-  async findAll(@TokenPayload() tokenPayload: TokenPayloadProps) {
-    const folders = await this.folderService.findAll(tokenPayload);
+  async findAll(
+    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @FindAllParams() params: QueryParamsInterface,
+  ) {
+    const folders = await this.folderService.findAll(tokenPayload, params);
 
     return this.successResponse({
       message: 'your folders',
@@ -136,7 +135,10 @@ export class FolderController extends BaseModuleController {
     @Param('id') id: number,
     @Body() addUsersDto: AddUsersDto,
   ): Promise<ResponseInterface> {
-    const request_users_count = await this.folderService.addUsers(+id, addUsersDto);
+    const request_users_count = await this.folderService.addUsers(
+      +id,
+      addUsersDto,
+    );
     return this.successResponse({
       message: `${request_users_count} users added to request folder successfully`,
       status: 201,
