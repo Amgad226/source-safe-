@@ -3,35 +3,49 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
+import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
+import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async users() {
-    let users = await this.prisma.user.findMany({});
-    return UserEntity.collect(users);
+  async users(params: QueryParamsInterface) {
+    const paginated_user = await PaginatorHelper<Prisma.UserFindManyArgs>({
+      model: this.prisma.user,
+      ...params,
+    });
+    return new PaginatorEntity(UserEntity, paginated_user);
   }
 
-  async usersNotInFolder(folder_id: number) {
-    let users = await this.prisma.user.findMany({
-      where: {
-        UserFolder: {
-          every: {
-            folder_id,
+  async usersNotInFolder(
+    folder_id: number,
+    paramsInterface: QueryParamsInterface,
+  ) {
+    const paginated_users = await PaginatorHelper<Prisma.UserFindManyArgs>({
+      model: this.prisma.user,
+      ...paramsInterface,
+      relations: {
+        where: {
+          UserFolder: {
+            every: {
+              folder_id,
+            },
           },
-        },
-        UserFolderRequest: {
-          every: {
-            folder_id,
+          UserFolderRequest: {
+            every: {
+              folder_id,
+            },
           },
         },
       },
     });
-    return UserEntity.collect(users);
+    return new PaginatorEntity(UserEntity, paginated_users);
   }
 
   async folderRequest({ user }: TokenPayloadProps) {

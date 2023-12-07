@@ -1,10 +1,11 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
 import { ResponseInterface } from 'src/base-module/response.interface';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { UsersService } from './users.service';
+import { log } from 'console';
 
 @Controller()
 export class UsersController extends BaseModuleController {
@@ -13,16 +14,31 @@ export class UsersController extends BaseModuleController {
   }
 
   @Get('users')
-  async user(): Promise<ResponseInterface<UserEntity>> {
-    const user = await this.userService.users();
+  async user(
+    @Query('search') search: string,
+    @Query('page') page: number,
+    @Query('items_per_page') items_per_page: number,
+  ): Promise<ResponseInterface<UserEntity>> {
+    const user = await this.userService.users({
+      items_per_page,
+      page,
+      search,
+    });
     return this.successResponse({ data: user });
   }
 
   @Get('users/not-in-folder/:folder_id')
   async usersNotInFolder(
     @Param('folder_id') folder_id: string,
+    @Query('search') search: string,
+    @Query('page') page: number,
+    @Query('items_per_page') items_per_page: number,
   ): Promise<ResponseInterface<UserEntity>> {
-    const user = await this.userService.usersNotInFolder(+folder_id);
+    const user = await this.userService.usersNotInFolder(+folder_id, {
+      items_per_page,
+      page,
+      search,
+    });
     return this.successResponse({ data: user });
   }
 
