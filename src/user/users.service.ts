@@ -84,7 +84,7 @@ export class UsersService {
       },
     });
     if (!folderUserRequest) {
-      throw new NotFoundException('Request not found');
+      throw new NotFoundException('Request id not found');
     }
 
     if (folderUserRequest.user_id !== user.id) {
