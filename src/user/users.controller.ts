@@ -1,11 +1,12 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
+import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
+import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { ResponseInterface } from 'src/base-module/response.interface';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { UsersService } from './users.service';
-import { log } from 'console';
 
 @Controller()
 export class UsersController extends BaseModuleController {
@@ -15,38 +16,31 @@ export class UsersController extends BaseModuleController {
 
   @Get('users')
   async user(
-    @Query('search') search: string,
-    @Query('page') page: number,
-    @Query('items_per_page') items_per_page: number,
+    @FindAllParams() params: QueryParamsInterface,
   ): Promise<ResponseInterface<UserEntity>> {
-    const user = await this.userService.users({
-      items_per_page,
-      page,
-      search,
-    });
+    const user = await this.userService.users(params);
     return this.successResponse({ data: user });
   }
 
   @Get('users/not-in-folder/:folder_id')
   async usersNotInFolder(
     @Param('folder_id') folder_id: string,
-    @Query('search') search: string,
-    @Query('page') page: number,
-    @Query('items_per_page') items_per_page: number,
+    @FindAllParams() params: QueryParamsInterface,
   ): Promise<ResponseInterface<UserEntity>> {
-    const user = await this.userService.usersNotInFolder(+folder_id, {
-      items_per_page,
-      page,
-      search,
+    return this.successResponse({
+      data: await this.userService.usersNotInFolder(+folder_id, params),
     });
-    return this.successResponse({ data: user });
   }
 
   @Get('my-folder-requests')
   async folderRequest(
     @TokenPayload() tokenPayload: TokenPayloadProps,
+    @FindAllParams() params: QueryParamsInterface,
   ): Promise<ResponseInterface> {
-    const folderRequest = await this.userService.folderRequest(tokenPayload);
+    const folderRequest = await this.userService.folderRequest(
+      tokenPayload,
+      params,
+    );
     return this.successResponse({ data: folderRequest });
   }
 
