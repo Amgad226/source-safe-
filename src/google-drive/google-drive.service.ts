@@ -1,12 +1,13 @@
 // src/google-drive/google-drive.service.ts
 import { Injectable } from '@nestjs/common';
+import { blue, green } from 'colorette';
+import { log } from 'console';
 import * as fs from 'fs';
-import { drive_v3, google } from 'googleapis';
+import { google } from 'googleapis';
 import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { Readable } from 'stream';
 import { CreateFolderProps, FileProps } from './props/create-folder.props';
-import { log } from 'console';
 
 @Injectable()
 export class GoogleDriveService {
@@ -37,7 +38,11 @@ export class GoogleDriveService {
     folderDriveId,
     originalname, // the file name with his mime type
   }: FileProps): Promise<string> {
-    const fileBuffer = fs.readFileSync(localPath);
+    if (!fs.existsSync(localPath)) {
+      console.error(`File not found: ${localPath}`);
+      return; // or throw an error, depending on your error handling strategy
+    }
+    const fileBuffer = await fs.readFileSync(localPath);
 
     const fileMetadata = {
       name: originalname, // Set your desired file name
@@ -69,8 +74,7 @@ export class GoogleDriveService {
       await this.updateFilePermissions(fileId);
 
       // Get the public link instead of the embedded link
-      const publicLink = await this.getShareableLink(fileId);
-
+      const publicLink = this.getShareableLink(fileId);
       return publicLink;
     } catch (error) {
       console.error(
@@ -110,6 +114,10 @@ export class GoogleDriveService {
     }
   }
   private getShareableLink(fileId: string): string {
+    log(
+      blue(`uploaded to drive :`) +
+        green(`https://drive.google.com/uc?id=${fileId}`),
+    );
     return `https://drive.google.com/uc?id=${fileId}`;
   }
 }

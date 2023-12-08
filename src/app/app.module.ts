@@ -1,32 +1,33 @@
 import { BullModule } from '@nestjs/bull';
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { MulterModule } from '@nestjs/platform-express';
+import { FileModule } from 'src/file/file.module';
+import { FolderModule } from 'src/folder/folder.module';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { RedisModule } from 'src/redis/redis.module';
+import { RedisService } from 'src/redis/redis.service';
 import { AuthModule } from '../auth/auth.module';
+import { AuthGuard } from '../auth/guards/access-auth.guard';
+import { BaseModuleController } from '../base-module/base-module.controller';
 import { DiskSpaceController } from '../disk-space.controller';
 import { GoogleDriveModule } from '../google-drive/google-drive.module';
 import { GoogleDriveService } from '../google-drive/google-drive.service';
 import { MyConfigService } from '../my-config/my-config.service';
 import { UsersModule } from '../user/users.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthGuard } from '../auth/guards/access-auth.guard';
-import { JwtModule } from '@nestjs/jwt';
-import { BaseModuleController } from '../base-module/base-module.controller';
-import { RedisService } from 'src/redis/redis.service';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { RedisModule } from 'src/redis/redis.module';
-import { FolderModule } from 'src/folder/folder.module';
-import { FileModule } from 'src/file/file.module';
-import { EnvEnum } from 'src/my-config/env-enum';
-import { MyConfigModule } from 'src/my-config/my-config.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
+    MulterModule.register({
+      dest: './upload', // specify a custom upload directory
+    }),
     BullModule.forRootAsync({
       useFactory:  () => ({
         redis: {

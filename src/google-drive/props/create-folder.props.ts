@@ -1,7 +1,7 @@
 export interface CreateFolderProps {
-  folderName:string;
-  parentFolderId:string;
-  folderIdDb:number;
+  folderName: string;
+  parentFolderId: string;
+  afterUpload: AfterUploadType;
 }
 export interface FileProps {
   originalname: string;
@@ -10,5 +10,19 @@ export interface FileProps {
   localPath: string;
   size?: number;
   folderDriveId: string | number;
-  DbFileId?: number;
+  afterUpload?: AfterUploadType;
 }
+export type AfterUploadType = {
+  functionCall: string;
+  data?: AfterUploadDataType;
+};
+
+export type AfterUploadDataType = FileDataType | FolderDataType;
+
+export type FileDataType = {
+  fileId: number;
+};
+
+export type FolderDataType = {
+  folderId: number;
+};

@@ -1,11 +1,11 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { GoogleDriveService } from './google-drive.service';
 import { MyConfigModule } from 'src/my-config/my-config.module';
-import { MyConfigService } from 'src/my-config/my-config.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { GoogleDriveController } from './google-drive.controller';
 import { GoogleDriveConsumer } from './google-drive.processor';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { GoogleDriveService } from './google-drive.service';
+import { UtilsAfterJob } from './utils-after-jobs.service';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
     }),
     MyConfigModule
   ],
-  providers: [GoogleDriveConsumer,GoogleDriveService,PrismaService],
+  providers: [GoogleDriveConsumer,GoogleDriveService,PrismaService,UtilsAfterJob],
   controllers: [GoogleDriveController],
 })
 export class GoogleDriveModule {}

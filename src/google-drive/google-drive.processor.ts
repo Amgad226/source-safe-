@@ -1,17 +1,17 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { GoogleDriveService } from './google-drive.service';
-import { log } from 'console';
-import { CreateFolderProps, FileProps } from './props/create-folder.props';
+import { deleteFile } from 'src/base-module/file.helper';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as path from 'path';
-import * as fs from 'fs';
+import { GoogleDriveService } from './google-drive.service';
+import { CreateFolderProps, FileProps } from './props/create-folder.props';
+import { UtilsAfterJob } from './utils-after-jobs.service';
 
 @Processor('google-drive')
 export class GoogleDriveConsumer {
   constructor(
     private googleDriveService: GoogleDriveService,
     private prisma: PrismaService,
+    private utilsAfterJob: UtilsAfterJob,
   ) {}
 
   @Process('upload-file')
@@ -22,38 +22,28 @@ export class GoogleDriveConsumer {
       mimetype: job.data.mimetype,
       folderDriveId: job.data.folderDriveId,
       originalname: job.data.originalname,
-      DbFileId: job.data.DbFileId,
+      afterUpload: job.data.afterUpload,
     };
     const link = await this.googleDriveService.uploadFileToDrive(file);
-    const Folder = await this.prisma.folder.update({
-      where: { id: file.DbFileId },
-      data: { logo: link },
-    });
-    const imagePath = path.join(__dirname, '../', '../','../', file.localPath);
-console.log(imagePath)
-    try {
-    //   // Check if the file exists before attempting to delete
-      await fs.promises.access(imagePath);
-    //   // Delete the file
-      await fs.promises.unlink(imagePath);
-    } catch (error) {
-    //   // Handle errors (e.g., file not found)
-      console.error(`Error deleting image: ${error.message}`);
-    //   throw new Error(`Unable to delete image: ${error.message}`);
-    }
-    console.log(link);
+    
+    await deleteFile(file.localPath);
+    await this.utilsAfterJob[file.afterUpload.functionCall](
+      file.afterUpload.data,
+      link,
+    );
   }
 
   @Process('create-folder')
   async handleCreateFolder(job: Job) {
-    const folderDriveLink = await this.googleDriveService.createFolder({
+    let folder: CreateFolderProps = {
       folderName: job.data.folderName,
       parentFolderId: job.data.parentFolderId,
-      folderIdDb: job.data.folderIdDb,
-    });
-    const Folder = await this.prisma.folder.update({
-      where: { id: job.data.folderIdDb },
-      data: { driveFolderID: folderDriveLink },
-    });
+      afterUpload: job.data.afterUpload,
+    };
+    const folderDriveLink = await this.googleDriveService.createFolder(folder);
+    await this.utilsAfterJob[folder.afterUpload.functionCall](
+      folder.afterUpload.data,
+      folderDriveLink,
+    );
   }
 }

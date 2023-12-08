@@ -2,25 +2,33 @@ import { InjectQueue } from '@nestjs/bull';
 import {
   Body,
   Controller,
-  FileTypeValidator,
   Get,
   Param,
-  ParseFilePipe,
   Post,
   Put,
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common';
+
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
-import { diskStorage } from 'multer';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
+import { uploadToLocalDisk } from 'src/base-module/file.helper';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { ResponseInterface } from 'src/base-module/response.interface';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
-import { FileProps } from 'src/google-drive/props/create-folder.props';
+import {
+  CreateFolderProps,
+  FileProps,
+} from 'src/google-drive/props/create-folder.props';
+import {
+  UtilsAfterJobFunctionEnum,
+  queueAction,
+} from 'src/google-drive/utils-after-jobs.service';
+import { EnvEnum } from 'src/my-config/env-enum';
+import { MyConfigService } from 'src/my-config/my-config.service';
 import { AddUsersDto } from './dto/add-users.dto';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { FolderService } from './folder.service';
@@ -29,72 +37,55 @@ import { FolderService } from './folder.service';
 export class FolderController extends BaseModuleController {
   constructor(
     private readonly folderService: FolderService,
+    private myConfigService: MyConfigService,
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {
     super();
   }
-
   @Post()
-  @UseInterceptors(
-    FileInterceptor('logo', {
-      storage: diskStorage({
-        destination: './upload',
-        filename: (req, file, cb) => {
-          cb(null, `${Date.now()}_${file.originalname}`);
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('logo'))
   async create(
     @Body() { name, parentFolderId }: CreateFolderDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        fileIsRequired: true,
-        errorHttpStatusCode: 400,
-        validators: [new FileTypeValidator({ fileType: /(jpg|jpeg|png)/ })],
-      }),
-    )
-    logo,
+    @UploadedFile() logo,
     @TokenPayload() tokenPayload: TokenPayloadProps,
-  ): Promise<ResponseInterface> {
+  ) {
+    let storedLogo = (await uploadToLocalDisk(logo, name))[0];
     const parentFolderDriveId =
       await this.folderService.getParentFolderDriveIds(parentFolderId);
 
-    const foldersImagesDriveId = '10NqH9S1H25YWJ9R8qa0Wj0qa5bstiA3_';
-
-    const fileDetails: FileProps = {
-      folderDriveId: foldersImagesDriveId,
-      localPath: logo.path,
-      filename: logo.filename,
-      mimetype: logo.mimetype,
-      originalname: logo.originalname,
-      DbFileId: null,
-    };
-
     const newDbFolder = await this.folderService.create(
       { name, parentFolderIdDb: parentFolderDriveId.DbFolderId },
-      fileDetails,
+      storedLogo.path,
       tokenPayload,
     );
-    fileDetails.DbFileId = newDbFolder.id;
 
-    this.googleDriveQueue.add(
-      'create-folder',
-      {
-        folderName: name,
-        parentFolderId: parentFolderDriveId.DriveFolderId,
-        folderIdDb: newDbFolder.id,
+    // create folder in google drive
+    const folderDetails: CreateFolderProps = {
+      folderName: name,
+      parentFolderId: parentFolderDriveId.DriveFolderId,
+      afterUpload: {
+        functionCall: UtilsAfterJobFunctionEnum.updateDriveFolderIDAfterUpload,
+        data: { folderId: newDbFolder.id },
       },
-      {
-        removeOnComplete: true,
-        removeOnFail: false,
-      },
-    );
+    };
 
-    this.googleDriveQueue.add('upload-file', fileDetails, {
-      removeOnComplete: true,
-      removeOnFail: false,
-    });
+    this.googleDriveQueue.add('create-folder', folderDetails, queueAction);
+
+    // upload the folder logo to google drive
+    const logoDetails: FileProps = {
+      folderDriveId: this.myConfigService.get(
+        EnvEnum.GOOGLE_DRIVE_NEST_JS_FOLDERS_IMAGES_ID,
+      ),
+      localPath: storedLogo.path,
+      filename: storedLogo.filename,
+      mimetype: storedLogo.mimetype,
+      originalname: storedLogo.originalname,
+      afterUpload: {
+        functionCall: UtilsAfterJobFunctionEnum.updateFolderLogoAfterUpload,
+        data: { folderId: newDbFolder.id },
+      },
+    };
+    this.googleDriveQueue.add('upload-file', logoDetails, queueAction);
 
     return this.successResponse({
       message: 'folder created successfully and will upload it to cloud ',

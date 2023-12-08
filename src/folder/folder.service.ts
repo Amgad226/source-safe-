@@ -5,19 +5,16 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Folder, Prisma } from '@prisma/client';
+import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
+import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
+import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
-import { FileProps } from 'src/google-drive/props/create-folder.props';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AddUsersDto } from './dto/add-users.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { FolderEntity } from './entities/folder.entity';
-import { AddUsersDto } from './dto/add-users.dto';
-import { log } from 'console';
-import { collectDataBy } from 'src/base-module/base-entity';
-import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
-import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 
 @Injectable()
 export class FolderService {
@@ -29,7 +26,7 @@ export class FolderService {
 
   async create(
     { name, parentFolderIdDb },
-    fileDetails: FileProps,
+    logoLocalPath:string,
     tokenPayload: TokenPayloadProps,
   ) {
     const admin_folder_role = await this.prisma.folderRole.findFirst({
@@ -40,10 +37,9 @@ export class FolderService {
         id: true,
       },
     });
-    console.log(parentFolderIdDb);
     const folder = await this.prisma.folder.create({
       data: {
-        logo: fileDetails.filename,
+        logo: logoLocalPath,
         name,
         parentFolder: {
           connect: { id: parentFolderIdDb },
