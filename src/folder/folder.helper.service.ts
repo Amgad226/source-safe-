@@ -5,7 +5,11 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Folder } from '@prisma/client';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { log } from 'console';
+import {
+  TokenPayloadType,
+  UserTokenPayloadType,
+} from 'src/base-module/token-payload-interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 export const queueAction = {
@@ -69,27 +73,47 @@ export class FolderHelperService {
     return parentDbFolder;
   }
 
-  public async isAdminInFolder(
+  async checkIfHasFolderPermission(
+    user: UserTokenPayloadType,
     folder_id: number,
-    tokenPayload: TokenPayloadProps,
-  ) {
-    const adminFolderRole = await this.prisma.folderRole.findFirst({
-      where: { name: 'admin' },
-    });
-    const folder = await this.prisma.folder.findFirst({
+    role = 'user',
+  ): Promise<void> {
+    let whereAdmin = {};
+    if ((role = 'admin')) {
+      const adminFolderRole = await this.prisma.folderRole.findFirst({
+        where: { name: 'admin' },
+      });
+      whereAdmin = {
+        folder_role_id: adminFolderRole.id,
+      };
+    }
+    const userExistsInFolder = await this.prisma.userFolder.findFirst({
       where: {
-        id: folder_id,
-        UserFolder: {
-          some: {
-            folder_role_id: adminFolderRole.id,
-            user_id: tokenPayload.user.id,
-          },
-        },
+        folder_id,
+        user_id: user.id,
+        ...whereAdmin,
       },
     });
-    if (!folder) {
-      throw new UnauthorizedException('unauthorized');
+    if (userExistsInFolder == null) {
+      throw new UnauthorizedException(
+        'unauthorize action , you do not have access for this folder',
+      );
     }
-    return folder;
+  }
+
+  async checkIfHasFilePermission(
+    user: UserTokenPayloadType,
+    file_id: number,
+    role = 'user',
+  ): Promise<void> {
+    const file = await this.prisma.file.findUnique({
+      where: {
+        id: file_id,
+      },
+    });
+    if (file == null) {
+      throw new NotFoundException(`file ${file_id} not found`);
+    }
+    await this.checkIfHasFolderPermission(user, file.folder_id, role);
   }
 }
