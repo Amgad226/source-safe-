@@ -24,22 +24,19 @@ export class UsersService {
     return new PaginatorEntity(UserEntity, paginated_user);
   }
 
-  async usersNotInFolder(
-    folder_id: number,
-    paramsInterface: QueryParamsInterface,
-  ) {
+  async usersNotInFolder(folder_id: number, params: QueryParamsInterface) {
     const paginated_users = await PaginatorHelper<Prisma.UserFindManyArgs>({
       model: this.prisma.user,
-      ...paramsInterface,
+      ...params,
       relations: {
         where: {
           UserFolder: {
-            every: {
+            none: {
               folder_id,
             },
           },
           UserFolderRequest: {
-            every: {
+            none: {
               folder_id,
             },
           },
@@ -66,8 +63,7 @@ export class UsersService {
           },
         },
       });
-      return new PaginatorEntity(FolderRequestEntity, foldersRequests);
-
+    return new PaginatorEntity(FolderRequestEntity, foldersRequests);
   }
 
   private async findFolderUserRequestByAuthUser(
