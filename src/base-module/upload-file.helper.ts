@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { green, red } from 'colorette';
 import { log } from 'console';
 import * as fs from 'fs';
@@ -25,9 +26,17 @@ export async function uploadToLocalDisk(
     message: string;
   },
 ): Promise<fileInterface[]> {
+
   if (!Array.isArray(files)) {
     files = [files];
   }
+
+
+  files.map((file) => {
+    if (file == null || file == undefined) {
+      throw new BadRequestException('file is required');
+    }
+  });
 
   if (validation) {
     files.forEach((file) => {
