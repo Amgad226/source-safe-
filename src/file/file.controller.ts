@@ -26,15 +26,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileService } from './file.service';
+import { BaseModuleController } from 'src/base-module/base-module.controller';
 
 @Controller('file')
-export class FileController {
+export class FileController extends BaseModuleController {
   constructor(
     private readonly fileService: FileService,
     private folderHelper: FolderHelperService,
     private prisma: PrismaService,
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
-  ) {}
+  ) {
+    super();
+  }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -43,14 +46,13 @@ export class FileController {
     @TokenPayload() tokenPayload: TokenPayloadProps,
     @UploadedFile() file,
   ) {
-    const folder = await this.folderHelper.isAdminInFolder(
+    await this.folderHelper.checkIfHasFolderPermission(
+      tokenPayload.user,
       +createFileDto.folder_id,
-      tokenPayload,
+      'admin',
     );
 
     const storedFile = (await uploadToLocalDisk(file, createFileDto.name))[0];
-
-    const folderDriveId = folder.driveFolderID;
 
     const db_file = await this.fileService.create(
       createFileDto,
@@ -59,7 +61,7 @@ export class FileController {
     );
 
     const fileDetails: FileProps = {
-      folderDriveId,
+      folderDriveId: db_file.folder.driveFolderID,
       localPath: storedFile.path,
       filename: storedFile.filename,
       mimetype: storedFile.mimetype,
@@ -67,7 +69,8 @@ export class FileController {
       afterUpload: {
         functionCall: UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
         data: {
-          fileVersionId: db_file.FileVersion[db_file.FileVersion.length - 1].id,
+          fileVersionId:
+            db_file.file_versions[db_file.file_versions.length - 1].id,
         },
       },
     };
@@ -76,20 +79,44 @@ export class FileController {
       removeOnComplete: true,
       removeOnFail: false,
     });
+
+    return this.successResponse({
+      message: 'file created successfully and will upload it to cloud',
+      status: 201,
+    });
   }
 
   @Get()
   async findAll(
+    @Query('folder_id', ParseIntPipe) folder_id: number,
     @TokenPayload() tokenPayload: TokenPayloadProps,
     @FindAllParams() params: QueryParamsInterface,
-    @Query('folder_id', ParseIntPipe) folder_id: number,
   ) {
-    return await this.fileService.findAll(tokenPayload, params, folder_id);
+    await this.folderHelper.checkIfHasFolderPermission(
+      tokenPayload.user,
+      +folder_id,
+    );
+    const files = await this.fileService.findAll(params, folder_id);
+    return this.successResponse({
+      status: 200,
+      message: 'files in this folder ',
+      data: files,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.fileService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayload() tokenPayload: TokenPayloadProps,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
+
+    const file = await this.fileService.findOne(+id);
+    return this.successResponse({
+      status: 200,
+      message: 'retrieve file info',
+      data: file,
+    });
   }
 
   @Patch(':id')

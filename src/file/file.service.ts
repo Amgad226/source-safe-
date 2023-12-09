@@ -10,6 +10,7 @@ import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileEntity } from './entities/file.entity';
 import { log } from 'console';
+import { FolderHelperService } from 'src/folder/folder.helper.service';
 
 @Injectable()
 export class FileService {
@@ -19,20 +20,20 @@ export class FileService {
   ) {}
 
   async create(
-    createFileDto: CreateFileDto,
+    { folder_id, name }: CreateFileDto,
     file: fileInterface,
     tokenPayload: TokenPayloadProps,
   ) {
     const file_ = await this.prisma.file.create({
       data: {
         extension: file.mimetype,
-        name: createFileDto.name,
-        folder_id: +createFileDto.folder_id,
+        name: name,
+        folder_id: +folder_id,
         checked_in: false,
         FileVersion: {
           create: {
             user_id: tokenPayload.user.id,
-            name: createFileDto.name,
+            name: name,
             path: file.path,
             size: file.size,
             extension: file.mimetype,
@@ -41,28 +42,16 @@ export class FileService {
       },
       include: {
         FileVersion: true,
+        Folder: true,
       },
     });
-    return file_;
+    return new FileEntity(file_);
   }
 
   async findAll(
-    { user }: TokenPayloadProps,
     params: QueryParamsInterface,
     folder_id: number,
   ) {
-    const userExistsInFolder = await this.prisma.userFolder.findFirst({
-      where: {
-        folder_id,
-        user_id: user.id,
-      },
-    });
-    if (userExistsInFolder == null) {
-      throw new UnauthorizedException(
-        'unauthorize action , you do not have access for this folder',
-      );
-    }
-    log(params);
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
       ...params,
@@ -84,8 +73,16 @@ export class FileService {
     return new PaginatorEntity(FileEntity, files);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} file`;
+  async findOne(id: number) {
+    const file = await this.prisma.file.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        FileVersion: { include: { User: true } },
+      },
+    });
+    return new FileEntity(file);
   }
 
   update(id: number, updateFileDto: UpdateFileDto) {
