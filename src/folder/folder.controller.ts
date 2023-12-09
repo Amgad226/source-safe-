@@ -110,12 +110,12 @@ export class FolderController extends BaseModuleController {
   }
 
   @Get(':id')
-  // @UsePipes(ExistsInDatabase('folder')) // Assuming 'folder' is the Prisma entity or table name
   async findOne(
     @TokenPayload() tokenPayload: TokenPayloadType,
     @Param('id') id: string,
   ) {
-    const folder = await this.folderService.findOne(+id, tokenPayload);
+    await this.folderHelper.checkIfHasFolderPermission(tokenPayload.user, +id);
+    const folder = await this.folderService.findOne(+id);
     return this.successResponse({
       message: 'folder info',
       status: 200,
