@@ -7,10 +7,13 @@ export class FileEntity extends BaseEntity {
   name: string;
   extension: string;
   checked_in: boolean;
+  latest_path: string;
   created_at: Date;
   folder_id: number;
   folder?: FolderEntity;
-  file_versions?: FileVersionEntity[];
+  check_in?: [any] | [];
+  check_out?: [any] | [];
+  file_versions: FileVersionEntity[];
   constructor({
     id,
     name,
@@ -18,8 +21,10 @@ export class FileEntity extends BaseEntity {
     checked_in,
     folder_id,
     created_at,
-    FileVersion=null,
-    Folder=null,
+    check_in = null,
+    check_out = null,
+    FileVersion,
+    Folder = null,
   }) {
     super();
     this.id = id;
@@ -27,10 +32,11 @@ export class FileEntity extends BaseEntity {
     this.extension = extension;
     this.checked_in = checked_in;
     this.folder_id = folder_id;
+    this.latest_path = FileVersion[FileVersion.length - 1].path;
     this.created_at = created_at;
+    this.check_in = check_in ? [{}] : [{}]; //FIXME
+    this.check_out = check_out ? [{}] : [{}]; //FIXME
     this.folder = Folder ?? null;
-    this.file_versions = FileVersion
-      ? collectDataBy(FileVersionEntity, FileVersion)
-      : [];
+    this.file_versions = collectDataBy(FileVersionEntity, FileVersion);
   }
 }
