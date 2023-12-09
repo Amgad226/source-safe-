@@ -1,27 +1,17 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { TokenPayloadType } from 'src/base-module/token-payload-interface';
-import { GoogleDriveService } from 'src/google-drive/google-drive.service';
-import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddUsersDto } from './dto/add-users.dto';
-import { UpdateFolderDto } from './dto/update-folder.dto';
+import { BaseFolderEntity } from './entities/base-folder.entity';
 import { FolderEntity } from './entities/folder.entity';
 
 @Injectable()
 export class FolderService {
-  constructor(
-    private myConfigService: MyConfigService,
-    private googleDrive: GoogleDriveService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(
     { name, parentFolderIdDb },
@@ -70,26 +60,22 @@ export class FolderService {
         },
       },
     });
-    return new PaginatorEntity(FolderEntity, folders);
+    return new PaginatorEntity(BaseFolderEntity, folders);
   }
 
-  async findOne(id: number, { user }: TokenPayloadType) {
-    const folder = await this.prisma.folder.findUnique({ where: { id } });
+  async findOne(id: number) {
+    const folder = await this.prisma.folder.findUnique({
+      where: { id },
+      include: {
+        files: { include: { FileVersion: true } },
+        UserFolder: { include: { user: true, folder_role: true } },
+      },
+    });
 
     if (!folder) {
       throw new NotFoundException(`Folder with ID ${id} not found`);
     }
-
-    const checkIfHasPermission = await this.prisma.userFolder.findFirst({
-      where: {
-        folder_id: id,
-        user_id: user.id,
-      },
-    });
-    if (checkIfHasPermission == null) {
-      throw new ForbiddenException('you cant seed this folder info');
-    }
-    return `This action returns a #${id} folder`;
+    return new FolderEntity(folder);
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {
@@ -155,11 +141,4 @@ export class FolderService {
     ).count;
   }
 
-  update(id: number, updateFolderDto: UpdateFolderDto) {
-    return `This action updates a #${id} folder`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} folder`;
-  }
 }
