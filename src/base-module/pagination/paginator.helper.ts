@@ -3,6 +3,7 @@ import {
   PaginatorInputProps,
   PaginatorOutputProps,
 } from './paginator.interfaces';
+import { dir, log } from 'console';
 // TODO edit function to accept multi relation names and inner relation
 
 export async function PaginatorHelper<T>({
@@ -22,13 +23,14 @@ export async function PaginatorHelper<T>({
   if (typeof relations === 'object') {
     if ('where' in relations) {
       where = relations.where;
+      delete relations.where;
     }
     const relationProps = Object.keys(relations);
     const hasOtherProps = relationProps.some((prop) => prop !== 'where');
     if (hasOtherProps) {
       const { ...props } = relations;
       restProps = props;
-    }
+  }
   }
   const modelKeys = await model.findFirst().then((data) => {
     if (data)
@@ -48,14 +50,17 @@ export async function PaginatorHelper<T>({
         }),
       }
     : {};
+  const whereConditionAndSearch = search
+    ? {
+        AND: [{ ...searchObject }, { ...where }],
+      }
+    : {};
+    
 
   const data = await model.findMany({
     take: items_per_page,
     skip,
-    where: {
-      ...where,
-      ...searchObject,
-    },
+    where: whereConditionAndSearch,
     ...restProps,
   });
 
