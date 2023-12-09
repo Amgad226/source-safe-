@@ -54,15 +54,21 @@ export async function PaginatorHelper<T>({
     ? {
         AND: [{ ...searchObject }, { ...where }],
       }
-    : {};
+    : where;
     
-
+      log(JSON.stringify(whereConditionAndSearch))
   const data = await model.findMany({
     take: items_per_page,
     skip,
     where: whereConditionAndSearch,
     ...restProps,
   });
+  log(JSON.stringify({
+    take: items_per_page,
+    skip,
+    where: whereConditionAndSearch,
+    ...restProps,
+  }))
 
   const totalItems = await model.count({
     where,
