@@ -5,13 +5,17 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
+import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
+import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
 import { uploadToLocalDisk } from 'src/base-module/upload-file.helper';
 import { TokenPayload } from 'src/decorators/user-decorator';
@@ -62,7 +66,9 @@ export class FileController {
       originalname: storedFile.originalname,
       afterUpload: {
         functionCall: UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
-        data: { fileVersionId: db_file.FileVersion[db_file.FileVersion.length-1].id },
+        data: {
+          fileVersionId: db_file.FileVersion[db_file.FileVersion.length - 1].id,
+        },
       },
     };
 
@@ -73,8 +79,12 @@ export class FileController {
   }
 
   @Get()
-  findAll() {
-    return this.fileService.findAll();
+  async findAll(
+    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @FindAllParams() params: QueryParamsInterface,
+    @Query('folder_id', ParseIntPipe) folder_id: number,
+  ) {
+    return await this.fileService.findAll(tokenPayload, params, folder_id);
   }
 
   @Get(':id')
