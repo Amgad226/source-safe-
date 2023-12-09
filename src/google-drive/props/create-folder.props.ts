@@ -1,3 +1,5 @@
+import { UtilsAfterJobFunctionEnum } from "../utils-after-jobs.service";
+
 export interface CreateFolderProps {
   folderName: string;
   parentFolderId: string;
@@ -13,14 +15,14 @@ export interface FileProps {
   afterUpload?: AfterUploadType;
 }
 export type AfterUploadType = {
-  functionCall: string;
+  functionCall: UtilsAfterJobFunctionEnum;
   data?: AfterUploadDataType;
 };
 
-export type AfterUploadDataType = FileDataType | FolderDataType;
+export type AfterUploadDataType = FileVersionDataType | FolderDataType;
 
-export type FileDataType = {
-  fileId: number;
+export type FileVersionDataType = {
+  fileVersionId: number;
 };
 
 export type FolderDataType = {
