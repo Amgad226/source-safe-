@@ -10,9 +10,9 @@ export class BaseModuleController {
     status = HttpStatus.OK,
   }): ResponseInterface<typeof data> {
     return {
-      data,
       message,
       status,
+      data,
     };
   }
 }
