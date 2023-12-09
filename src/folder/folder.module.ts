@@ -6,6 +6,7 @@ import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 import { BullModule } from '@nestjs/bull';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CheckFolderAndUsersMiddleware } from './middlewares/check-folder-and-users.middleware';
+import { FolderHelperService } from './folder.helper.service';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { CheckFolderAndUsersMiddleware } from './middlewares/check-folder-and-us
     }),
   ],
   controllers: [FolderController],
-  providers: [FolderService, MyConfigService, GoogleDriveService,PrismaService],
+  providers: [FolderService, MyConfigService, GoogleDriveService,PrismaService,FolderHelperService],
 })
 export class FolderModule {
   configure(consumer: MiddlewareConsumer) {

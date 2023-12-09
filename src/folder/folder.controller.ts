@@ -13,7 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
-import { uploadToLocalDisk } from 'src/base-module/file.helper';
+import { uploadToLocalDisk } from 'src/base-module/upload-file.helper';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { ResponseInterface } from 'src/base-module/response.interface';
@@ -32,12 +32,14 @@ import { MyConfigService } from 'src/my-config/my-config.service';
 import { AddUsersDto } from './dto/add-users.dto';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { FolderService } from './folder.service';
+import { FolderHelperService } from './folder.helper.service';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
   constructor(
     private readonly folderService: FolderService,
     private myConfigService: MyConfigService,
+    private folderHelper :FolderHelperService,
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {
     super();
@@ -51,7 +53,7 @@ export class FolderController extends BaseModuleController {
   ) {
     let storedLogo = (await uploadToLocalDisk(logo, name))[0];
     const parentFolderDriveId =
-      await this.folderService.getParentFolderDriveIds(parentFolderId);
+      await this.folderHelper.getParentFolderDriveIds(parentFolderId);
 
     const newDbFolder = await this.folderService.create(
       { name, parentFolderIdDb: parentFolderDriveId.DbFolderId },

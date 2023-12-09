@@ -1,10 +1,9 @@
 import {
   ForbiddenException,
   Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
+  NotFoundException
 } from '@nestjs/common';
-import { Folder, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
@@ -54,46 +53,6 @@ export class FolderService {
       },
     });
     return folder;
-  }
-  public async getParentFolderDriveIds(
-    parentFolderId: number | string,
-  ): Promise<{ DriveFolderId: string; DbFolderId: number }> {
-    let drive_folderId = '1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw';
-    let rootDbFolderId = await this.prisma.folder.findFirst({
-      where: { name: 'root folder', driveFolderID: drive_folderId },
-      select: { id: true },
-    });
-    let DbFolderId = rootDbFolderId.id;
-    if (parentFolderId != null) {
-      const folder_db = await this.resolveParentFolderId(parentFolderId);
-      drive_folderId = folder_db.driveFolderID;
-      DbFolderId = folder_db.id;
-    }
-    return {
-      DriveFolderId: drive_folderId,
-      DbFolderId: DbFolderId,
-    };
-  }
-  private async resolveParentFolderId(
-    parentFolderId: number | string,
-  ): Promise<Folder> {
-    if (typeof parentFolderId !== 'number') {
-      parentFolderId = parseInt(parentFolderId, 10);
-    }
-
-    if (isNaN(parentFolderId) || !Number.isSafeInteger(parentFolderId)) {
-      throw new UnprocessableEntityException('parentFolderId must be a number');
-    }
-
-    const parentDbFolder = await this.prisma.folder.findFirst({
-      where: { id: parentFolderId },
-    });
-
-    if (!parentDbFolder) {
-      throw new NotFoundException('parentFolderId invalid');
-    }
-
-    return parentDbFolder;
   }
   async findAll({ user }: TokenPayloadProps, params: QueryParamsInterface) {
     const folders = await PaginatorHelper<Prisma.FolderFindManyArgs>({
