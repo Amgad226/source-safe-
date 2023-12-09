@@ -12,10 +12,32 @@ export const queueAction = {
 export enum UtilsAfterJobFunctionEnum {
   updateFolderLogoAfterUpload = 'updateFolderLogoAfterUpload',
   updateDriveFolderIDAfterUpload = 'updateDriveFolderIDAfterUpload',
+  updateFilePathAfterUpload = 'updateFilePathAfterUpload',
 }
 @Injectable()
 export class UtilsAfterJob {
   constructor(private prisma: PrismaService) {}
+
+  async updateFilePathAfterUpload(data: AfterUploadDataType, link: string) {
+    if ('fileVersionId' in data) {
+      const fileVersion = await this.prisma.fileVersion.update({
+        where: {
+          id: data.fileVersionId,
+        },
+        data: {
+          path: link,
+        },
+      });
+    }
+    else {
+        error(
+          red(
+            '$$$$$$$$$$$$$$$$$$$fileVersionId not found$$$$$$$$$$$$$$$$ UtilsAfterJob updateFilePathAfterUpload',
+          ),
+        );
+      }
+  }
+
   async updateFolderLogoAfterUpload(data: AfterUploadDataType, link: string) {
     if ('folderId' in data) {
       const Folder = await this.prisma.folder.update({
