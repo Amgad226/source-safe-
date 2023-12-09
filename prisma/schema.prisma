@@ -68,6 +68,7 @@ model File {
   checked_in    Boolean         @default(false)
   folder_id     Int
   Folder        Folder          @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  deleted_at    DateTime?
   FileStatistic FileStatistic[]
   FileVersion   FileVersion[]
 
