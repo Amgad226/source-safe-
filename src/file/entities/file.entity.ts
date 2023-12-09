@@ -1,15 +1,9 @@
 import { BaseEntity, collectDataBy } from 'src/base-module/base-entity';
 import { FileVersionEntity } from './file-version.entity';
 import { FolderEntity } from 'src/folder/entities/folder.entity';
+import { BaseFileEntity } from './base-file-entity';
 
-export class FileEntity extends BaseEntity {
-  id: number;
-  name: string;
-  extension: string;
-  checked_in: boolean;
-  latest_path: string;
-  created_at: Date;
-  folder_id: number;
+export class FileEntity extends BaseFileEntity {
   folder?: FolderEntity;
   check_in?: [any] | [];
   check_out?: [any] | [];
@@ -26,14 +20,15 @@ export class FileEntity extends BaseEntity {
     FileVersion,
     Folder = null,
   }) {
-    super();
-    this.id = id;
-    this.name = name;
-    this.extension = extension;
-    this.checked_in = checked_in;
-    this.folder_id = folder_id;
-    this.latest_path = FileVersion[FileVersion.length - 1].path;
-    this.created_at = created_at;
+    super({
+      id,
+      name,
+      extension,
+      folder_id,
+      created_at,
+      FileVersion,
+      checked_in,
+    });
     this.check_in = check_in ? [{}] : [{}]; //FIXME
     this.check_out = check_out ? [{}] : [{}]; //FIXME
     this.folder = Folder ?? null;
