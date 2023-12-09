@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { UserEntity } from 'src/auth/entities/common/user-entity';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
@@ -50,7 +50,7 @@ export class UsersService {
   }
 
   async folderRequest(
-    { user }: TokenPayloadProps,
+    { user }: TokenPayloadType,
     params: QueryParamsInterface,
   ) {
     const foldersRequests =
@@ -72,7 +72,7 @@ export class UsersService {
 
   private async findFolderUserRequestByAuthUser(
     folderUserRequestId: number,
-    { user }: TokenPayloadProps,
+    { user }: TokenPayloadType,
   ) {
     const folderUserRequest = await this.prisma.userFolderRequest.findFirst({
       where: {
@@ -95,7 +95,7 @@ export class UsersService {
 
   async acceptJoinFolder(
     folderUserRequestId: number,
-    TokenPayloadProps: TokenPayloadProps,
+    TokenPayloadProps: TokenPayloadType,
   ) {
     const folderUserRequest = await this.findFolderUserRequestByAuthUser(
       folderUserRequestId,
@@ -126,7 +126,7 @@ export class UsersService {
 
   async rejectJoinFolder(
     folderUserRequestId: number,
-    TokenPayloadProps: TokenPayloadProps,
+    TokenPayloadProps: TokenPayloadType,
   ) {
     const folderUserRequest = await this.findFolderUserRequestByAuthUser(
       folderUserRequestId,

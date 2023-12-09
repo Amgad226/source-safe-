@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -26,7 +26,7 @@ export class FolderService {
   async create(
     { name, parentFolderIdDb },
     logoLocalPath:string,
-    tokenPayload: TokenPayloadProps,
+    tokenPayload: TokenPayloadType,
   ) {
     const admin_folder_role = await this.prisma.folderRole.findFirst({
       where: {
@@ -54,7 +54,7 @@ export class FolderService {
     });
     return folder;
   }
-  async findAll({ user }: TokenPayloadProps, params: QueryParamsInterface) {
+  async findAll({ user }: TokenPayloadType, params: QueryParamsInterface) {
     const folders = await PaginatorHelper<Prisma.FolderFindManyArgs>({
       model: this.prisma.folder,
       ...params,
@@ -73,7 +73,7 @@ export class FolderService {
     return new PaginatorEntity(FolderEntity, folders);
   }
 
-  async findOne(id: number, { user }: TokenPayloadProps) {
+  async findOne(id: number, { user }: TokenPayloadType) {
     const folder = await this.prisma.folder.findUnique({ where: { id } });
 
     if (!folder) {

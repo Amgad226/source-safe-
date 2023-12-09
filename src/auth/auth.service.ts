@@ -15,7 +15,7 @@ import { TokensEntity } from './entities/create-token.entity';
 import { SignInEntity } from './entities/sign-in/sign-in.entity';
 import { SignUpEntity } from './entities/sign-up/sign-up.entity';
 import { BlacklistTokenService } from 'src/blacklist-token/blacklist-token.service';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 
 @Injectable()
 export class AuthService {
@@ -102,7 +102,7 @@ export class AuthService {
     }
   }
 
-  private async createTokens(payload: TokenPayloadProps) {
+  private async createTokens(payload: TokenPayloadType) {
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: this.myConfigService.get(EnvEnum.ACCESS_EXPIRE),
       secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),

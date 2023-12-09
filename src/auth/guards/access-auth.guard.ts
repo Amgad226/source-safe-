@@ -9,7 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { log } from 'console';
 import { Request } from 'express';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { IS_PUBLIC_KEY } from 'src/decorators/public.decorators';
 import { EnvEnum } from 'src/my-config/env-enum';
 import { MyConfigService } from 'src/my-config/my-config.service';
@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync<TokenPayloadProps>(
+      const payload = await this.jwtService.verifyAsync<TokenPayloadType>(
         token,
         {
           secret: this.myConfigService.get(EnvEnum.ACCESS_SECRET),

@@ -17,7 +17,7 @@ import { uploadToLocalDisk } from 'src/base-module/upload-file.helper';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { ResponseInterface } from 'src/base-module/response.interface';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import {
   CreateFolderProps,
@@ -49,7 +49,7 @@ export class FolderController extends BaseModuleController {
   async create(
     @Body() { name, parentFolderId }: CreateFolderDto,
     @UploadedFile() logo,
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
   ) {
     let storedLogo = (await uploadToLocalDisk(logo, name))[0];
     const parentFolderDriveId =
@@ -97,7 +97,7 @@ export class FolderController extends BaseModuleController {
 
   @Get()
   async findAll(
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
   ) {
     const folders = await this.folderService.findAll(tokenPayload, params);
@@ -112,7 +112,7 @@ export class FolderController extends BaseModuleController {
   @Get(':id')
   // @UsePipes(ExistsInDatabase('folder')) // Assuming 'folder' is the Prisma entity or table name
   async findOne(
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @Param('id') id: string,
   ) {
     const folder = await this.folderService.findOne(+id, tokenPayload);

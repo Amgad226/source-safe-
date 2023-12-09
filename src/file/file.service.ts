@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { fileInterface } from 'src/base-module/upload-file.helper';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
@@ -22,7 +22,7 @@ export class FileService {
   async create(
     { folder_id, name }: CreateFileDto,
     file: fileInterface,
-    tokenPayload: TokenPayloadProps,
+    tokenPayload: TokenPayloadType,
   ) {
     const file_ = await this.prisma.file.create({
       data: {

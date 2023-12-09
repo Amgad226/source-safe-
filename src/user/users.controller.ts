@@ -4,7 +4,7 @@ import { BaseModuleController } from 'src/base-module/base-module.controller';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { ResponseInterface } from 'src/base-module/response.interface';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { UsersService } from './users.service';
 
@@ -34,7 +34,7 @@ export class UsersController extends BaseModuleController {
 
   @Get('my-folder-requests')
   async folderRequest(
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
   ): Promise<ResponseInterface> {
     const folderRequest = await this.userService.folderRequest(
@@ -46,7 +46,7 @@ export class UsersController extends BaseModuleController {
 
   @Post('accept-join-folder/:folder_user_request_id')
   async acceptJoinFolder(
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @Param('folder_user_request_id') folder_user_request_id: string,
   ) {
     await this.userService.acceptJoinFolder(
@@ -58,7 +58,7 @@ export class UsersController extends BaseModuleController {
 
   @Post('reject-join-folder/:folder_user_request_id')
   async rejectJoinFolder(
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @Param('folder_user_request_id') folder_user_request_id: string,
   ) {
     await this.userService.rejectJoinFolder(

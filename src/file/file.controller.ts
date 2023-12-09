@@ -16,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { TokenPayloadProps } from 'src/base-module/token-payload-interface';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { uploadToLocalDisk } from 'src/base-module/upload-file.helper';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
@@ -43,7 +43,7 @@ export class FileController extends BaseModuleController {
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createFileDto: CreateFileDto,
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @UploadedFile() file,
   ) {
     await this.folderHelper.checkIfHasFolderPermission(
@@ -89,7 +89,7 @@ export class FileController extends BaseModuleController {
   @Get()
   async findAll(
     @Query('folder_id', ParseIntPipe) folder_id: number,
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
   ) {
     await this.folderHelper.checkIfHasFolderPermission(
@@ -107,7 +107,7 @@ export class FileController extends BaseModuleController {
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
-    @TokenPayload() tokenPayload: TokenPayloadProps,
+    @TokenPayload() tokenPayload: TokenPayloadType,
   ) {
     await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
 
