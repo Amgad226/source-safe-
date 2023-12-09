@@ -1,6 +1,6 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { deleteFile } from 'src/base-module/file.helper';
+import { deleteFile } from 'src/base-module/upload-file.helper';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GoogleDriveService } from './google-drive.service';
 import { CreateFolderProps, FileProps } from './props/create-folder.props';
