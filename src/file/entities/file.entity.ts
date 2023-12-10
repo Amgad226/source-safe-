@@ -12,8 +12,8 @@ export class FileEntity extends BaseFileEntity {
     id,
     name,
     extension,
-    checked_in,
     folder_id,
+    status,
     created_at,
     check_in = null,
     check_out = null,
@@ -24,10 +24,10 @@ export class FileEntity extends BaseFileEntity {
       id,
       name,
       extension,
+      status,
       folder_id,
       created_at,
       FileVersion,
-      checked_in,
     });
     this.check_in = check_in ? [{}] : [{}]; //FIXME
     this.check_out = check_out ? [{}] : [{}]; //FIXME
