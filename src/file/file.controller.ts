@@ -9,24 +9,32 @@ import {
   Patch,
   Post,
   Query,
+  UnauthorizedException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
+import { BaseModuleController } from 'src/base-module/base-module.controller';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
 import { TokenPayloadType } from 'src/base-module/token-payload-interface';
-import { uploadToLocalDisk } from 'src/base-module/upload-file.helper';
+import {
+  fileInterface,
+  uploadToLocalDisk,
+} from 'src/base-module/upload-file.helper';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
-import { FileProps } from 'src/google-drive/props/create-folder.props';
+import {
+  AfterUploadDataType,
+  FileProps,
+} from 'src/google-drive/props/create-folder.props';
 import { UtilsAfterJobFunctionEnum } from 'src/google-drive/utils-after-jobs.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
+import { FileStatusEnum } from './enums/file-status.enum';
 import { FileService } from './file.service';
-import { BaseModuleController } from 'src/base-module/base-module.controller';
 
 @Controller('file')
 export class FileController extends BaseModuleController {
@@ -52,33 +60,24 @@ export class FileController extends BaseModuleController {
       'admin',
     );
 
-    const storedFile = (await uploadToLocalDisk(file, createFileDto.name))[0];
+    const storedFile: fileInterface = (
+      await uploadToLocalDisk(file, createFileDto.name)
+    )[0];
 
     const db_file = await this.fileService.create(
       createFileDto,
       storedFile,
       tokenPayload,
     );
-
-    const fileDetails: FileProps = {
-      folderDriveId: db_file.folder.driveFolderID,
-      localPath: storedFile.path,
-      filename: storedFile.filename,
-      mimetype: storedFile.mimetype,
-      originalname: storedFile.originalname,
-      afterUpload: {
-        functionCall: UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
-        data: {
-          fileVersionId:
-            db_file.file_versions[db_file.file_versions.length - 1].id,
-        },
+    this.createFileDetailsObjectAndServeToQueue(
+      db_file.folder.driveFolderID,
+      storedFile,
+      UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
+      {
+        fileVersionId:
+          db_file.file_versions[db_file.file_versions.length - 1].id,
       },
-    };
-
-    this.googleDriveQueue.add('upload-file', fileDetails, {
-      removeOnComplete: true,
-      removeOnFail: false,
-    });
+    );
 
     return this.successResponse({
       message: 'file created successfully and will upload it to cloud',
@@ -119,6 +118,74 @@ export class FileController extends BaseModuleController {
     });
   }
 
+  @Post(':id/check-in')
+  async checkIn(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
+    if (await this.folderHelper.isCheckedIn(+id)) {
+      throw new UnauthorizedException('this file already checked in ');
+    }
+    await this.fileService.storeCheckIn(+id, tokenPayload.user);
+    await this.fileService.fileChangeStatus(
+      +id,
+      tokenPayload.user,
+      FileStatusEnum.CHECKED_OUT,
+    );
+    return this.successResponse({
+      status: 200,
+      message: 'file checked in',
+    });
+  }
+
+  @Post(':id/check-out')
+  @UseInterceptors(FileInterceptor('file'))
+  async checkOut(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @UploadedFile() uploadedFile,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
+
+    if (!(await this.folderHelper.isCheckedIn(+id))) {
+      throw new UnauthorizedException('this file is free and not checked in ');
+    }
+
+    const isUserCheckedIn = await this.fileService.checkedInByAuthUser(
+      +id,
+      tokenPayload.user,
+    );
+    if (!isUserCheckedIn) {
+      throw new UnauthorizedException(
+        'you cant check out file not checked in by you',
+      );
+    }
+    const db_file = await this.fileService.findOne(+id);
+    const storedFile = (await uploadToLocalDisk(uploadedFile, db_file.name))[0];
+    await this.fileService.createVersion(+id, tokenPayload.user, storedFile);
+    await this.fileService.fileChangeStatus(
+      +id,
+      tokenPayload.user,
+      FileStatusEnum.CHECKED_IN,
+    );
+    await this.fileService.deleteCheckIn(+id, tokenPayload.user);
+
+    this.createFileDetailsObjectAndServeToQueue(
+      db_file.folder.driveFolderID,
+      storedFile,
+      UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
+      {
+        fileVersionId:
+          db_file.file_versions[db_file.file_versions.length - 1].id,
+      },
+    );
+
+    return this.successResponse({
+      message: 'file checked out successfully and file will upload it to cloud',
+      status: 201,
+    });
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
     return this.fileService.update(+id, updateFileDto);
@@ -127,5 +194,23 @@ export class FileController extends BaseModuleController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.fileService.remove(+id);
+  }
+
+  private createFileDetailsObjectAndServeToQueue(
+    folder_driveFolderID: string,
+    storedFile: fileInterface,
+    functionCall: UtilsAfterJobFunctionEnum,
+    data?: AfterUploadDataType,
+  ) {
+    const fileDetails: FileProps = this.folderHelper.createFileDetailsObject(
+      folder_driveFolderID,
+      storedFile,
+      functionCall,
+      data,
+    );
+    this.googleDriveQueue.add('upload-file', fileDetails, {
+      removeOnComplete: true,
+      removeOnFail: false,
+    });
   }
 }

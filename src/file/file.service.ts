@@ -3,7 +3,10 @@ import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { TokenPayloadType } from 'src/base-module/token-payload-interface';
+import {
+  TokenPayloadType,
+  UserTokenPayloadType,
+} from 'src/base-module/token-payload-interface';
 import { fileInterface } from 'src/base-module/upload-file.helper';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
@@ -11,6 +14,7 @@ import { UpdateFileDto } from './dto/update-file.dto';
 import { FileEntity } from './entities/file.entity';
 import { log } from 'console';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
+import { FileStatusEnum } from './enums/file-status.enum';
 
 @Injectable()
 export class FileService {
@@ -29,7 +33,7 @@ export class FileService {
         extension: file.mimetype,
         name: name,
         folder_id: +folder_id,
-        checked_in: false,
+        status: 'check_out',
         FileVersion: {
           create: {
             user_id: tokenPayload.user.id,
@@ -48,10 +52,7 @@ export class FileService {
     return new FileEntity(file_);
   }
 
-  async findAll(
-    params: QueryParamsInterface,
-    folder_id: number,
-  ) {
+  async findAll(params: QueryParamsInterface, folder_id: number) {
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
       ...params,
@@ -80,11 +81,95 @@ export class FileService {
       },
       include: {
         FileVersion: { include: { User: true } },
+        Folder: true,
       },
     });
     return new FileEntity(file);
   }
 
+  async fileChangeStatus(
+    id: number,
+    user: UserTokenPayloadType,
+    status: FileStatusEnum,
+  ) {
+    await this.prisma.file.update({
+      where: {
+        id,
+      },
+      data: {
+        status: status,
+      },
+    });
+    const last_version_file = await this.prisma.fileVersion.findFirst({
+      where: {
+        file_id: id,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+    
+    await this.prisma.fileStatistic.create({
+      data: {
+        status: status,
+        user_id: user.id,
+        file_version_id: last_version_file.id,
+        text: `this file has ${status} at ${Date.now().toLocaleString()} and this text hardcoded 😉😍 `,
+        file_id: id,
+      },
+    });
+  }
+  async storeCheckIn(file_id: number, user: UserTokenPayloadType) {
+    const check_in = await this.prisma.checkIn.create({
+      data: {
+        user_id: user.id,
+        file_id,
+      },
+    });
+  }
+  async deleteCheckIn(file_id: number, user: UserTokenPayloadType) {
+    await this.prisma.checkIn.deleteMany({
+      where: {
+        user_id: user.id,
+        file_id,
+      },
+    });
+  }
+  async checkedInByAuthUser(file_id: number, user: UserTokenPayloadType) {
+    const checkIn = await this.prisma.checkIn.findFirst({
+      where: {
+        file_id,
+        user_id: user.id,
+      },
+    });
+    return checkIn != null ? true : false;
+  }
+
+  async createVersion(
+    file_id: number,
+    user: UserTokenPayloadType,
+    {
+      destination,
+      encoding,
+      fieldname,
+      filename,
+      mimetype,
+      originalname,
+      path,
+      size,
+    }: fileInterface,
+  ) {
+    const fileVersion = await this.prisma.fileVersion.create({
+      data: {
+        extension: mimetype,
+        name: filename,
+        path,
+        size,
+        file_id,
+        user_id: user.id,
+      },
+    });
+  }
   update(id: number, updateFileDto: UpdateFileDto) {
     return `This action updates a #${id} file`;
   }
