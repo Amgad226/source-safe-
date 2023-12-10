@@ -7,9 +7,15 @@ import {
 import { Folder } from '@prisma/client';
 import { log } from 'console';
 import {
-  TokenPayloadType,
-  UserTokenPayloadType,
+  UserTokenPayloadType
 } from 'src/base-module/token-payload-interface';
+import { fileInterface } from 'src/base-module/upload-file.helper';
+import { FileStatusEnum } from 'src/file/enums/file-status.enum';
+import {
+  AfterUploadDataType,
+  FileProps
+} from 'src/google-drive/props/create-folder.props';
+import { UtilsAfterJobFunctionEnum } from 'src/google-drive/utils-after-jobs.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 export const queueAction = {
@@ -17,10 +23,6 @@ export const queueAction = {
   removeOnFail: false,
 };
 
-export enum UtilsAfterJobFunctionEnum {
-  updateFolderLogoAfterUpload = 'updateFolderLogoAfterUpload',
-  updateDriveFolderIDAfterUpload = 'updateDriveFolderIDAfterUpload',
-}
 @Injectable()
 export class FolderHelperService {
   constructor(private prisma: PrismaService) {}
@@ -115,5 +117,54 @@ export class FolderHelperService {
       throw new NotFoundException(`file ${file_id} not found`);
     }
     await this.checkIfHasFolderPermission(user, file.folder_id, role);
+  }
+  async isFileStatus(
+    file_id: number,
+    fileStatus: FileStatusEnum = FileStatusEnum.CHECKED_IN,
+  ) {
+    const file = await this.prisma.file.findUnique({
+      where: {
+        id: file_id,
+      },
+    });
+    log(
+      file.status,
+      fileStatus.toString(),
+      file.status == fileStatus.toString(),
+    );
+    if (file.status == fileStatus.toString()) {
+      throw new UnauthorizedException(
+        `this file is ${file.status} , wait to unlock this file then `,
+      );
+    }
+  }
+  async isCheckedIn(id: number) {
+    const checkIn = await this.prisma.checkIn.findFirst({
+      where: {
+        file_id:id,
+      },
+    });
+    
+    return checkIn != null ? true : false;
+  }
+
+  createFileDetailsObject(
+    folder_driveFolderID: string,
+    storedFile: fileInterface,
+    functionCall: UtilsAfterJobFunctionEnum,
+    data?: AfterUploadDataType,
+  ): FileProps {
+    const fileDetails: FileProps = {
+      folderDriveId: folder_driveFolderID,
+      localPath: storedFile.path,
+      filename: storedFile.filename,
+      mimetype: storedFile.mimetype,
+      originalname: storedFile.originalname,
+      afterUpload: {
+        functionCall,
+        data,
+      },
+    };
+    return fileDetails;
   }
 }
