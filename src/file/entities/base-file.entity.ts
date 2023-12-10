@@ -1,20 +1,21 @@
-import { BaseEntity, collectDataBy } from 'src/base-module/base-entity';
+import { BaseEntity } from 'src/base-module/base-entity';
+import { FileStatusEnum } from '../enums/file-status.enum';
 
 export class BaseFileEntity extends BaseEntity {
   id: number;
   name: string;
   extension: string;
-  checked_in: boolean;
   latest_path: string;
+  status: FileStatusEnum;
   created_at: Date;
   folder_id: number;
-
+  last_modified: Date;
   constructor({
     id,
     name,
     extension,
-    checked_in,
     folder_id,
+    status,
     created_at,
     FileVersion,
   }) {
@@ -22,9 +23,10 @@ export class BaseFileEntity extends BaseEntity {
     this.id = id;
     this.name = name;
     this.extension = extension;
-    this.checked_in = checked_in;
+    this.status = status;
     this.folder_id = folder_id;
-    this.latest_path = FileVersion[FileVersion.length - 1].path;
     this.created_at = created_at;
+    this.latest_path = FileVersion[FileVersion.length - 1].path;
+    this.last_modified = FileVersion[FileVersion.length - 1].created_at;
   }
 }
