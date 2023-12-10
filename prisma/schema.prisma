@@ -106,8 +106,8 @@ model FileStatistic {
   status         StatusEnum
   file           File        @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   file_id        Int
-  file_verion_id Int
-  file_verion    FileVersion @relation(fields: [file_verion_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  file_version_id Int
+  file_version    FileVersion @relation(fields: [file_version_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user_id        Int
 
