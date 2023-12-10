@@ -64,7 +64,7 @@ model File {
   name          String
   extension     String
   created_at    DateTime        @default(now())
-  checked_in    Boolean         @default(false)
+  status        StatusEnum      @default(check_out)
   folder_id     Int
   Folder        Folder          @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   deleted_at    DateTime?
@@ -101,15 +101,15 @@ enum StatusEnum {
 model FileStatistic {
   id Int @id @default(autoincrement())
 
-  text           String?
-  created_at     DateTime    @default(now())
-  status         StatusEnum
-  file           File        @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  file_id        Int
+  text            String?
+  created_at      DateTime    @default(now())
+  status          StatusEnum
+  file            File        @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  file_id         Int
   file_version_id Int
   file_version    FileVersion @relation(fields: [file_version_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id        Int
+  user            User        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id         Int
 
   @@map("file_statistics")
 }
