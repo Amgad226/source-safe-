@@ -30,7 +30,7 @@ export async function PaginatorHelper<T>({
     if (hasOtherProps) {
       const { ...props } = relations;
       restProps = props;
-  }
+    }
   }
   const modelKeys = await model.findFirst().then((data) => {
     if (data)
@@ -55,20 +55,22 @@ export async function PaginatorHelper<T>({
         AND: [{ ...searchObject }, { ...where }],
       }
     : where;
-    
-      log(JSON.stringify(whereConditionAndSearch))
+
+  log(JSON.stringify(whereConditionAndSearch));
   const data = await model.findMany({
     take: items_per_page,
     skip,
     where: whereConditionAndSearch,
     ...restProps,
   });
-  log(JSON.stringify({
-    take: items_per_page,
-    skip,
-    where: whereConditionAndSearch,
-    ...restProps,
-  }))
+  log(
+    JSON.stringify({
+      take: items_per_page,
+      skip,
+      where: whereConditionAndSearch,
+      ...restProps,
+    }),
+  );
 
   const totalItems = await model.count({
     where,
@@ -78,6 +80,7 @@ export async function PaginatorHelper<T>({
   return {
     data,
     pagination: {
+      totalItems,
       totalPages,
       page: ++page,
       items_per_page,

@@ -12,6 +12,7 @@ export interface QueryParamsInterface {
 }
 
 export interface PaginationMetaData {
+  totalItems: number;
   totalPages: number;
   page: number;
   items_per_page: number;
