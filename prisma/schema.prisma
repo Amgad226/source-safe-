@@ -20,6 +20,7 @@ model User {
   FileStatistic     FileStatistic[]
   UserFolderRequest UserFolderRequest[]
   FileVersion       FileVersion[]
+  CheckIn           CheckIn[]
 
   @@map("users")
 }
@@ -70,8 +71,21 @@ model File {
   deleted_at    DateTime?
   FileStatistic FileStatistic[]
   FileVersion   FileVersion[]
+  CheckIn       CheckIn[]
 
   @@map("files")
+}
+
+model CheckIn {
+  id Int @id @default(autoincrement())
+
+  user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id        Int
+
+  file_id        Int
+  File           File        @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("check_in")
 }
 
 model FileVersion {
