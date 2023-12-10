@@ -1802,6 +1802,74 @@
 							"body": "{\n    \"message\": \"retrieve file info\",\n    \"status\": 200,\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"file name \",\n        \"extension\": \"image/jpeg\",\n        \"checked_in\": false,\n        \"folder_id\": 1,\n        \"latest_path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n        \"created_at\": \"2023-12-09T18:35:26.470Z\",\n        \"check_in\": [\n            {}// has not complete yet\n        ],\n        \"check_out\": [\n            {}// has not complete yet\n        ],\n        \"folder\": null,\n        \"file_versions\": [\n            {\n                \"id\": 7,\n                \"path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"size\": 203876,\n                \"user\": {\n                    \"id\": 1,\n                    \"email\": \"amgad@gmail.com\",\n                    \"name\": \"amgad alwattar\"\n                }\n            }\n        ]\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "file check in",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIyMzgyMzksImV4cCI6MTcwMjg0MzAzOX0.eHRALi12pyZ6oXCB3rLEsACd9v7CV34gwqcaCH0Un6A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/7/check-in",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"7",
+								"check-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "file check out",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIyMzgyMzksImV4cCI6MTcwMjg0MzAzOX0.eHRALi12pyZ6oXCB3rLEsACd9v7CV34gwqcaCH0Un6A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/ASUS/Pictures/cv.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/file/7/check-out",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"7",
+								"check-out"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
