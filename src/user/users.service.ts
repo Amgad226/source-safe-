@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { UserEntity } from 'src/auth/entities/common/user-entity';
-import { TokenPayloadType } from 'src/base-module/token-payload-interface';
-import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
+import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
+import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FolderRequestEntity } from './entity/folder-request.entity';
 
@@ -59,7 +59,17 @@ export class UsersService {
             user_id: user.id,
           },
           include: {
-            folder: true,
+            folder: {
+              include: {
+                UserFolder: {
+                  include: {
+                    user: true,
+                    folder_role:true
+                  },
+                },
+                files: true,
+              },
+            },
           },
         },
       });

@@ -1,18 +1,19 @@
-import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { collectDataBy } from 'src/base-module/base-entity';
 import { BaseFileEntity } from 'src/file/entities/base-file.entity';
-import { BaseFolderEntity } from './base-folder.entity';
-export class FolderEntity extends BaseFolderEntity {
+import { FolderWithMemberEntity } from './folder-with-members.entity';
+export class FolderEntity extends FolderWithMemberEntity {
   files: BaseFileEntity[];
-  members: any[];
-  constructor({ id, folder_id, name, logo, driveFolderID, files, UserFolder }) {
-    super({ id, folder_id, name, logo, driveFolderID });
+  constructor({
+    id,
+    folder_id,
+    name,
+    logo,
+    driveFolderID,
+    created_at,
+    files,
+    UserFolder,
+  }) {
+    super({ id, folder_id, name, logo, driveFolderID, created_at, UserFolder });
     this.files = collectDataBy(BaseFileEntity, files);
-    this.members = UserFolder.map(function (userFolderr) {
-      return {
-        user: new UserEntity(userFolderr.user),
-        role: userFolderr.folder_role.name,
-      };
-    });
   }
 }
