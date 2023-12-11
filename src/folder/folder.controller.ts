@@ -114,7 +114,7 @@ export class FolderController extends BaseModuleController {
     @TokenPayload() tokenPayload: TokenPayloadType,
     @Param('id') id: string,
   ) {
-    await this.folderHelper.checkIfHasFolderPermission(tokenPayload.user, +id);
+    // await this.folderHelper.checkIfHasFolderPermission(tokenPayload.user, +id);
     const folder = await this.folderService.findOne(+id);
     return this.successResponse({
       message: 'folder info',
