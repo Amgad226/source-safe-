@@ -2,8 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+  previewFeatures = ["selectRelationCount"]
 }
 
 datasource db {
@@ -31,6 +32,7 @@ model Folder {
   logo              String?
   driveFolderID     String?
   folder_id         Int?
+  created_at        DateTime            @default(now())
   parentFolder      Folder?             @relation("ChildFolders", fields: [folder_id], references: [id])
   childFolders      Folder[]            @relation("ChildFolders")
   files             File[]
@@ -79,11 +81,11 @@ model File {
 model CheckIn {
   id Int @id @default(autoincrement())
 
-  user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id        Int
+  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id Int
 
-  file_id        Int
-  File           File        @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  file_id Int
+  File    File @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("check_in")
 }
