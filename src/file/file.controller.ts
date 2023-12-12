@@ -131,7 +131,7 @@ export class FileController extends BaseModuleController {
     await this.fileService.fileChangeStatus(
       +id,
       tokenPayload.user,
-      FileStatusEnum.CHECKED_OUT,
+      FileStatusEnum.CHECKED_IN,
     );
     return this.successResponse({
       status: 200,
@@ -167,7 +167,7 @@ export class FileController extends BaseModuleController {
     await this.fileService.fileChangeStatus(
       +id,
       tokenPayload.user,
-      FileStatusEnum.CHECKED_IN,
+      FileStatusEnum.CHECKED_OUT,
     );
     await this.fileService.deleteCheckIn(+id, tokenPayload.user);
 
