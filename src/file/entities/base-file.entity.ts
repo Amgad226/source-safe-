@@ -26,7 +26,7 @@ export class BaseFileEntity extends BaseEntity {
     this.status = status;
     this.folder_id = folder_id;
     this.created_at = created_at;
-    this.latest_path = FileVersion[FileVersion.length - 1].path;
-    this.last_modified = FileVersion[FileVersion.length - 1].created_at;
+    this.latest_path = FileVersion[FileVersion.length - 1]?.path ?? 'not_found_data';
+    this.last_modified = FileVersion[FileVersion.length - 1]?.created_at ?? 'not_found_data';
   }
 }

@@ -11,7 +11,7 @@ export class FolderWithMemberEntity extends BaseFolderEntity {
     created_at,
     UserFolder,
   }) {
-    super({ id, folder_id, name, logo, driveFolderID, created_at });
+    super({ id, folder_id, name, logo, driveFolderID, created_at});
     this.members = UserFolder.map(function (userFolderr) {
       return {
         user: new UserEntity(userFolderr.user),

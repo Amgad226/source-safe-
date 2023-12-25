@@ -8,6 +8,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AddUsersDto } from './dto/add-users.dto';
 import { BaseFolderEntity } from './entities/base-folder.entity';
 import { FolderEntity } from './entities/folder.entity';
+import { FolderIndexEntity } from './entities/folder-index.entity';
 
 @Injectable()
 export class FolderService {
@@ -15,7 +16,7 @@ export class FolderService {
 
   async create(
     { name, parentFolderIdDb },
-    logoLocalPath:string,
+    logoLocalPath: string,
     tokenPayload: TokenPayloadType,
   ) {
     const admin_folder_role = await this.prisma.folderRole.findFirst({
@@ -49,18 +50,39 @@ export class FolderService {
       model: this.prisma.folder,
       ...params,
       relations: {
-        where: {
-          UserFolder: {
-            some: {
-              user_id: {
-                equals: user.id,
-              },
-            },
-          },
+        include:{
+          files:{
+            include:{
+              FileVersion:true
+            }
+          }
         },
+        // where: {
+        //   UserFolder: {
+        //     some: {
+        //       user_id: {
+        //         equals: user.id,
+        //       },
+        //     },
+        //   },
+        // },
       },
     });
-    return new PaginatorEntity(BaseFolderEntity, folders);
+    folders.data.map((folder) => {
+       folder['folder_size'] = folder.files.reduce((accumulator, file) => {
+        const fileVersionSizes = file.FileVersion.map(
+          (version) => version.size,
+        );
+        const totalSizeForFile = fileVersionSizes.reduce(
+          (sum, size) => sum + size,
+          0,
+        );
+        return accumulator + totalSizeForFile;
+      }, 0);
+      folder['files_count'] =  folder.files.length
+      return folder
+    });
+    return new PaginatorEntity(FolderIndexEntity, folders);
   }
 
   async findOne(id: number) {
@@ -71,11 +93,32 @@ export class FolderService {
         UserFolder: { include: { user: true, folder_role: true } },
       },
     });
+    // SELECT
+    // folders.*,
+    // COALESCE(subquery.total_size, 0) AS total_size
+    // FROM folders
+    // LEFT JOIN
+    //          (
+    //            SELECT folder_id, SUM(file_versions.size) AS total_size
+    //            FROM files
+    //            JOIN file_versions ON file_versions.file_id = files.id
+    //            GROUP BY folder_id
+    //            ) AS subquery ON folders.id = subquery.folder_id;
+
+    const totalSize = folder.files.reduce((accumulator, file) => {
+      const fileVersionSizes = file.FileVersion.map((version) => version.size);
+      const totalSizeForFile = fileVersionSizes.reduce(
+        (sum, size) => sum + size,
+        0,
+      );
+      return accumulator + totalSizeForFile;
+    }, 0);
+    folder['files_count'] =1 
 
     if (!folder) {
       throw new NotFoundException(`Folder with ID ${id} not found`);
     }
-    return new FolderEntity(folder);
+    return new FolderEntity({ ...folder, folder_size: totalSize });
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {
@@ -140,5 +183,4 @@ export class FolderService {
       })
     ).count;
   }
-
 }
