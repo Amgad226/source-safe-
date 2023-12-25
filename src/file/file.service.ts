@@ -70,7 +70,13 @@ export class FileService {
         },
       },
     });
-
+    files.data.map((file) => {
+      file['full_size'] = file.FileVersion.reduce((accumulator, version) => {
+        return version.size + accumulator;
+      }, 0);
+      file['latest_size'] =
+        file.FileVersion[file.FileVersion.length - 1]?.size ?? 'not_found_data';
+    });
     return new PaginatorEntity(FileEntity, files);
   }
 
@@ -84,6 +90,12 @@ export class FileService {
         Folder: true,
       },
     });
+    file['full_size'] = file.FileVersion.reduce((accumulator, version) => {
+      return version.size + accumulator;
+    }, 0);
+    file['latest_size'] =
+      file.FileVersion[file.FileVersion.length - 1]?.size ?? 'not_found_data';
+
     return new FileEntity(file);
   }
 
@@ -108,7 +120,7 @@ export class FileService {
         created_at: 'desc',
       },
     });
-    
+
     await this.prisma.fileStatistic.create({
       data: {
         status: status,

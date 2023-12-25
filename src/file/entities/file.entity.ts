@@ -8,6 +8,8 @@ export class FileEntity extends BaseFileEntity {
   check_in?: [any] | [];
   check_out?: [any] | [];
   file_versions: FileVersionEntity[];
+  full_size: number|string;
+  latest_size: number|string;
   constructor({
     id,
     name,
@@ -19,6 +21,8 @@ export class FileEntity extends BaseFileEntity {
     check_out = null,
     FileVersion,
     Folder = null,
+    full_size = null,
+    latest_size = null,
   }) {
     super({
       id,
@@ -32,6 +36,8 @@ export class FileEntity extends BaseFileEntity {
     this.check_in = check_in ? [{}] : [{}]; //FIXME
     this.check_out = check_out ? [{}] : [{}]; //FIXME
     this.folder = Folder ?? null;
+    this.full_size = full_size ?? 'not_loaded_data';
+    this.latest_size = latest_size ?? 'not_loaded_data';
     this.file_versions = collectDataBy(FileVersionEntity, FileVersion);
   }
 }
