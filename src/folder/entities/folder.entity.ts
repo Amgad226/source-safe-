@@ -14,7 +14,7 @@ export class FolderEntity extends FolderWithMemberEntity {
     created_at,
     files,
     UserFolder,
-    folder_size
+    folder_size=0
   }) {
     super({ id, folder_id, name, logo, driveFolderID, created_at, UserFolder });
     this.files_count = files.length;

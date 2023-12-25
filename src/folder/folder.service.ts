@@ -51,21 +51,23 @@ export class FolderService {
       ...params,
       relations: {
         include:{
+        UserFolder: { include: { user: true, folder_role: true } },
+
           files:{
             include:{
               FileVersion:true
             }
           }
         },
-        // where: {
-        //   UserFolder: {
-        //     some: {
-        //       user_id: {
-        //         equals: user.id,
-        //       },
-        //     },
-        //   },
-        // },
+        where: {
+          UserFolder: {
+            some: {
+              user_id: {
+                equals: user.id,
+              },
+            },
+          },
+        },
       },
     });
     folders.data.map((folder) => {
@@ -113,12 +115,11 @@ export class FolderService {
       );
       return accumulator + totalSizeForFile;
     }, 0);
-    folder['files_count'] =1 
-
+    folder['folder_size'] =totalSize
     if (!folder) {
       throw new NotFoundException(`Folder with ID ${id} not found`);
     }
-    return new FolderEntity({ ...folder, folder_size: totalSize });
+    return new FolderEntity(folder);
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {

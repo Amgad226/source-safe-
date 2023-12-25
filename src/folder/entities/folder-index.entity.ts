@@ -1,6 +1,7 @@
 import { UserEntity } from 'src/auth/entities/common/user-entity';
 import { BaseFolderEntity } from './base-folder.entity';
-export class FolderIndexEntity extends BaseFolderEntity {
+import { FolderWithMemberEntity } from './folder-with-members.entity';
+export class FolderIndexEntity extends FolderWithMemberEntity  {
   files_count :number ;
   folder_size :number ;
   constructor({
@@ -11,9 +12,10 @@ export class FolderIndexEntity extends BaseFolderEntity {
     driveFolderID,
     created_at,
     files,
-    folder_size
+    folder_size,
+    UserFolder
   }) {
-    super({ id, folder_id, name, logo, driveFolderID, created_at });
+    super({ id, folder_id, name, logo, driveFolderID, created_at,UserFolder });
     this.files_count = files.length;
     this.folder_size = folder_size;
 
