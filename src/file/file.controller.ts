@@ -9,12 +9,15 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UnauthorizedException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Queue } from 'bull';
+import { Response } from 'express';
+import * as fs from 'fs';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
@@ -23,6 +26,7 @@ import {
   fileInterface,
   uploadToLocalDisk,
 } from 'src/base-module/upload-file.helper';
+import { Public } from 'src/decorators/public.decorators';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
 import {
@@ -30,6 +34,8 @@ import {
   FileProps,
 } from 'src/google-drive/props/create-folder.props';
 import { UtilsAfterJobFunctionEnum } from 'src/google-drive/utils-after-jobs.service';
+import { EnvEnum } from 'src/my-config/env-enum';
+import { MyConfigService } from 'src/my-config/my-config.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -42,6 +48,7 @@ export class FileController extends BaseModuleController {
     private readonly fileService: FileService,
     private folderHelper: FolderHelperService,
     private prisma: PrismaService,
+    private myConfigService: MyConfigService,
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {
     super();
@@ -101,6 +108,41 @@ export class FileController extends BaseModuleController {
       message: 'files in this folder ',
       data: files,
     });
+  }
+  
+  @Public()
+  @Get('download')
+  async downloadLink(@Query('link') link: string) {
+    if (link.startsWith('https://drive.google.com/uc?id='))
+      return link + '&export=download';
+    else {
+      return `${this.myConfigService.get(
+        EnvEnum.HOST,
+      )}/file/disk-download?link=${link}`;
+    }
+  }
+  @Public()
+  @Get('disk-download')
+  async downloadLocalLink(@Query('link') link: string, @Res() res: Response) {
+    if (fs.existsSync(link)) {
+      // Content-Disposition header suggests that the content should be treated as an attachment
+      // and specifies the default filename for the downloaded file.
+      res.header(
+        'Content-Disposition',
+        `attachment; filename=${link.replace(/\\/g, '/').split('/').pop()}`,
+      );
+
+      // Content-Type header indicates the media type of the resource.
+      // In this case, it is set to 'application/octet-stream' to treat the content as binary data.
+      res.header('Content-Type', 'application/octet-stream');
+
+      // Stream the file to the response
+      const fileStream = fs.createReadStream(link);
+      fileStream.pipe(res);
+    } else {
+      // File not found
+      res.status(404).send('File not found');
+    }
   }
 
   @Get(':id')
