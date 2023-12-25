@@ -7,7 +7,7 @@ import {
   Post,
   Put,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -33,13 +33,14 @@ import { AddUsersDto } from './dto/add-users.dto';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { FolderService } from './folder.service';
 import { FolderHelperService } from './folder.helper.service';
+import { RemoveUserDto } from './dto/remove-user.dto';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
   constructor(
     private readonly folderService: FolderService,
     private myConfigService: MyConfigService,
-    private folderHelper :FolderHelperService,
+    private folderHelper: FolderHelperService,
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {
     super();
@@ -52,8 +53,9 @@ export class FolderController extends BaseModuleController {
     @TokenPayload() tokenPayload: TokenPayloadType,
   ) {
     let storedLogo = (await uploadToLocalDisk(logo, name))[0];
-    const parentFolderDriveId =
-      await this.folderHelper.getParentFolderDriveIds(parentFolderId);
+    const parentFolderDriveId = await this.folderHelper.getParentFolderDriveIds(
+      parentFolderId,
+    );
 
     const newDbFolder = await this.folderService.create(
       { name, parentFolderIdDb: parentFolderDriveId.DbFolderId },
@@ -135,6 +137,18 @@ export class FolderController extends BaseModuleController {
     return this.successResponse({
       message: `${request_users_count} users added to request folder successfully`,
       status: 201,
+    });
+  }
+
+  @Post(':id/remove-user')
+  async removeUser(
+    @Param('id') id: number,
+    @Body() removeUserDto: RemoveUserDto,
+  ): Promise<ResponseInterface> {
+    await this.folderService.deleteUser(+id, removeUserDto);
+    return this.successResponse({
+      message: `users removed form group`,
+      status: 200,
     });
   }
 }
