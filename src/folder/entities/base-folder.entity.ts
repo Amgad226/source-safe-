@@ -7,14 +7,17 @@ export class BaseFolderEntity extends BaseEntity {
   driveFolderID: string;
   created_at: Date;
 
-  constructor({ id, folder_id, name, logo, driveFolderID,created_at }) {
+  constructor({ id, folder_id, name, logo, driveFolderID, created_at }) {
     super();
     this.id = id;
     this.folder_id = folder_id;
     this.name = name;
-    this.logo = logo;
+    if (logo.startsWith('https://drive.google.com/uc') || logo.length == 0) {
+      this.logo = logo;
+    } else {
+      this.logo = `${global.baseUrl}/${logo}`;
+    }
     this.driveFolderID = driveFolderID;
     this.created_at = created_at;
   }
-
 }
