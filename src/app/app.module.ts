@@ -1,5 +1,5 @@
 import { BullModule } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
@@ -19,6 +19,7 @@ import { MyConfigService } from '../my-config/my-config.service';
 import { UsersModule } from '../user/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BaseUrlMiddleware } from 'src/base-module/baseUrl.middleware';
 
 @Module({
   imports: [
@@ -59,4 +60,9 @@ import { AppService } from './app.service';
   ],
   exports: [RedisService, PrismaService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    // Apply the middleware globally
+    consumer.apply(BaseUrlMiddleware).forRoutes('*');
+  }
+}
