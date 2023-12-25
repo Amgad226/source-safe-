@@ -26,6 +26,7 @@ import {
   fileInterface,
   uploadToLocalDisk,
 } from 'src/base-module/upload-file.helper';
+import { signUrl, validateSignedUrl } from 'src/base-module/url-signing.helper';
 import { Public } from 'src/decorators/public.decorators';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
@@ -109,27 +110,46 @@ export class FileController extends BaseModuleController {
       data: files,
     });
   }
-  
+
   @Public()
   @Get('download')
   async downloadLink(@Query('link') link: string) {
     if (link.startsWith('https://drive.google.com/uc?id='))
       return link + '&export=download';
     else {
-      return `${this.myConfigService.get(
-        EnvEnum.HOST,
-      )}/file/disk-download?link=${link}`;
+      return signUrl(
+        `${this.myConfigService.get(EnvEnum.HOST)}/file/disk-download`,
+        link,
+        90,
+      );
     }
   }
   @Public()
   @Get('disk-download')
-  async downloadLocalLink(@Query('link') link: string, @Res() res: Response) {
-    if (fs.existsSync(link)) {
+  async downloadLocalLink(
+    @Query('url') url: string,
+    @Query('signature') signature: string,
+    @Query('timestamp') timestamp: string,
+    @Query('nonce') nonce: string,
+    @Query('expires') expires: string,
+    @Res() res: Response,
+  ) {
+    const checkUrl = validateSignedUrl(
+      url,
+      signature,
+      timestamp,
+      nonce,
+      expires,
+    );
+    if (checkUrl.status == false) {
+      return res.status(400).send(checkUrl.msg);
+    }
+    if (fs.existsSync(url)) {
       // Content-Disposition header suggests that the content should be treated as an attachment
       // and specifies the default filename for the downloaded file.
       res.header(
         'Content-Disposition',
-        `attachment; filename=${link.replace(/\\/g, '/').split('/').pop()}`,
+        `attachment; filename=${url.replace(/\\/g, '/').split('/').pop()}`,
       );
 
       // Content-Type header indicates the media type of the resource.
@@ -137,7 +157,7 @@ export class FileController extends BaseModuleController {
       res.header('Content-Type', 'application/octet-stream');
 
       // Stream the file to the response
-      const fileStream = fs.createReadStream(link);
+      const fileStream = fs.createReadStream(url);
       fileStream.pipe(res);
     } else {
       // File not found
