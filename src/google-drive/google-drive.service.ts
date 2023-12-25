@@ -120,4 +120,7 @@ export class GoogleDriveService {
     );
     return `https://drive.google.com/uc?id=${fileId}`;
   }
+  private getDownloadLink(link: string): string {
+    return link + '&export=download';
+  }
 }
