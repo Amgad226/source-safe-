@@ -179,7 +179,7 @@ export class FileService {
       size,
     }: fileInterface,
   ) {
-    const fileVersion = await this.prisma.fileVersion.create({
+    return await this.prisma.fileVersion.create({
       data: {
         extension: mimetype,
         name: filename,

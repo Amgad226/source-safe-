@@ -229,8 +229,11 @@ export class FileController extends BaseModuleController {
       );
     }
     const db_file = await this.fileService.findOne(+id);
+    if(uploadedFile.mimetype != db_file.extension){
+      throw new BadRequestException('this file extension mismatched with original file extension')
+    }
     const storedFile = (await uploadToLocalDisk(uploadedFile, db_file.name))[0];
-    await this.fileService.createVersion(+id, tokenPayload.user, storedFile);
+    const version= await this.fileService.createVersion(+id, tokenPayload.user, storedFile);
     await this.fileService.fileChangeStatus(
       +id,
       tokenPayload.user,
@@ -244,7 +247,7 @@ export class FileController extends BaseModuleController {
       UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
       {
         fileVersionId:
-          db_file.file_versions[db_file.file_versions.length - 1].id,
+        version.id,
       },
     );
 
