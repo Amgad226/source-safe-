@@ -254,8 +254,36 @@ export class FileController extends BaseModuleController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fileService.remove(+id);
+  async remove(
+    @Param('id') id: string,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(
+      tokenPayload.user,
+      +id,
+      'admin',
+    );
+    return this.successResponse({
+      message: 'file deleted successfully ',
+      status: 200,
+      data: this.fileService.remove(+id),
+    });
+  }
+  @Post('restore/:id')
+  async restore(
+    @Param('id') id: string,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(
+      tokenPayload.user,
+      +id,
+      'admin',
+    );
+    return this.successResponse({
+      message: 'file restored successfully',
+      status: 200,
+      data: this.fileService.restore(+id),
+    });
   }
 
   private createFileDetailsObjectAndServeToQueue(

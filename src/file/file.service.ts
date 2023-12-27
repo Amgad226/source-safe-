@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
@@ -84,12 +88,16 @@ export class FileService {
     const file = await this.prisma.file.findFirst({
       where: {
         id,
+        deleted_at: null,
       },
       include: {
         FileVersion: { include: { User: true } },
         Folder: true,
       },
     });
+    if (file == null) {
+      throw new NotFoundException('file not found or may deleted by admin');
+    }
     file['full_size'] = file.FileVersion.reduce((accumulator, version) => {
       return version.size + accumulator;
     }, 0);
@@ -186,7 +194,17 @@ export class FileService {
     return `This action updates a #${id} file`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} file`;
+  async remove(id: number) {
+    await this.prisma.file.update({
+      where: { id },
+      data: { deleted_at: new Date() },
+    });
+  }
+
+  async restore(id: number) {
+    await this.prisma.file.update({
+      where: { id },
+      data: { deleted_at: null },
+    });
   }
 }
