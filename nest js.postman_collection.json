@@ -960,12 +960,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/folder",
+							"raw": "{{url}}/folder?filter[myFolders]=true",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"folder"
+							],
+							"query": [
+								{
+									"key": "filter[myFolders]",
+									"value": "true"
+								}
 							]
 						}
 					},
@@ -997,6 +1003,67 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 61,\n                \"folder_id\": null,\n                \"name\": \"root folder\",\n                \"logo\": \"\",\n                \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\"\n            }\n        ],\n        \"pagination\": {\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    },\n    \"message\": \"your folders\",\n    \"status\": 200\n}"
+						},
+						{
+							"name": "filter myFolders",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/folder?filter[myFolders]=true",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder"
+									],
+									"query": [
+										{
+											"key": "filter[myFolders]",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "415"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"19f-HGLb+ndePxeONTC9q4r4DpCYJ7g\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 27 Dec 2023 14:34:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"your folders\",\n    \"status\": 200,\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 1,\n                \"folder_id\": null,\n                \"name\": \"root folder\",\n                \"logo\": \"\",\n                \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n                \"created_at\": \"2023-12-11T19:28:40.647Z\",\n                \"members\": [\n                    {\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        },\n                        \"role\": \"admin\"\n                    }\n                ],\n                \"files_count\": 24,\n                \"folder_size\": 12424919\n            }\n        ],\n        \"pagination\": {\n            \"totalItems\": 1,\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    }\n}"
 						}
 					]
 				},
@@ -1936,7 +2003,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM1NDMzMjksImV4cCI6MTcwNDE0ODEyOX0.rF8h7ix9WDoHxYfIFe9PaWI_l-UfhsYxiwHat68W0Vc",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
 									"type": "string"
 								}
 							]
