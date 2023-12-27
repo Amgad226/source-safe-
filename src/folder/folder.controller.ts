@@ -97,7 +97,19 @@ export class FolderController extends BaseModuleController {
     });
   }
 
+  @Get()
+  async findAll(
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @FindAllParams() params: QueryParamsInterface,
+  ) {
+    const folders = await this.folderService.findAll(tokenPayload, params);
 
+    return this.successResponse({
+      message: 'your folders',
+      status: 200,
+      data: folders,
+    });
+  }
 
   @Get(':id')
   async findOne(
@@ -130,7 +142,7 @@ export class FolderController extends BaseModuleController {
       data: await this.folderService.removedFiles(+id, params),
     });
   }
-  
+
   @Put(':id/add-users')
   async addUsers(
     @Param('id') id: number,
