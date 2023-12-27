@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -34,6 +35,7 @@ import { CreateFolderDto } from './dto/create-folder.dto';
 import { FolderService } from './folder.service';
 import { FolderHelperService } from './folder.helper.service';
 import { RemoveUserDto } from './dto/remove-user.dto';
+import { FilterParams } from 'src/base-module/filter.interface';
 
 @Controller('folder')
 export class FolderController extends BaseModuleController {
@@ -101,8 +103,13 @@ export class FolderController extends BaseModuleController {
   async findAll(
     @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
+    @Query('filter') filters: FilterParams,
   ) {
-    const folders = await this.folderService.findAll(tokenPayload, params);
+    const folders = await this.folderService.findAll(
+      tokenPayload,
+      params,
+      filters,
+    );
 
     return this.successResponse({
       message: 'your folders',

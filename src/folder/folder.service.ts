@@ -11,6 +11,7 @@ import { FolderEntity } from './entities/folder.entity';
 import { FolderIndexEntity } from './entities/folder-index.entity';
 import { RemoveUserDto } from './dto/remove-user.dto';
 import { FileEntity } from 'src/file/entities/file.entity';
+import { FilterParams } from 'src/base-module/filter.interface';
 
 @Injectable()
 export class FolderService {
@@ -47,7 +48,23 @@ export class FolderService {
     });
     return folder;
   }
-  async findAll({ user }: TokenPayloadType, params: QueryParamsInterface) {
+  async findAll(
+    { user }: TokenPayloadType,
+    params: QueryParamsInterface,
+    filters: FilterParams,
+  ) {
+    //TODO must improve this and do it with general way 
+    let scopes = {};
+    const adminRole = await this.prisma.folderRole.findFirst({
+      where: {
+        name: 'admin',
+      },
+    });
+    if (filters?.myFolders=='true') {
+      scopes = {
+        folder_role_id: adminRole.id,
+      };
+    }
     const folders = await PaginatorHelper<Prisma.FolderFindManyArgs>({
       model: this.prisma.folder,
       ...params,
@@ -64,6 +81,8 @@ export class FolderService {
         where: {
           UserFolder: {
             some: {
+              ...scopes,
+
               user_id: {
                 equals: user.id,
               },
@@ -207,13 +226,13 @@ export class FolderService {
       });
     }
   }
-  async removedFiles(folder_id:number,params){
+  async removedFiles(folder_id: number, params) {
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
       ...params,
       relations: {
         where: {
-          NOT:{
+          NOT: {
             deleted_at: null,
           },
           folder_id: {
