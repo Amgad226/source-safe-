@@ -97,26 +97,14 @@ export class FolderController extends BaseModuleController {
     });
   }
 
-  @Get()
-  async findAll(
-    @TokenPayload() tokenPayload: TokenPayloadType,
-    @FindAllParams() params: QueryParamsInterface,
-  ) {
-    const folders = await this.folderService.findAll(tokenPayload, params);
 
-    return this.successResponse({
-      message: 'your folders',
-      status: 200,
-      data: folders,
-    });
-  }
 
   @Get(':id')
   async findOne(
     @TokenPayload() tokenPayload: TokenPayloadType,
     @Param('id') id: string,
   ) {
-    // await this.folderHelper.checkIfHasFolderPermission(tokenPayload.user, +id);
+    await this.folderHelper.checkIfHasFolderPermission(tokenPayload.user, +id);
     const folder = await this.folderService.findOne(+id);
     return this.successResponse({
       message: 'folder info',
@@ -125,6 +113,24 @@ export class FolderController extends BaseModuleController {
     });
   }
 
+  @Get(':id/removed-files')
+  async removedFiles(
+    @Param('id') id: string,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @FindAllParams() params: QueryParamsInterface,
+  ) {
+    await this.folderHelper.checkIfHasFolderPermission(
+      tokenPayload.user,
+      +id,
+      'admin',
+    );
+    return this.successResponse({
+      message: 'all removed files',
+      status: 200,
+      data: await this.folderService.removedFiles(+id, params),
+    });
+  }
+  
   @Put(':id/add-users')
   async addUsers(
     @Param('id') id: number,

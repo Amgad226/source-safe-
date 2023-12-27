@@ -10,6 +10,7 @@ import { BaseFolderEntity } from './entities/base-folder.entity';
 import { FolderEntity } from './entities/folder.entity';
 import { FolderIndexEntity } from './entities/folder-index.entity';
 import { RemoveUserDto } from './dto/remove-user.dto';
+import { FileEntity } from 'src/file/entities/file.entity';
 
 @Injectable()
 export class FolderService {
@@ -205,5 +206,36 @@ export class FolderService {
         },
       });
     }
+  }
+  async removedFiles(folder_id:number,params){
+    const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
+      model: this.prisma.file,
+      ...params,
+      relations: {
+        where: {
+          NOT:{
+            deleted_at: null,
+          },
+          folder_id: {
+            equals: folder_id,
+          },
+        },
+        include: {
+          FileVersion: {
+            include: {
+              User: true,
+            },
+          },
+        },
+      },
+    });
+    files.data.map((file) => {
+      file['full_size'] = file.FileVersion.reduce((accumulator, version) => {
+        return version.size + accumulator;
+      }, 0);
+      file['latest_size'] =
+        file.FileVersion[file.FileVersion.length - 1]?.size ?? 'not_found_data';
+    });
+    return new PaginatorEntity(FileEntity, files);
   }
 }
