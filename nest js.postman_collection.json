@@ -613,7 +613,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjM4NDAsImV4cCI6MTcwMjc2ODY0MH0.e6OnYCijO4WwD1XiYJWla7Yj_Buyqu2v9-uDM5iocpI",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMjMyMTI4OSwiZXhwIjoxNzAyOTI2MDg5fQ.u-aSW4j40A2bfhH6WvjjrbZoNnAzRTbqgjDkpVZAESY",
 											"type": "string"
 										}
 									]
@@ -811,7 +811,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjM4NDAsImV4cCI6MTcwMjc2ODY0MH0.e6OnYCijO4WwD1XiYJWla7Yj_Buyqu2v9-uDM5iocpI",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMjMyMTI4OSwiZXhwIjoxNzAyOTI2MDg5fQ.u-aSW4j40A2bfhH6WvjjrbZoNnAzRTbqgjDkpVZAESY",
 											"type": "string"
 										}
 									]
@@ -952,7 +952,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjM4NDAsImV4cCI6MTcwMjc2ODY0MH0.e6OnYCijO4WwD1XiYJWla7Yj_Buyqu2v9-uDM5iocpI",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
 									"type": "string"
 								}
 							]
@@ -1001,6 +1001,93 @@
 					]
 				},
 				{
+					"name": "get removed files in folder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/folder/1/removed-files",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"folder",
+								"1",
+								"removed-files"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get removed files in folder",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/folder/1/removed-files",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"1",
+										"removed-files"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "4050"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"fd2-SxH9zq/aFyPi8K6aliJmfbWIpuI\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 27 Dec 2023 11:23:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"all removed files\",\n    \"status\": 200,\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 7,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"status\": \"check_out\",\n                \"folder_id\": 1,\n                \"created_at\": \"2023-12-09T18:35:26.470Z\",\n                \"latest_path\": \"upload\\\\1703544059266_file name .png\",\n                \"last_modified\": \"2023-12-25T22:40:59.273Z\",\n                \"check_in\": [\n                    {}\n                ],\n                \"check_out\": [\n                    {}\n                ],\n                \"folder\": null,\n                \"full_size\": 7051845,\n                \"latest_size\": 390829,\n                \"file_versions\": [\n                    {\n                        \"id\": 37,\n                        \"path\": \"https://drive.google.com/uc?id=1h_hFYSBBaSFLVy0tdCqnjPjFkZ1grnQX\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 42,\n                        \"path\": \"upload\\\\1702249142940_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 41,\n                        \"path\": \"https://drive.google.com/uc?id=1PbR3Cx4zpoN70_Egiz7cTbLTGPySU8OH\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 7,\n                        \"path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/jpeg\",\n                        \"size\": 203876,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 43,\n                        \"path\": \"upload\\\\1702373053644_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 8,\n                        \"path\": \"https://drive.google.com/uc?id=1_v6Ud1_9N2sL7iSBU3uPDjkhwJwhQS0b\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/jpeg\",\n                        \"size\": 203876,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 31,\n                        \"path\": \"upload\\\\1702246349928_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 32,\n                        \"path\": \"upload\\\\1702246375325_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 33,\n                        \"path\": \"upload\\\\1702246392941_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 34,\n                        \"path\": \"upload\\\\1702246402755_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 36,\n                        \"path\": \"upload\\\\1702246604664_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 44,\n                        \"path\": \"upload\\\\1702373059987_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 38,\n                        \"path\": \"upload\\\\1702246617930_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 35,\n                        \"path\": \"https://drive.google.com/uc?id=1gnTzwwCqkhjujq8kUsxR41chINg2yV9u\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 45,\n                        \"path\": \"upload\\\\1702373450049_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 39,\n                        \"path\": \"upload\\\\1702249098572_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 46,\n                        \"path\": \"upload\\\\1702373526153_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 40,\n                        \"path\": \"https://drive.google.com/uc?id=1DQrdOT3St88aDUnd0EDBdieJz8dpJhZG\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    },\n                    {\n                        \"id\": 47,\n                        \"path\": \"upload\\\\1703544059266_file name .png\",\n                        \"name\": \"file name \",\n                        \"extension\": \"image/png\",\n                        \"size\": 390829,\n                        \"user\": {\n                            \"id\": 1,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    }\n                ]\n            }\n        ],\n        \"pagination\": {\n            \"totalItems\": 1,\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    }\n}"
+						}
+					]
+				},
+				{
 					"name": "create folder",
 					"request": {
 						"auth": {
@@ -1008,7 +1095,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjM4NDAsImV4cCI6MTcwMjc2ODY0MH0.e6OnYCijO4WwD1XiYJWla7Yj_Buyqu2v9-uDM5iocpI",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMzUyNDc3NCwiZXhwIjoxNzA0MTI5NTc0fQ.Dpu2k4OH0rjM1OpC3mHpCLTF0RWOi0_jh551uXKf_uY",
 									"type": "string"
 								}
 							]
@@ -1193,7 +1280,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjAwMDUsImV4cCI6MTcwMjc2NDgwNX0.6IwXeS46OxenagRyNX4UZEbd5ZdqdjelLp4q5NXdNmE",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMzUyNDc3NCwiZXhwIjoxNzA0MTI5NTc0fQ.Dpu2k4OH0rjM1OpC3mHpCLTF0RWOi0_jh551uXKf_uY",
 									"type": "string"
 								}
 							]
@@ -1278,7 +1365,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjM4NDAsImV4cCI6MTcwMjc2ODY0MH0.e6OnYCijO4WwD1XiYJWla7Yj_Buyqu2v9-uDM5iocpI",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIzMjExNjksImV4cCI6MTcwMjkyNTk2OX0.cR1T-aFws4Y960X8FKjdh9WyV26vgfK0m_u9ATlUt-I",
 									"type": "string"
 								}
 							]
@@ -1287,7 +1374,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"users_ids\":[22]\r\n}\r\n//// if you send user id that already joined to folder or already have request to folder i will ignore it ",
+							"raw": "{\r\n    \"users_ids\":[2]\r\n}\r\n//// if you send user id that already joined to folder or already have request to folder i will ignore it ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1464,6 +1551,44 @@
 							"body": "{\n    \"statusCode\": 400,\n    \"message\": \"Invalid user ID(s) in the array\",\n    \"error\": \"Bad Request\"\n}"
 						}
 					]
+				},
+				{
+					"name": "remove user from folder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMzUyNDc3NCwiZXhwIjoxNzA0MTI5NTc0fQ.Dpu2k4OH0rjM1OpC3mHpCLTF0RWOi0_jh551uXKf_uY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/folder/3/remove-user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"folder",
+								"3",
+								"remove-user"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1478,7 +1603,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIwNzgyODksImV4cCI6MTcwMjY4MzA4OX0.2lcWAKre6NyW8xbUjuzhguc6h9jiHRfvD98b43Vv8YU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
 									"type": "string"
 								}
 							]
@@ -1495,10 +1620,6 @@
 							],
 							"query": [
 								{
-									"key": "folder_id",
-									"value": "1"
-								},
-								{
 									"key": "page",
 									"value": "1",
 									"disabled": true
@@ -1512,6 +1633,10 @@
 									"key": "search",
 									"value": "pdf",
 									"disabled": true
+								},
+								{
+									"key": "folder_id",
+									"value": "1"
 								}
 							]
 						}
@@ -1626,7 +1751,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/ASUS/Pictures/EDIT_copy.jpg"
+									"src": "/C:/Users/ASUS/Pictures/logo_.png"
 								}
 							]
 						},
@@ -1726,7 +1851,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIxNjAwMDUsImV4cCI6MTcwMjc2NDgwNX0.6IwXeS46OxenagRyNX4UZEbd5ZdqdjelLp4q5NXdNmE",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
 									"type": "string"
 								}
 							]
@@ -1811,7 +1936,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIyMzgyMzksImV4cCI6MTcwMjg0MzAzOX0.eHRALi12pyZ6oXCB3rLEsACd9v7CV34gwqcaCH0Un6A",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM1NDMzMjksImV4cCI6MTcwNDE0ODEyOX0.rF8h7ix9WDoHxYfIFe9PaWI_l-UfhsYxiwHat68W0Vc",
 									"type": "string"
 								}
 							]
@@ -1840,7 +1965,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDIyMzgyMzksImV4cCI6MTcwMjg0MzAzOX0.eHRALi12pyZ6oXCB3rLEsACd9v7CV34gwqcaCH0Un6A",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM1NDMzMjksImV4cCI6MTcwNDE0ODEyOX0.rF8h7ix9WDoHxYfIFe9PaWI_l-UfhsYxiwHat68W0Vc",
 									"type": "string"
 								}
 							]
@@ -1870,6 +1995,236 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "download link",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/download?link=https://drive.google.com/uc?id=1h_hFYSBBaSFLVy0tdCqnjPjFkZ1grnQX",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"download"
+							],
+							"query": [
+								{
+									"key": "link",
+									"value": "https://drive.google.com/uc?id=1h_hFYSBBaSFLVy0tdCqnjPjFkZ1grnQX"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "disk download",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/disk-download?link=upload/amgad.jpg",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"disk-download"
+							],
+							"query": [
+								{
+									"key": "link",
+									"value": "upload/amgad.jpg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "soft delete file",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"7"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "soft delete file",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/file/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"file",
+										"7"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3f-O4kSimmmuuloDsuYLULlMjjmG+o\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 27 Dec 2023 11:24:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"file deleted successfully \",\n    \"status\": 200,\n    \"data\": {}\n}"
+						}
+					]
+				},
+				{
+					"name": "restore file",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/restore/7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"restore",
+								"7"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "restore file",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/file/restore/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"file",
+										"restore",
+										"7"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3f-53kyvXRTVMOUDhqN3gHQeAmktGw\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 27 Dec 2023 11:24:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"file restored successfully\",\n    \"status\": 200,\n    \"data\": {}\n}"
+						}
+					]
 				}
 			]
 		}
