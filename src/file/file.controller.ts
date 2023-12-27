@@ -1,5 +1,6 @@
 import { InjectQueue } from '@nestjs/bull';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -117,6 +118,10 @@ export class FileController extends BaseModuleController {
     if (link.startsWith('https://drive.google.com/uc?id='))
       return link + '&export=download';
     else {
+      const host = this.myConfigService.get(EnvEnum.HOST) ;
+      if (!host){
+        throw new BadRequestException('add host to env')
+      }
       return signUrl(
         `${this.myConfigService.get(EnvEnum.HOST)}/file/disk-download`,
         link,
