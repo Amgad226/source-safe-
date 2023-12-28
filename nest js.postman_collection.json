@@ -2004,7 +2004,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM2NjU1MjksImV4cCI6MTcwNDI3MDMyOX0.LGXuMoW9kbvWzfnXfg1Z45y6P3YZcxJNr4bIPPqcwzo",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM3OTc4OTQsImV4cCI6MTcwNDQwMjY5NH0.j86OVW-yAepO4pCQhBmPciXbpO0bOg1NtBUNphRwHds",
 									"type": "string"
 								}
 							]
@@ -2012,13 +2012,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/file/7",
+							"raw": "{{url}}/file/31",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"file",
-								"7"
+								"31"
 							]
 						}
 					},
@@ -2077,7 +2077,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"message\": \"retrieve file info\",\n    \"status\": 200,\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"file name \",\n        \"extension\": \"image/jpeg\",\n        \"checked_in\": false,\n        \"folder_id\": 1,\n        \"latest_path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n        \"created_at\": \"2023-12-09T18:35:26.470Z\",\n        \"check_in\": [\n            {}// has not complete yet\n        ],\n        \"check_out\": [\n            {}// has not complete yet\n        ],\n        \"folder\": null,\n        \"file_versions\": [\n            {\n                \"id\": 7,\n                \"path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"size\": 203876,\n                \"user\": {\n                    \"id\": 1,\n                    \"email\": \"amgad@gmail.com\",\n                    \"name\": \"amgad alwattar\"\n                }\n            }\n        ]\n    }\n}"
+							"body": "{\n    \"message\": \"retrieve file info\",\n    \"status\": 200,\n    \"data\": {\n        \"id\": 31,\n        \"name\": \"amgad photo\",\n        \"extension\": \"image/png\",\n        \"status\": \"check_in\",\n        \"folder_id\": 4,\n        \"created_at\": \"2023-12-28T21:12:50.568Z\",\n        \"latest_path\": \"https://drive.google.com/uc?id=1zaFuwfmtbMtpscuXwvz9oNWZ3wcdHJaY\",\n        \"last_modified\": \"2023-12-28T21:12:50.568Z\",\n        \"check_in\": [\n            {}\n        ],\n        \"check_out\": [\n            {}\n        ],\n        \"folder\": {\n            \"id\": 4,\n            \"name\": \"root folder\",\n            \"logo\": \"\",\n            \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n            \"folder_id\": null,\n            \"created_at\": \"2023-12-28T21:10:58.281Z\"\n        },\n        \"full_size\": 54592,\n        \"latest_size\": 54592,\n        \"file_versions\": [\n            {\n                \"id\": 51,\n                \"path\": \"https://drive.google.com/uc?id=1zaFuwfmtbMtpscuXwvz9oNWZ3wcdHJaY\",\n                \"name\": \"amgad photo\",\n                \"extension\": \"image/png\",\n                \"size\": 54592,\n                \"user\": {\n                    \"id\": 3,\n                    \"email\": \"amgad@gmail.com\",\n                    \"name\": \"amgad alwattar\"\n                }\n            }\n        ],\n        \"last_action_on_file\": {\n            \"id\": 40,\n            \"text\": \"this file has check_out at 1,703,797,975,056 and this text hardcoded 😉😍 \",\n            \"status\": \"check_out\",\n            \"file_id\": 31,\n            \"file_version_id\": 51,\n            \"user_id\": 3,\n            \"created_at\": \"2023-12-28T21:12:55.060Z\",\n            \"user\": {\n                \"id\": 3,\n                \"email\": \"amgad@gmail.com\",\n                \"name\": \"amgad alwattar\",\n                \"password\": \"amgad123\"\n            }\n        }\n    }\n}"
 						}
 					]
 				},
