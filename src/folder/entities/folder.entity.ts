@@ -1,7 +1,7 @@
 import { collectDataBy } from 'src/base-module/base-entity';
 import { BaseFileEntity } from 'src/file/entities/base-file.entity';
 import { FolderWithMemberEntity } from './folder-with-members.entity';
-export class FolderEntity extends FolderWithMemberEntity {
+export class FolderWithFilesEntity extends FolderWithMemberEntity {
   files: BaseFileEntity[];
   files_count :number ;
   folder_size :number ;

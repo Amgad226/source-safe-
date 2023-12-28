@@ -1,10 +1,10 @@
 import { BaseEntity, collectDataBy } from 'src/base-module/base-entity';
 import { FileVersionEntity } from './file-version.entity';
-import { FolderEntity } from 'src/folder/entities/folder.entity';
 import { BaseFileEntity } from './base-file.entity';
+import { FolderWithMemberEntity } from 'src/folder/entities/folder-with-members.entity';
 
 export class FileEntity extends BaseFileEntity {
-  folder?: FolderEntity;
+  folder?: FolderWithMemberEntity;
   check_in?: [any] | [];
   check_out?: [any] | [];
   file_versions: FileVersionEntity[];

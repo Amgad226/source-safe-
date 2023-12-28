@@ -7,7 +7,7 @@ import { TokenPayloadType } from 'src/base-module/token-payload-interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddUsersDto } from './dto/add-users.dto';
 import { BaseFolderEntity } from './entities/base-folder.entity';
-import { FolderEntity } from './entities/folder.entity';
+import { FolderWithFilesEntity } from './entities/folder.entity';
 import { FolderIndexEntity } from './entities/folder-index.entity';
 import { RemoveUserDto } from './dto/remove-user.dto';
 import { FileEntity } from 'src/file/entities/file.entity';
@@ -150,7 +150,7 @@ export class FolderService {
     if (!folder) {
       throw new NotFoundException(`Folder with ID ${id} not found`);
     }
-    return new FolderEntity(folder);
+    return new FolderWithFilesEntity(folder);
   }
 
   async addUsers(id: number, { users_ids }: AddUsersDto) {
