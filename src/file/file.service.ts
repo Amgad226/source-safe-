@@ -38,7 +38,7 @@ export class FileService {
         extension: file.mimetype,
         name: name,
         folder_id: +folder_id,
-        status: 'check_out',
+        status: FileStatusEnum.PROCESSING,
         FileVersion: {
           create: {
             user_id: tokenPayload.user.id,
