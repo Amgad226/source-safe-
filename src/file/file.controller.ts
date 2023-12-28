@@ -111,6 +111,18 @@ export class FileController extends BaseModuleController {
       data: files,
     });
   }
+  @Get('my-trash')
+  async removedFiles(
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @FindAllParams() params: QueryParamsInterface,
+  ) {
+
+    return this.successResponse({
+      message: 'all removed files',
+      status: 200,
+      data: await this.fileService.removedFiles( params,tokenPayload),
+    });
+  }
 
   @Public()
   @Get('download')
