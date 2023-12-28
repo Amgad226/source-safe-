@@ -19,6 +19,7 @@ import { FileEntity } from './entities/file.entity';
 import { log } from 'console';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
 import { FileStatusEnum } from './enums/file-status.enum';
+import { formatTimestamp } from 'src/base-module/helpers';
 
 @Injectable()
 export class FileService {
@@ -83,8 +84,8 @@ export class FileService {
     });
     return new PaginatorEntity(FileEntity, files);
   }
-  async removedFiles(params,tokenPayload: TokenPayloadType) {
-    console.log(tokenPayload.user.id)
+  async removedFiles(params, tokenPayload: TokenPayloadType) {
+    console.log(tokenPayload.user.id);
     const admin_folder_role = await this.prisma.folderRole.findFirst({
       where: {
         name: 'admin',
@@ -101,14 +102,14 @@ export class FileService {
           NOT: {
             deleted_at: null,
           },
-        Folder:{
-          UserFolder:{
-            every:{
-              folder_role_id:admin_folder_role.id,
-              user_id:tokenPayload.user.id
-            }
-          }
-        }
+          Folder: {
+            UserFolder: {
+              every: {
+                folder_role_id: admin_folder_role.id,
+                user_id: tokenPayload.user.id,
+              },
+            },
+          },
         },
         include: {
           FileVersion: {
@@ -155,6 +156,7 @@ export class FileService {
     id: number,
     user: UserTokenPayloadType,
     status: FileStatusEnum,
+    text?: string,
   ) {
     await this.prisma.file.update({
       where: {
@@ -178,7 +180,7 @@ export class FileService {
         status: status,
         user_id: user.id,
         file_version_id: last_version_file.id,
-        text: `this file has ${status} at ${Date.now().toLocaleString()} and this text hardcoded 😉😍 `,
+        text: `${text} this file has ${status} at ${formatTimestamp(Date.now())}😁`,
         file_id: id,
       },
     });

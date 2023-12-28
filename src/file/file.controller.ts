@@ -269,6 +269,35 @@ export class FileController extends BaseModuleController {
       status: 201,
     });
   }
+
+  @Post(':id/force-check-out')
+  @UseInterceptors(FileInterceptor('file'))
+  async forceCheckOut(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id,'admin');
+
+    if (!(await this.folderHelper.isCheckedIn(+id))) {
+      throw new UnauthorizedException('this file is free and not checked in ');
+    }
+
+    await this.fileService.fileChangeStatus(
+      +id,
+      tokenPayload.user,
+      FileStatusEnum.CHECKED_OUT,
+      'FORCE checkout by folder admin,'
+    );
+    await this.fileService.deleteCheckIn(+id, tokenPayload.user);
+
+    
+
+    return this.successResponse({
+      message: 'file checked out successfully and file will upload it to cloud',
+      status: 201,
+    });
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
     return this.fileService.update(+id, updateFileDto);
