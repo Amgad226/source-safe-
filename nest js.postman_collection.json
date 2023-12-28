@@ -1701,6 +1701,93 @@
 					]
 				},
 				{
+					"name": "checked in by me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM3OTc4OTQsImV4cCI6MTcwNDQwMjY5NH0.j86OVW-yAepO4pCQhBmPciXbpO0bOg1NtBUNphRwHds",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/auth/check-in",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"auth",
+								"check-in"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/file/auth/check-in",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"file",
+										"auth",
+										"check-in"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "922"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"39a-547ZTgj/IkjoD5uaDoPx/P0qoqQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Dec 2023 22:14:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"retrieve my check in files\",\n    \"status\": 200,\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 31,\n                \"name\": \"amgad photo\",\n                \"extension\": \"image/png\",\n                \"status\": \"check_in\",\n                \"folder_id\": 4,\n                \"created_at\": \"2023-12-28T21:12:50.568Z\",\n                \"latest_path\": \"https://drive.google.com/uc?id=1zaFuwfmtbMtpscuXwvz9oNWZ3wcdHJaY\",\n                \"last_modified\": \"2023-12-28T21:12:50.568Z\",\n                \"check_in\": [\n                    {}\n                ],\n                \"check_out\": [\n                    {}\n                ],\n                \"folder\": {\n                    \"id\": 4,\n                    \"name\": \"root folder\",\n                    \"logo\": \"\",\n                    \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n                    \"folder_id\": null,\n                    \"created_at\": \"2023-12-28T21:10:58.281Z\",\n                    \"UserFolder\": [\n                        {\n                            \"id\": 4,\n                            \"user_id\": 3,\n                            \"folder_id\": 4,\n                            \"folder_role_id\": 3\n                        }\n                    ]\n                },\n                \"full_size\": 54592,\n                \"latest_size\": 54592,\n                \"file_versions\": [\n                    {\n                        \"id\": 51,\n                        \"path\": \"https://drive.google.com/uc?id=1zaFuwfmtbMtpscuXwvz9oNWZ3wcdHJaY\",\n                        \"name\": \"amgad photo\",\n                        \"extension\": \"image/png\",\n                        \"size\": 54592,\n                        \"user\": {\n                            \"id\": 3,\n                            \"email\": \"amgad@gmail.com\",\n                            \"name\": \"amgad alwattar\"\n                        }\n                    }\n                ]\n            }\n        ],\n        \"pagination\": {\n            \"totalItems\": 1,\n            \"totalPages\": 1,\n            \"page\": 1,\n            \"items_per_page\": 10\n        }\n    }\n}"
+						}
+					]
+				},
+				{
 					"name": "my-trash",
 					"request": {
 						"auth": {
