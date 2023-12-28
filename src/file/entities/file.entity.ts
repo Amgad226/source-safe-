@@ -42,6 +42,8 @@ export class FileEntity extends BaseFileEntity {
     this.full_size = full_size ?? 'not_loaded_data';
     this.latest_size = latest_size ?? 'not_loaded_data';
     this.file_versions = collectDataBy(FileVersionEntity, FileVersion);
-    this.last_action_on_file= new FileStatisticWithUserEntity(FileStatistic[0]);
+    if(FileStatistic!= null){
+      this.last_action_on_file= new FileStatisticWithUserEntity(FileStatistic[0]);
+    }
   }
 }
