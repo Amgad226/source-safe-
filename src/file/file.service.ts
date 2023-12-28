@@ -151,11 +151,11 @@ export class FileService {
               User: true,
             },
           },
-          Folder:{
-            include:{
-              UserFolder:true
-            }
-          }
+          Folder: {
+            include: {
+              UserFolder: true,
+            },
+          },
         },
       },
     });
@@ -178,6 +178,12 @@ export class FileService {
       include: {
         FileVersion: { include: { User: true } },
         Folder: true,
+        FileStatistic: {
+          take: 1,
+          include: {
+            user: true,
+          },
+        },
       },
     });
     if (file == null) {
@@ -199,12 +205,10 @@ export class FileService {
         deleted_at: null,
       },
       include: {
-        Folder: true
+        Folder: true,
       },
     });
     return file;
-    
- 
   }
 
   async fileChangeStatus(
