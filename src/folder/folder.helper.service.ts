@@ -81,7 +81,7 @@ export class FolderHelperService {
     role = 'user',
   ): Promise<void> {
     let whereAdmin = {};
-    if ((role = 'admin')) {
+    if ((role == 'admin')) {
       const adminFolderRole = await this.prisma.folderRole.findFirst({
         where: { name: 'admin' },
       });
