@@ -192,6 +192,21 @@ export class FileService {
     return new FileEntity(file);
   }
 
+  async findOneForCheckout(id: number) {
+    const file = await this.prisma.file.findFirst({
+      where: {
+        id,
+        deleted_at: null,
+      },
+      include: {
+        Folder: true
+      },
+    });
+    return file;
+    
+ 
+  }
+
   async fileChangeStatus(
     id: number,
     user: UserTokenPayloadType,

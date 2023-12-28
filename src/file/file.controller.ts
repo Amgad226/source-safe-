@@ -254,7 +254,7 @@ export class FileController extends BaseModuleController {
         'you cant check out file not checked in by you',
       );
     }
-    const db_file = await this.fileService.findOne(+id);
+    const db_file = await this.fileService.findOneForCheckout(+id);
     if(uploadedFile.mimetype != db_file.extension){
       throw new BadRequestException('this file extension mismatched with original file extension')
     }
@@ -268,7 +268,7 @@ export class FileController extends BaseModuleController {
     await this.fileService.deleteCheckIn(+id, tokenPayload.user);
 
     this.createFileDetailsObjectAndServeToQueue(
-      db_file.folder.driveFolderID,
+      db_file.Folder.driveFolderID,
       storedFile,
       UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
       {
