@@ -111,6 +111,7 @@ model FileVersion {
 enum StatusEnum {
   check_in
   check_out
+  processing
 }
 
 model FileStatistic {
