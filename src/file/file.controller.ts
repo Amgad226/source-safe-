@@ -198,6 +198,19 @@ export class FileController extends BaseModuleController {
     });
   }
 
+  @Get('/auth/check-in')
+  async checkInByMe(
+    @TokenPayload() tokenPayload: TokenPayloadType,
+  ) {
+    const file = await this.fileService.checkInByMe(tokenPayload.user);
+    return this.successResponse({
+      status: 200,
+      message: 'retrieve my check in files',
+      data: file,
+    });
+  }
+
+
   @Post(':id/check-in')
   async checkIn(
     @Param('id', ParseIntPipe) id: number,

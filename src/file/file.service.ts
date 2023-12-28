@@ -129,6 +129,46 @@ export class FileService {
     });
     return new PaginatorEntity(FileEntity, files);
   }
+
+  async checkInByMe(user: UserTokenPayloadType) {
+    const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
+      model: this.prisma.file,
+      relations: {
+        where: {
+          deleted_at: null,
+
+          Folder: {
+            UserFolder: {
+              every: {
+                user_id: user.id,
+              },
+            },
+          },
+        },
+        include: {
+          FileVersion: {
+            include: {
+              User: true,
+            },
+          },
+          Folder:{
+            include:{
+              UserFolder:true
+            }
+          }
+        },
+      },
+    });
+    files.data.map((file) => {
+      file['full_size'] = file.FileVersion.reduce((accumulator, version) => {
+        return version.size + accumulator;
+      }, 0);
+      file['latest_size'] =
+        file.FileVersion[file.FileVersion.length - 1]?.size ?? 'not_found_data';
+    });
+    return new PaginatorEntity(FileEntity, files);
+  }
+
   async findOne(id: number) {
     const file = await this.prisma.file.findFirst({
       where: {
@@ -180,7 +220,9 @@ export class FileService {
         status: status,
         user_id: user.id,
         file_version_id: last_version_file.id,
-        text: `${text} this file has ${status} at ${formatTimestamp(Date.now())}😁`,
+        text: `${text} this file has ${status} at ${formatTimestamp(
+          Date.now(),
+        )}😁`,
         file_id: id,
       },
     });
