@@ -960,7 +960,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/folder?filter[myFolders]=true",
+							"raw": "{{url}}/folder?filter[myFolders]=1",
 							"host": [
 								"{{url}}"
 							],
@@ -970,7 +970,7 @@
 							"query": [
 								{
 									"key": "filter[myFolders]",
-									"value": "true"
+									"value": "1"
 								}
 							]
 						}
@@ -2061,6 +2061,150 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "file FORCE check out",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM3OTc4OTQsImV4cCI6MTcwNDQwMjY5NH0.j86OVW-yAepO4pCQhBmPciXbpO0bOg1NtBUNphRwHds",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/31/force-check-out",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"31",
+								"force-check-out"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "file FORCE check out",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/file/31/force-check-out",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"file",
+										"31",
+										"force-check-out"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"44-2uQpPRSiKHEngv8TbdoXDsjfj30\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Dec 2023 21:28:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"file checked out successfully\",\n    \"status\": 200,\n    \"data\": null\n}"
+						},
+						{
+							"name": "this file is free and not checked in",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/file/31/force-check-out",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"file",
+										"31",
+										"force-check-out"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "91"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5b-+0JOXO2H9vdmML/eQdQh5f8NWDg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Dec 2023 21:28:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"this file is free and not checked in \",\n    \"error\": \"Unauthorized\"\n}"
+						}
+					]
 				},
 				{
 					"name": "download link",
