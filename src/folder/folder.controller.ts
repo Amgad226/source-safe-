@@ -132,23 +132,6 @@ export class FolderController extends BaseModuleController {
     });
   }
 
-  @Get(':id/removed-files')
-  async removedFiles(
-    @Param('id') id: string,
-    @TokenPayload() tokenPayload: TokenPayloadType,
-    @FindAllParams() params: QueryParamsInterface,
-  ) {
-    await this.folderHelper.checkIfHasFolderPermission(
-      tokenPayload.user,
-      +id,
-      'admin',
-    );
-    return this.successResponse({
-      message: 'all removed files',
-      status: 200,
-      data: await this.folderService.removedFiles(+id, params),
-    });
-  }
 
   @Put(':id/add-users')
   async addUsers(
