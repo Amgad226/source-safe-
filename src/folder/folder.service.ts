@@ -53,16 +53,26 @@ export class FolderService {
     params: QueryParamsInterface,
     filters: FilterParams,
   ) {
-    //TODO must improve this and do it with general way 
+    //TODO must improve this and do it with general way
     let scopes = {};
-    const adminRole = await this.prisma.folderRole.findFirst({
-      where: {
-        name: 'admin',
-      },
-    });
-    if (filters?.myFolders=='true') {
+
+    if (filters?.myFolders == true) {
+      const adminRole = await this.prisma.folderRole.findFirst({
+        where: {
+          name: 'admin',
+        },
+      });
       scopes = {
         folder_role_id: adminRole.id,
+      };
+    } else if (filters?.myFolders == false) {
+      const userRole = await this.prisma.folderRole.findFirst({
+        where: {
+          name: 'user',
+        },
+      });
+      scopes = {
+        folder_role_id: userRole.id,
       };
     }
     const folders = await PaginatorHelper<Prisma.FolderFindManyArgs>({
