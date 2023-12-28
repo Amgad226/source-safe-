@@ -293,8 +293,8 @@ export class FileController extends BaseModuleController {
     
 
     return this.successResponse({
-      message: 'file checked out successfully and file will upload it to cloud',
-      status: 201,
+      message: 'file checked out successfully',
+      status: 200,
     });
   }
 
