@@ -85,6 +85,7 @@ export class FileController extends BaseModuleController {
       {
         fileVersionId:
           db_file.file_versions[db_file.file_versions.length - 1].id,
+          user:tokenPayload.user
       },
     );
 
@@ -249,7 +250,7 @@ export class FileController extends BaseModuleController {
     await this.fileService.fileChangeStatus(
       +id,
       tokenPayload.user,
-      FileStatusEnum.CHECKED_OUT,
+      FileStatusEnum.PROCESSING,
     );
     await this.fileService.deleteCheckIn(+id, tokenPayload.user);
 

@@ -1,3 +1,4 @@
+import { UserTokenPayloadType } from "src/base-module/token-payload-interface";
 import { UtilsAfterJobFunctionEnum } from "../utils-after-jobs.service";
 
 export interface CreateFolderProps {
@@ -20,11 +21,14 @@ export type AfterUploadType = {
 };
 
 export type AfterUploadDataType = FileVersionDataType | FolderDataType;
-
+// TODO must improve these types 
 export type FileVersionDataType = {
   fileVersionId: number;
+  user?:UserTokenPayloadType
 };
 
 export type FolderDataType = {
   folderId: number;
+  user?:UserTokenPayloadType
+
 };

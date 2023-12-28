@@ -3,6 +3,8 @@ import { blue, red } from 'colorette';
 import { error, log } from 'console';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AfterUploadDataType } from './props/create-folder.props';
+import { FileService } from 'src/file/file.service';
+import { FileStatusEnum } from 'src/file/enums/file-status.enum';
 
 export const queueAction = {
   removeOnComplete: true,
@@ -16,7 +18,8 @@ export enum UtilsAfterJobFunctionEnum {
 }
 @Injectable()
 export class UtilsAfterJob {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+    private fileService:FileService) {}
 
   async updateFilePathAfterUpload(data: AfterUploadDataType, link: string) {
     if ('fileVersionId' in data) {
@@ -28,6 +31,11 @@ export class UtilsAfterJob {
           path: link,
         },
       });
+      await this.fileService.fileChangeStatus(
+        fileVersion.file_id,
+        data.user,
+        FileStatusEnum.CHECKED_OUT,
+      );
     }
     else {
         error(

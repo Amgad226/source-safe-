@@ -6,6 +6,7 @@ import { GoogleDriveController } from './google-drive.controller';
 import { GoogleDriveConsumer } from './google-drive.processor';
 import { GoogleDriveService } from './google-drive.service';
 import { UtilsAfterJob } from './utils-after-jobs.service';
+import { FileService } from 'src/file/file.service';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { UtilsAfterJob } from './utils-after-jobs.service';
     }),
     MyConfigModule
   ],
-  providers: [GoogleDriveConsumer,GoogleDriveService,PrismaService,UtilsAfterJob],
+  providers: [GoogleDriveConsumer,GoogleDriveService,PrismaService,UtilsAfterJob,FileService],
+  
   controllers: [GoogleDriveController],
 })
 export class GoogleDriveModule {}
