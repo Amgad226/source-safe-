@@ -1253,7 +1253,92 @@
 					]
 				},
 				{
-					"name": "get folder Statistic",
+					"name": "get folder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMzUyNDc3NCwiZXhwIjoxNzA0MTI5NTc0fQ.Dpu2k4OH0rjM1OpC3mHpCLTF0RWOi0_jh551uXKf_uY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/folder/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"folder",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get folder",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/folder/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1301"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"515-cNxKuTmjTRq3L8uDtXY/FW6kFMM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 09 Dec 2023 23:14:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"folder info\",\n    \"status\": 200,\n    \"data\": {\n        \"id\": 1,\n        \"folder_id\": null,\n        \"name\": \"root folder\",\n        \"logo\": \"\",\n        \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n        \"files\": [\n            {\n                \"id\": 7,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n                \"created_at\": \"2023-12-09T18:35:26.470Z\"\n            },\n            {\n                \"id\": 8,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1_v6Ud1_9N2sL7iSBU3uPDjkhwJwhQS0b\",\n                \"created_at\": \"2023-12-09T19:08:29.899Z\"\n            },\n            {\n                \"id\": 9,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1T1X_cJHcGFyvRL2oh3LS4pSJ4hMZkvTf\",\n                \"created_at\": \"2023-12-09T19:08:31.429Z\"\n            },\n            {\n                \"id\": 10,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1_pxnyoWegd-g0Pt77iPc5MJCZyTB7nen\",\n                \"created_at\": \"2023-12-09T21:37:05.627Z\"\n            },\n            {\n                \"id\": 11,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1FUMQGPpYPGbCuVIGIg7CwGNOhg5Nggbv\",\n                \"created_at\": \"2023-12-09T22:46:10.138Z\"\n            }\n        ],\n        \"members\": [\n            {\n                \"user\": {\n                    \"id\": 1,\n                    \"email\": \"amgad@gmail.com\",\n                    \"name\": \"amgad alwattar\"\n                },\n                \"role\": \"admin\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get folder Statistic by file",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1350,14 +1435,14 @@
 					]
 				},
 				{
-					"name": "get folder",
+					"name": "get folder Statistic by versions",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImF5aGFtQGdtYWlsLmNvbSIsIm5hbWUiOiJheWhhbSBoYW1tYW1pIn0sImlhdCI6MTcwMzUyNDc3NCwiZXhwIjoxNzA0MTI5NTc0fQ.Dpu2k4OH0rjM1OpC3mHpCLTF0RWOi0_jh551uXKf_uY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM3OTc4OTQsImV4cCI6MTcwNDQwMjY5NH0.j86OVW-yAepO4pCQhBmPciXbpO0bOg1NtBUNphRwHds",
 									"type": "string"
 								}
 							]
@@ -1365,30 +1450,42 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/folder/1",
+							"raw": "{{url}}/folder/statistic-by-versions?folder_id=4",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"folder",
-								"1"
+								"statistic-by-versions"
+							],
+							"query": [
+								{
+									"key": "folder_id",
+									"value": "4"
+								}
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "get folder",
+							"name": "get folder Statistic",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/folder/1",
+									"raw": "{{url}}/folder/statistic?folder_id=1",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"folder",
-										"1"
+										"statistic"
+									],
+									"query": [
+										{
+											"key": "folder_id",
+											"value": "1"
+										}
 									]
 								}
 							},
@@ -1410,15 +1507,15 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "1301"
+									"value": "58"
 								},
 								{
 									"key": "ETag",
-									"value": "W/\"515-cNxKuTmjTRq3L8uDtXY/FW6kFMM\""
+									"value": "W/\"3a-3ITAJ6Dx5njDZJhGHX3mcfY5VD0\""
 								},
 								{
 									"key": "Date",
-									"value": "Sat, 09 Dec 2023 23:14:10 GMT"
+									"value": "Fri, 29 Dec 2023 00:41:54 GMT"
 								},
 								{
 									"key": "Connection",
@@ -1430,7 +1527,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"message\": \"folder info\",\n    \"status\": 200,\n    \"data\": {\n        \"id\": 1,\n        \"folder_id\": null,\n        \"name\": \"root folder\",\n        \"logo\": \"\",\n        \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n        \"files\": [\n            {\n                \"id\": 7,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1wrvFbJ4BQyuMkRRtCJk6qgkMNbOzUSB8\",\n                \"created_at\": \"2023-12-09T18:35:26.470Z\"\n            },\n            {\n                \"id\": 8,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1_v6Ud1_9N2sL7iSBU3uPDjkhwJwhQS0b\",\n                \"created_at\": \"2023-12-09T19:08:29.899Z\"\n            },\n            {\n                \"id\": 9,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1T1X_cJHcGFyvRL2oh3LS4pSJ4hMZkvTf\",\n                \"created_at\": \"2023-12-09T19:08:31.429Z\"\n            },\n            {\n                \"id\": 10,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1_pxnyoWegd-g0Pt77iPc5MJCZyTB7nen\",\n                \"created_at\": \"2023-12-09T21:37:05.627Z\"\n            },\n            {\n                \"id\": 11,\n                \"name\": \"file name \",\n                \"extension\": \"image/jpeg\",\n                \"checked_in\": false,\n                \"folder_id\": 1,\n                \"latest_path\": \"https://drive.google.com/uc?id=1FUMQGPpYPGbCuVIGIg7CwGNOhg5Nggbv\",\n                \"created_at\": \"2023-12-09T22:46:10.138Z\"\n            }\n        ],\n        \"members\": [\n            {\n                \"user\": {\n                    \"id\": 1,\n                    \"email\": \"amgad@gmail.com\",\n                    \"name\": \"amgad alwattar\"\n                },\n                \"role\": \"admin\"\n            }\n        ]\n    }\n}"
+							"body": "{\n    \"message\": \"folder show Statistic\",\n    \"status\": 200,\n    \"data\": [\n        {\n            \"count\": \"1\",\n            \"total_size\": \"281912\",\n            \"extension_group\": \"application\"\n        },\n        {\n            \"count\": \"2\",\n            \"total_size\": \"2182573\",\n            \"extension_group\": \"image\"\n        },\n        {\n            \"count\": \"2\",\n            \"total_size\": \"1099936\",\n            \"extension_group\": \"video\"\n        }\n    ]\n}"
 						}
 					]
 				},
