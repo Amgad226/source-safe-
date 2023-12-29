@@ -22,7 +22,10 @@ import * as fs from 'fs';
 import { BaseModuleController } from 'src/base-module/base-module.controller';
 import { FindAllParams } from 'src/base-module/pagination/find-all-params.decorator';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { TokenPayloadType } from 'src/base-module/token-payload-interface';
+import {
+  TokenPayloadType,
+  UserTokenPayloadType,
+} from 'src/base-module/token-payload-interface';
 import {
   fileInterface,
   uploadToLocalDisk,
@@ -43,6 +46,7 @@ import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileStatusEnum } from './enums/file-status.enum';
 import { FileService } from './file.service';
+import { MultiCheckInDto } from './dto/multi-check-in.dto';
 
 @Controller('file')
 export class FileController extends BaseModuleController {
@@ -85,7 +89,7 @@ export class FileController extends BaseModuleController {
       {
         fileVersionId:
           db_file.file_versions[db_file.file_versions.length - 1].id,
-          user:tokenPayload.user
+        user: tokenPayload.user,
       },
     );
 
@@ -117,11 +121,10 @@ export class FileController extends BaseModuleController {
     @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
   ) {
-
     return this.successResponse({
       message: 'all removed files',
       status: 200,
-      data: await this.fileService.removedFiles( params,tokenPayload),
+      data: await this.fileService.removedFiles(params, tokenPayload),
     });
   }
 
@@ -131,9 +134,9 @@ export class FileController extends BaseModuleController {
     if (link.startsWith('https://drive.google.com/uc?id='))
       return link + '&export=download';
     else {
-      const host = this.myConfigService.get(EnvEnum.HOST) ;
-      if (!host){
-        throw new BadRequestException('add host to env')
+      const host = this.myConfigService.get(EnvEnum.HOST);
+      if (!host) {
+        throw new BadRequestException('add host to env');
       }
       return signUrl(
         `${this.myConfigService.get(EnvEnum.HOST)}/file/disk-download`,
@@ -202,9 +205,8 @@ export class FileController extends BaseModuleController {
   async checkInByMe(
     @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
-
   ) {
-    const file = await this.fileService.checkInByMe(tokenPayload.user,params);
+    const file = await this.fileService.checkInByMe(tokenPayload.user, params);
     return this.successResponse({
       status: 200,
       message: 'retrieve my check in files',
@@ -212,26 +214,62 @@ export class FileController extends BaseModuleController {
     });
   }
 
-
   @Post(':id/check-in')
   async checkIn(
     @Param('id', ParseIntPipe) id: number,
     @TokenPayload() tokenPayload: TokenPayloadType,
   ) {
-    await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
-    if (await this.folderHelper.isCheckedIn(+id)) {
-      throw new UnauthorizedException('this file already checked in ');
-    }
-    await this.fileService.getFileById(id);
-    await this.fileService.storeCheckIn(+id, tokenPayload.user);
-    await this.fileService.fileChangeStatus(
-      +id,
-      tokenPayload.user,
-      FileStatusEnum.CHECKED_IN,
-    );
+    await this.checkFileToCheckIn(+id, tokenPayload.user);
+    await this.checkInAction(+id, tokenPayload.user);
+
     return this.successResponse({
       status: 200,
       message: 'file checked in',
+    });
+  }
+
+  async checkFileToCheckIn(id: number, user: UserTokenPayloadType) {
+    await this.folderHelper.checkIfHasFilePermission(user, id);
+    if (await this.folderHelper.isCheckedIn(id)) {
+      throw new UnauthorizedException(`file ${id} already checked in `);
+    }
+    await this.fileService.getFileById(id);
+  }
+  async checkInAction(id: number, user: UserTokenPayloadType) {
+    await this.fileService.storeCheckIn(+id, user);
+    await this.fileService.fileChangeStatus(
+      id,
+      user,
+      FileStatusEnum.CHECKED_IN,
+    );
+  }
+
+  @Post('multi-check-in')
+  async multiCheckIn(
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @Body() multiCheckInDto: MultiCheckInDto,
+  ) {
+    const ids = multiCheckInDto.ids;
+    if (ids.length == 0) {
+      return this.successResponse({ message: 'files ids array is empty' });
+    }
+    // Use Promise.all to wait for all promises to resolve
+    await Promise.all(
+      ids.map(async (id) => {
+        await this.checkFileToCheckIn(id, tokenPayload.user);
+      }),
+    );
+
+    // If all checks are successful, proceed with checkInAction for all ids
+    await Promise.all(
+      ids.map(async (id) => {
+        await this.checkInAction(id, tokenPayload.user);
+      }),
+    );
+
+    return this.successResponse({
+      status: 200,
+      message: 'multi checked in',
     });
   }
 
@@ -242,8 +280,7 @@ export class FileController extends BaseModuleController {
     @TokenPayload() tokenPayload: TokenPayloadType,
     @UploadedFile() uploadedFile,
   ) {
-
-    console.log(uploadedFile)
+    console.log(uploadedFile);
     await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
 
     if (!(await this.folderHelper.isCheckedIn(+id))) {
@@ -260,11 +297,17 @@ export class FileController extends BaseModuleController {
       );
     }
     const db_file = await this.fileService.getFileById(+id);
-    if(uploadedFile?.mimetype != db_file.extension){
-      throw new BadRequestException('this file extension mismatched with original file extension')
+    if (uploadedFile?.mimetype != db_file.extension) {
+      throw new BadRequestException(
+        'this file extension mismatched with original file extension',
+      );
     }
     const storedFile = (await uploadToLocalDisk(uploadedFile, db_file.name))[0];
-    const version= await this.fileService.createVersion(+id, tokenPayload.user, storedFile);
+    const version = await this.fileService.createVersion(
+      +id,
+      tokenPayload.user,
+      storedFile,
+    );
     await this.fileService.fileChangeStatus(
       +id,
       tokenPayload.user,
@@ -277,8 +320,7 @@ export class FileController extends BaseModuleController {
       storedFile,
       UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
       {
-        fileVersionId:
-        version.id,
+        fileVersionId: version.id,
       },
     );
 
@@ -294,7 +336,11 @@ export class FileController extends BaseModuleController {
     @Param('id', ParseIntPipe) id: number,
     @TokenPayload() tokenPayload: TokenPayloadType,
   ) {
-    await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id,'admin');
+    await this.folderHelper.checkIfHasFilePermission(
+      tokenPayload.user,
+      +id,
+      'admin',
+    );
 
     if (!(await this.folderHelper.isCheckedIn(+id))) {
       throw new UnauthorizedException('this file is free and not checked in ');
@@ -304,11 +350,9 @@ export class FileController extends BaseModuleController {
       +id,
       tokenPayload.user,
       FileStatusEnum.CHECKED_OUT,
-      'FORCE checkout by folder admin,'
+      'FORCE checkout by folder admin,',
     );
     await this.fileService.deleteCheckIn(+id, tokenPayload.user);
-
-    
 
     return this.successResponse({
       message: 'file checked out successfully',
