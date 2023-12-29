@@ -98,7 +98,7 @@ export class FolderHelperService {
     });
     if (userExistsInFolder == null) {
       throw new UnauthorizedException(
-        'unauthorize action , you do not have access for this folder',
+        `unauthorize action , you do not have access for this folder: ${folder_id}`,
       );
     }
   }
