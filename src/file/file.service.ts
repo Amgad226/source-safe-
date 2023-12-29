@@ -132,9 +132,10 @@ export class FileService {
     return new PaginatorEntity(FileEntity, files);
   }
 
-  async checkInByMe(user: UserTokenPayloadType) {
+  async checkInByMe(user: UserTokenPayloadType,params: QueryParamsInterface,) {
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
+      ...params,
       relations: {
         where: {
           CheckIn:{

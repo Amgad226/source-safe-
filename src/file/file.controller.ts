@@ -201,8 +201,10 @@ export class FileController extends BaseModuleController {
   @Get('/auth/check-in')
   async checkInByMe(
     @TokenPayload() tokenPayload: TokenPayloadType,
+    @FindAllParams() params: QueryParamsInterface,
+
   ) {
-    const file = await this.fileService.checkInByMe(tokenPayload.user);
+    const file = await this.fileService.checkInByMe(tokenPayload.user,params);
     return this.successResponse({
       status: 200,
       message: 'retrieve my check in files',
