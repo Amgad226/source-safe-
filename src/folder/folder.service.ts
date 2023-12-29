@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
@@ -12,6 +16,8 @@ import { FolderIndexEntity } from './entities/folder-index.entity';
 import { RemoveUserDto } from './dto/remove-user.dto';
 import { FileEntity } from 'src/file/entities/file.entity';
 import { FilterParams } from 'src/base-module/filter.interface';
+import { Sql } from '@prisma/client/runtime/library';
+import { isNumber } from 'class-validator';
 
 @Injectable()
 export class FolderService {
@@ -153,6 +159,55 @@ export class FolderService {
     return new FolderWithFilesEntity(folder);
   }
 
+  async showStatistic(id: number) {
+    const stringQuery = `
+    SELECT
+      COUNT(file_versions.id) AS count,
+      SUM(file_versions.size) AS total_size,
+      CASE
+        WHEN POSITION('/' IN file_versions.extension) > 0 THEN
+            SUBSTRING(file_versions.extension FROM 1 FOR POSITION('/' IN file_versions.extension) - 1)
+        ELSE file_versions.extension
+      END AS extension_group
+    FROM
+      file_versions
+  `;
+    let dynamicStringQuery = stringQuery;
+
+    if (id != null && !isNaN(id)) {
+      console.log(id);
+      if (!isNumber(id)) {
+        throw new BadRequestException(
+          'This situation will not happen but I will make sure to avoid SQL INJECTION',
+        );
+      }
+      dynamicStringQuery += `
+    JOIN files ON file_versions.file_id = files.id
+    WHERE files.folder_id = ${id}
+  `;
+    }
+
+    dynamicStringQuery += `
+  GROUP BY extension_group
+`;
+    const queryAsArrayString = [dynamicStringQuery];
+    let query = Prisma.sql(queryAsArrayString);
+    const result = await this.prisma.$queryRaw(query);
+
+    if (Array.isArray(result)) {
+      result.map((row) => {
+        for (const key in row) {
+          if (typeof row[key] === 'bigint') {
+            row[key] = row[key].toString();
+          }
+        }
+        return row;
+      });
+    }
+
+    return result;
+  }
+
   async addUsers(id: number, { users_ids }: AddUsersDto) {
     const folder_user_role = await this.prisma.folderRole.findFirst({
       where: {
@@ -236,5 +291,4 @@ export class FolderService {
       });
     }
   }
- 
 }

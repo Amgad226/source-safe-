@@ -118,6 +118,18 @@ export class FolderController extends BaseModuleController {
     });
   }
 
+  @Get('statistic')
+  async showStatistic(
+    @Query('folder_id') id: string,
+  ) {
+    const folder = await this.folderService.showStatistic(+id);
+    return this.successResponse({
+      message: 'folder show Statistic',
+      status: 200,
+      data: folder,
+    });
+  }
+
   @Get(':id')
   async findOne(
     @TokenPayload() tokenPayload: TokenPayloadType,
@@ -131,6 +143,7 @@ export class FolderController extends BaseModuleController {
       data: folder,
     });
   }
+
 
 
   @Put(':id/add-users')
