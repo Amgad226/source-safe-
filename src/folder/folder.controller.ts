@@ -121,8 +121,10 @@ export class FolderController extends BaseModuleController {
   @Get('statistic')
   async showStatistic(
     @Query('folder_id') id: string,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+
   ) {
-    const folder = await this.folderService.showStatistic(+id);
+    const folder = await this.folderService.showStatistic(+id,tokenPayload.user.id);
     return this.successResponse({
       message: 'folder show statistic by files',
       status: 200,
@@ -132,8 +134,10 @@ export class FolderController extends BaseModuleController {
   @Get('statistic-by-versions')
   async showStatisticIncludeVersions(
     @Query('folder_id') id: string,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+
   ) {
-    const folder = await this.folderService.showStatisticIncludeVersions(+id);
+    const folder = await this.folderService.showStatisticIncludeVersions(+id,tokenPayload.user.id);
     return this.successResponse({
       message: 'folder show statistic by versions',
       status: 200,

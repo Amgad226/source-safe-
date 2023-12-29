@@ -7,7 +7,10 @@ import { Prisma } from '@prisma/client';
 import { PaginatorEntity } from 'src/base-module/pagination/paginator.entity';
 import { PaginatorHelper } from 'src/base-module/pagination/paginator.helper';
 import { QueryParamsInterface } from 'src/base-module/pagination/paginator.interfaces';
-import { TokenPayloadType } from 'src/base-module/token-payload-interface';
+import {
+  TokenPayloadType,
+  UserTokenPayloadType,
+} from 'src/base-module/token-payload-interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddUsersDto } from './dto/add-users.dto';
 import { BaseFolderEntity } from './entities/base-folder.entity';
@@ -18,6 +21,7 @@ import { FileEntity } from 'src/file/entities/file.entity';
 import { FilterParams } from 'src/base-module/filter.interface';
 import { Sql } from '@prisma/client/runtime/library';
 import { isNumber } from 'class-validator';
+import { log } from 'console';
 
 @Injectable()
 export class FolderService {
@@ -159,7 +163,7 @@ export class FolderService {
     return new FolderWithFilesEntity(folder);
   }
 
-  async showStatisticIncludeVersions(id: number) {
+  async showStatisticIncludeVersions(id: number, user_id: number) {
     const stringQuery = `
     SELECT
       COUNT(file_versions.id) AS count,
@@ -171,6 +175,11 @@ export class FolderService {
       END AS extension_group
     FROM
       file_versions
+      JOIN files ON file_versions.file_id = files.id
+      join folders  on files.folder_id=  folders.id 
+      join users_folders on users_folders.folder_id=folders.id
+      where files.deleted_at is null 
+      and users_folders.user_id =  ${user_id} 
   `;
     let dynamicStringQuery = stringQuery;
 
@@ -182,8 +191,7 @@ export class FolderService {
         );
       }
       dynamicStringQuery += `
-    JOIN files ON file_versions.file_id = files.id
-    WHERE files.folder_id = ${id}
+   AND  folders.id = ${id}
   `;
     }
 
@@ -208,7 +216,7 @@ export class FolderService {
     return result;
   }
 
-  async showStatistic(id: number) {
+  async showStatistic(id: number,user_id:number) {
     const stringQuery = `
     SELECT
     COUNT( files.id) AS count,
@@ -236,7 +244,11 @@ export class FolderService {
                 file_id
         )
     ) AS file_versions_last_size ON files.id = file_versions_last_size.file_id
-    where deleted_at is null 
+    join folders  on files.folder_id=  folders.id 
+    join users_folders on users_folders.folder_id=folders.id
+    where deleted_at is null and
+    users_folders.user_id =  ${user_id} 
+
     `;
     let dynamicStringQuery = stringQuery;
 
@@ -248,13 +260,13 @@ export class FolderService {
         );
       }
       dynamicStringQuery += `
-      and folder_id= ${id} 
+      and folders.id= ${id} 
   `;
     }
 
     dynamicStringQuery += `
     GROUP BY extension_group
-  `;
+  `;log(dynamicStringQuery)
     const queryAsArrayString = [dynamicStringQuery];
     let query = Prisma.sql(queryAsArrayString);
     const result = await this.prisma.$queryRaw(query);
