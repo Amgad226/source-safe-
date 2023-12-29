@@ -137,15 +137,11 @@ export class FileService {
       model: this.prisma.file,
       relations: {
         where: {
-          deleted_at: null,
-
-          Folder: {
-            UserFolder: {
-              every: {
-                user_id: user.id,
-              },
-            },
-          },
+          CheckIn:{
+            some:{
+              user_id:user.id
+            }
+          }
         },
         include: {
           FileVersion: {
