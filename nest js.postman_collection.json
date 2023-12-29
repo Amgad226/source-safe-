@@ -1253,6 +1253,103 @@
 					]
 				},
 				{
+					"name": "get folder Statistic",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJlbWFpbCI6ImFtZ2FkQGdtYWlsLmNvbSIsIm5hbWUiOiJhbWdhZCBhbHdhdHRhciJ9LCJpYXQiOjE3MDM3OTc4OTQsImV4cCI6MTcwNDQwMjY5NH0.j86OVW-yAepO4pCQhBmPciXbpO0bOg1NtBUNphRwHds",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/folder/statistic?folder_id=4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"folder",
+								"statistic"
+							],
+							"query": [
+								{
+									"key": "folder_id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get folder Statistic",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/folder/statistic?folder_id=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"folder",
+										"statistic"
+									],
+									"query": [
+										{
+											"key": "folder_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "58"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3a-3ITAJ6Dx5njDZJhGHX3mcfY5VD0\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Dec 2023 00:41:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"folder show Statistic\",\n    \"status\": 200,\n    \"data\": [\n        {\n            \"count\": \"1\",\n            \"total_size\": \"281912\",\n            \"extension_group\": \"application\"\n        },\n        {\n            \"count\": \"2\",\n            \"total_size\": \"2182573\",\n            \"extension_group\": \"image\"\n        },\n        {\n            \"count\": \"2\",\n            \"total_size\": \"1099936\",\n            \"extension_group\": \"video\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
 					"name": "get folder",
 					"request": {
 						"auth": {
