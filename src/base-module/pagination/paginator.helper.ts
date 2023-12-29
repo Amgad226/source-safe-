@@ -31,10 +31,12 @@ export async function PaginatorHelper<T>({
       restProps = props;
     }
   }
+  //TODO must get columns of table without get the first row and extract keys from it 
   const modelKeys = await model.findFirst().then((data) => {
     if (data)
       return Object.keys(data).filter(
-        (key) => typeof data[key] === 'string' && key !== 'gender',
+            //TODO must handle enum search
+        (key) => typeof data[key] === 'string' && key !== 'gender' && key !== 'status',
       );
     else return [];
   });
