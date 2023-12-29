@@ -9,10 +9,10 @@ export class FolderWithMemberEntity extends BaseFolderEntity {
     logo,
     driveFolderID,
     created_at,
-    UserFolder,
+    UserFolder=null,
   }) {
     super({ id, folder_id, name, logo, driveFolderID, created_at});
-    this.members = UserFolder.map(function (userFolderr) {
+    this.members = UserFolder?.map(function (userFolderr) {
       return {
         user: new UserEntity(userFolderr.user),
         role: userFolderr.folder_role.name,

@@ -117,6 +117,7 @@ export class FileService {
               User: true,
             },
           },
+          Folder:true
         },
       },
     });
