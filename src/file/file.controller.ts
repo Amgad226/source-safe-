@@ -220,6 +220,7 @@ export class FileController extends BaseModuleController {
     if (await this.folderHelper.isCheckedIn(+id)) {
       throw new UnauthorizedException('this file already checked in ');
     }
+    await this.fileService.getFileById(id);
     await this.fileService.storeCheckIn(+id, tokenPayload.user);
     await this.fileService.fileChangeStatus(
       +id,
@@ -239,6 +240,8 @@ export class FileController extends BaseModuleController {
     @TokenPayload() tokenPayload: TokenPayloadType,
     @UploadedFile() uploadedFile,
   ) {
+
+    console.log(uploadedFile)
     await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
 
     if (!(await this.folderHelper.isCheckedIn(+id))) {
@@ -254,8 +257,8 @@ export class FileController extends BaseModuleController {
         'you cant check out file not checked in by you',
       );
     }
-    const db_file = await this.fileService.findOneForCheckout(+id);
-    if(uploadedFile.mimetype != db_file.extension){
+    const db_file = await this.fileService.getFileById(+id);
+    if(uploadedFile?.mimetype != db_file.extension){
       throw new BadRequestException('this file extension mismatched with original file extension')
     }
     const storedFile = (await uploadToLocalDisk(uploadedFile, db_file.name))[0];

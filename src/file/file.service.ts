@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -199,7 +200,7 @@ export class FileService {
     return new FileEntity(file);
   }
 
-  async findOneForCheckout(id: number) {
+  async getFileById(id: number) {
     const file = await this.prisma.file.findFirst({
       where: {
         id,
@@ -209,6 +210,9 @@ export class FileService {
         Folder: true,
       },
     });
+    if(file==null){
+      throw new NotFoundException(`file ${id} not found or may deleted by admin `);
+    }
     return file;
   }
 
