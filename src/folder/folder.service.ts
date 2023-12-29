@@ -159,7 +159,7 @@ export class FolderService {
     return new FolderWithFilesEntity(folder);
   }
 
-  async showStatistic(id: number) {
+  async showStatisticIncludeVersions(id: number) {
     const stringQuery = `
     SELECT
       COUNT(file_versions.id) AS count,
@@ -190,6 +190,71 @@ export class FolderService {
     dynamicStringQuery += `
   GROUP BY extension_group
 `;
+    const queryAsArrayString = [dynamicStringQuery];
+    let query = Prisma.sql(queryAsArrayString);
+    const result = await this.prisma.$queryRaw(query);
+
+    if (Array.isArray(result)) {
+      result.map((row) => {
+        for (const key in row) {
+          if (typeof row[key] === 'bigint') {
+            row[key] = row[key].toString();
+          }
+        }
+        return row;
+      });
+    }
+
+    return result;
+  }
+
+  async showStatistic(id: number) {
+    const stringQuery = `
+    SELECT
+    COUNT( files.id) AS count,
+    sum(last_size) as total_size,
+    CASE
+        WHEN POSITION('/' IN files.extension) > 0 THEN
+            SUBSTRING(files.extension FROM 1 FOR POSITION('/' IN files.extension) - 1)
+        ELSE files.extension
+    END AS extension_group
+    FROM files
+    LEFT JOIN (
+    SELECT
+        file_id,
+        fv.size AS last_size
+    FROM
+        file_versions fv
+    WHERE
+        (fv.file_id, fv.created_at) IN (
+            SELECT
+                file_id,
+                MAX(created_at) AS max_created_at
+            FROM
+                file_versions
+            GROUP BY
+                file_id
+        )
+    ) AS file_versions_last_size ON files.id = file_versions_last_size.file_id
+    where deleted_at is null 
+    `;
+    let dynamicStringQuery = stringQuery;
+
+    if (id != null && !isNaN(id)) {
+      console.log(id);
+      if (!isNumber(id)) {
+        throw new BadRequestException(
+          'This situation will not happen but I will make sure to avoid SQL INJECTION',
+        );
+      }
+      dynamicStringQuery += `
+      and folder_id= ${id} 
+  `;
+    }
+
+    dynamicStringQuery += `
+    GROUP BY extension_group
+  `;
     const queryAsArrayString = [dynamicStringQuery];
     let query = Prisma.sql(queryAsArrayString);
     const result = await this.prisma.$queryRaw(query);

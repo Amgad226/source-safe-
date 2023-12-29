@@ -124,12 +124,23 @@ export class FolderController extends BaseModuleController {
   ) {
     const folder = await this.folderService.showStatistic(+id);
     return this.successResponse({
-      message: 'folder show Statistic',
+      message: 'folder show statistic by files',
       status: 200,
       data: folder,
     });
   }
-
+  @Get('statistic-by-versions')
+  async showStatisticIncludeVersions(
+    @Query('folder_id') id: string,
+  ) {
+    const folder = await this.folderService.showStatisticIncludeVersions(+id);
+    return this.successResponse({
+      message: 'folder show statistic by versions',
+      status: 200,
+      data: folder,
+    });
+  }
+  
   @Get(':id')
   async findOne(
     @TokenPayload() tokenPayload: TokenPayloadType,
