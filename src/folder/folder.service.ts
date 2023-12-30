@@ -218,7 +218,7 @@ export class FolderService {
     return result;
   }
 
-  async showStatistic(id: number,user_id:number) {
+  async showStatistic(id: number, user_id: number) {
     const stringQuery = `
     SELECT
     COUNT( files.id) AS count,
@@ -250,7 +250,7 @@ export class FolderService {
     join users_folders on users_folders.folder_id=folders.id
     join folder_roles on folder_roles.id = users_folders.folder_role_id 
     where deleted_at is null and
-    folder_roles.name= 'admin'
+    folder_roles.name= 'admin' and
     users_folders.user_id =  ${user_id} 
 
     `;
@@ -270,7 +270,8 @@ export class FolderService {
 
     dynamicStringQuery += `
     GROUP BY extension_group
-  `;log(dynamicStringQuery)
+  `;
+    log(dynamicStringQuery);
     const queryAsArrayString = [dynamicStringQuery];
     let query = Prisma.sql(queryAsArrayString);
     const result = await this.prisma.$queryRaw(query);
