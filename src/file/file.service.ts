@@ -108,7 +108,7 @@ export class FileService {
           include: {
             UserFolder: {
               orderBy: { id: 'asc' },
-              take:1,
+              take: 1,
               include: {
                 folder_role: true,
               },
@@ -215,6 +215,9 @@ export class FileService {
         Folder: true,
         FileStatistic: {
           take: 1,
+          orderBy: {
+            created_at: 'desc',
+          },
           include: {
             user: true,
           },
@@ -337,7 +340,7 @@ export class FileService {
       },
     });
   }
-  
+
   async remove(id: number) {
     await this.prisma.file.update({
       where: { id },
