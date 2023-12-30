@@ -250,7 +250,7 @@ export class FolderService {
     join users_folders on users_folders.folder_id=folders.id
     join folder_roles on folder_roles.id = users_folders.folder_role_id 
     where deleted_at is null and
-    and folder_roles.name= 'admin'
+    folder_roles.name= 'admin'
     users_folders.user_id =  ${user_id} 
 
     `;
