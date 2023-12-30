@@ -27,7 +27,7 @@ export class GoogleDriveConsumer {
     console.log('start @Process(upload-file)');
     const link = await this.googleDriveService.uploadFileToDrive(file);
     
-    await deleteFile(file.localPath);
+    // await deleteFile(file.localPath);
     await this.utilsAfterJob[file.afterUpload.functionCall](
       file.afterUpload.data,
       link,
