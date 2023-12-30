@@ -21,6 +21,7 @@ import { log } from 'console';
 import { FolderHelperService } from 'src/folder/folder.helper.service';
 import { FileStatusEnum } from './enums/file-status.enum';
 import { formatTimestamp } from 'src/base-module/helpers';
+import { collectDataBy } from 'src/base-module/base-entity';
 
 @Injectable()
 export class FileService {
@@ -85,6 +86,41 @@ export class FileService {
     });
     return new PaginatorEntity(FileEntity, files);
   }
+  async recentActivities(user: UserTokenPayloadType) {
+    const files = await this.prisma.file.findMany({
+      where: {
+        Folder: {
+          UserFolder: {
+            some: {
+              user_id: user.id,
+            },
+          },
+        },
+      },
+      include: {
+        FileVersion: {
+          orderBy: { created_at: 'desc' },
+          include: {
+            User: true,
+          },
+        },
+        Folder: {
+          include: {
+            UserFolder: {
+              orderBy: { id: 'asc' },
+              take:1,
+              include: {
+                folder_role: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { created_at: 'desc' },
+      take: 10,
+    });
+    return collectDataBy(FileEntity, files);
+  }
   async removedFiles(params, tokenPayload: TokenPayloadType) {
     console.log(tokenPayload.user.id);
     const admin_folder_role = await this.prisma.folderRole.findFirst({
@@ -118,7 +154,7 @@ export class FileService {
               User: true,
             },
           },
-          Folder:true
+          Folder: true,
         },
       },
     });
@@ -132,17 +168,17 @@ export class FileService {
     return new PaginatorEntity(FileEntity, files);
   }
 
-  async checkInByMe(user: UserTokenPayloadType,params: QueryParamsInterface,) {
+  async checkInByMe(user: UserTokenPayloadType, params: QueryParamsInterface) {
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
       ...params,
       relations: {
         where: {
-          CheckIn:{
-            some:{
-              user_id:user.id
-            }
-          }
+          CheckIn: {
+            some: {
+              user_id: user.id,
+            },
+          },
         },
         include: {
           FileVersion: {
@@ -207,8 +243,10 @@ export class FileService {
         Folder: true,
       },
     });
-    if(file==null){
-      throw new NotFoundException(`file ${id} not found or may deleted by admin `);
+    if (file == null) {
+      throw new NotFoundException(
+        `file ${id} not found or may deleted by admin `,
+      );
     }
     return file;
   }

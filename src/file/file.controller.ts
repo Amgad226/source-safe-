@@ -116,6 +116,19 @@ export class FileController extends BaseModuleController {
       data: files,
     });
   }
+  
+  @Get('recent-activities')
+  async recentActivities(
+    @TokenPayload() tokenPayload: TokenPayloadType,
+  ) {
+ 
+    const files = await this.fileService.recentActivities(tokenPayload.user);
+    return this.successResponse({
+      status: 200,
+      message: 'recent activities',
+      data: files,
+    });
+  }
   @Get('my-trash')
   async removedFiles(
     @TokenPayload() tokenPayload: TokenPayloadType,
