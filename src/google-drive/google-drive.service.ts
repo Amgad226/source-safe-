@@ -38,6 +38,7 @@ export class GoogleDriveService {
     folderDriveId,
     originalname, // the file name with his mime type
   }: FileProps): Promise<string> {
+    log('uploadFileToDrive')
     if (!fs.existsSync(localPath)) {
       console.error(`File not found: ${localPath}`);
       return; // or throw an error, depending on your error handling strategy
@@ -59,6 +60,7 @@ export class GoogleDriveService {
         },
       }),
     };
+    log('uploadFileToDrive 2 ')
 
     try {
       // Upload the file to Google Drive
@@ -67,11 +69,13 @@ export class GoogleDriveService {
         media: media,
         fields: 'id',
       });
+      log('uploadFileToDrive 3 ')
 
       const fileId = file?.data.id;
 
       // Update permissions for the uploaded file to make it public
       await this.updateFilePermissions(fileId);
+      log('uploadFileToDrive updateFilePermissions ')
 
       // Get the public link instead of the embedded link
       const publicLink = this.getShareableLink(fileId);
