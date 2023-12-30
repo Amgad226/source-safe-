@@ -1982,6 +1982,81 @@
 					]
 				},
 				{
+					"name": "recent activities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/file/recent-activities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"file",
+								"recent-activities"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "recent-activities",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/file/recent-activities",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"file",
+										"recent-activities"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "3333"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d05-8KF+Yrckg/Zxl8GHyDiekUFc72k\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 30 Dec 2023 18:19:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"recent activities\",\n    \"status\": 200,\n    \"data\": [\n        {\n            \"id\": 38,\n            \"name\": \"amgad photo\",\n            \"extension\": \"image/jpeg\",\n            \"status\": \"check_out\",\n            \"folder_id\": 4,\n            \"created_at\": \"2023-12-29T16:32:34.248Z\",\n            \"latest_path\": \"https://drive.google.com/uc?id=1FmflZYlMvzyux17IQOJBnGKp3pEIZ200\",\n            \"last_modified\": \"2023-12-29T16:32:34.248Z\",\n            \"folder\": {\n                \"id\": 4,\n                \"name\": \"root folder\",\n                \"logo\": \"\",\n                \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n                \"folder_id\": null,\n                \"created_at\": \"2023-12-28T21:10:58.281Z\",\n                \"UserFolder\": [\n                    {\n                        \"id\": 4,\n                        \"user_id\": 4,\n                        \"folder_id\": 4,\n                        \"folder_role_id\": 3,\n                        \"folder_role\": {\n                            \"id\": 3,\n                            \"name\": \"admin\"\n                        }\n                    }\n                ]\n            },\n            \"full_size\": \"not_loaded_data\",\n            \"latest_size\": \"not_loaded_data\",\n            \"file_versions\": [\n                {\n                    \"id\": 62,\n                    \"path\": \"https://drive.google.com/uc?id=11r8KO-IEb_acqwwI7Np5j__qBqGeYBIC\",\n                    \"name\": \"amgad photo\",\n                    \"extension\": \"image/jpeg\",\n                    \"size\": 143819,\n                    \"created_at\": \"2023-12-29T20:43:40.100Z\",\n                    \"user\": {\n                        \"id\": 3,\n                        \"email\": \"amgad@gmail.com\",\n                        \"name\": \"amgad alwattar\"\n                    }\n                },\n                {\n                    \"id\": 61,\n                    \"path\": \"https://drive.google.com/uc?id=1_rZIfz9yM6WfGjbyeDv3pt9RzKUL11Dl\",\n                    \"name\": \"amgad photo\",\n                    \"extension\": \"image/jpeg\",\n                    \"size\": 143819,\n                    \"created_at\": \"2023-12-29T20:37:32.366Z\",\n                    \"user\": {\n                        \"id\": 3,\n                        \"email\": \"amgad@gmail.com\",\n                        \"name\": \"amgad alwattar\"\n                    }\n                },\n                {\n                    \"id\": 60,\n                    \"path\": \"https://drive.google.com/uc?id=1FmflZYlMvzyux17IQOJBnGKp3pEIZ200\",\n                    \"name\": \"amgad photo\",\n                    \"extension\": \"image/jpeg\",\n                    \"size\": 30,\n                    \"created_at\": \"2023-12-29T16:32:34.248Z\",\n                    \"user\": {\n                        \"id\": 3,\n                        \"email\": \"amgad@gmail.com\",\n                        \"name\": \"amgad alwattar\"\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 37,\n            \"name\": \"amgad photo\",\n            \"extension\": \"video/mp4\",\n            \"status\": \"check_in\",\n            \"folder_id\": 4,\n            \"created_at\": \"2023-12-29T16:07:28.824Z\",\n            \"latest_path\": \"https://drive.google.com/uc?id=1wqssgnS7dVRITcxE6fhRSg1Oi5F-mt6x\",\n            \"last_modified\": \"2023-12-29T16:07:28.824Z\",\n            \"folder\": {\n                \"id\": 4,\n                \"name\": \"root folder\",\n                \"logo\": \"\",\n                \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n                \"folder_id\": null,\n                \"created_at\": \"2023-12-28T21:10:58.281Z\",\n                \"UserFolder\": [\n                    {\n                        \"id\": 4,\n                        \"user_id\": 4,\n                        \"folder_id\": 4,\n                        \"folder_role_id\": 3,\n                        \"folder_role\": {\n                            \"id\": 3,\n                            \"name\": \"admin\"\n                        }\n                    }\n                ]\n            },\n            \"full_size\": \"not_loaded_data\",\n            \"latest_size\": \"not_loaded_data\",\n            \"file_versions\": [\n                {\n                    \"id\": 58,\n                    \"path\": \"https://drive.google.com/uc?id=1wqssgnS7dVRITcxE6fhRSg1Oi5F-mt6x\",\n                    \"name\": \"amgad photo\",\n                    \"extension\": \"video/mp4\",\n                    \"size\": 50,\n                    \"created_at\": \"2023-12-29T16:07:28.824Z\",\n                    \"user\": {\n                        \"id\": 3,\n                        \"email\": \"amgad@gmail.com\",\n                        \"name\": \"amgad alwattar\"\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 36,\n            \"name\": \"amgad photo\",\n            \"extension\": \"image/jpeg\",\n            \"status\": \"check_in\",\n            \"folder_id\": 4,\n            \"created_at\": \"2023-12-29T16:07:14.515Z\",\n            \"latest_path\": \"https://drive.google.com/uc?id=1kLbBfd6GsqhmwWlxp-OzPj1XwQGRpGeX\",\n            \"last_modified\": \"2023-12-29T16:07:14.515Z\",\n            \"folder\": {\n                \"id\": 4,\n                \"name\": \"root folder\",\n                \"logo\": \"\",\n                \"driveFolderID\": \"1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw\",\n                \"folder_id\": null,\n                \"created_at\": \"2023-12-28T21:10:58.281Z\",\n                \"UserFolder\": [\n                    {\n                        \"id\": 4,\n                        \"user_id\": 4,\n                        \"folder_id\": 4,\n                        \"folder_role_id\": 3,\n                        \"folder_role\": {\n                            \"id\": 3,\n                            \"name\": \"admin\"\n                        }\n                    }\n                ]\n            },\n            \"full_size\": \"not_loaded_data\",\n            \"latest_size\": \"not_loaded_data\",\n            \"file_versions\": [\n                {\n                    \"id\": 59,\n                    \"path\": \"https://drive.google.com/uc?id=1Q9twUZJ33ElyNb95sohyfHX2m_sIaeYq\",\n                    \"name\": \"amgad photo\",\n                    \"extension\": \"image/jpeg\",\n                    \"size\": 11,\n                    \"created_at\": \"2023-12-29T16:08:02.643Z\",\n                    \"user\": {\n                        \"id\": 3,\n                        \"email\": \"amgad@gmail.com\",\n                        \"name\": \"amgad alwattar\"\n                    }\n                },\n                {\n                    \"id\": 57,\n                    \"path\": \"https://drive.google.com/uc?id=1kLbBfd6GsqhmwWlxp-OzPj1XwQGRpGeX\",\n                    \"name\": \"amgad photo\",\n                    \"extension\": \"image/jpeg\",\n                    \"size\": 10,\n                    \"created_at\": \"2023-12-29T16:07:14.515Z\",\n                    \"user\": {\n                        \"id\": 3,\n                        \"email\": \"amgad@gmail.com\",\n                        \"name\": \"amgad alwattar\"\n                    }\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
 					"name": "my-trash",
 					"request": {
 						"auth": {
