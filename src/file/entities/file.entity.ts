@@ -4,9 +4,10 @@ import { BaseFileEntity } from './base-file.entity';
 import { FolderWithMemberEntity } from 'src/folder/entities/folder-with-members.entity';
 import { FileStatisticWithUserEntity } from './file-statistic-with-user.entity';
 import { isArray } from 'class-validator';
+import { BaseFolderEntity } from 'src/folder/entities/base-folder.entity';
 
 export class FileEntity extends BaseFileEntity {
-  folder?: FolderWithMemberEntity;
+  folder?: FolderWithMemberEntity | BaseFolderEntity;
   file_versions: FileVersionEntity[];
   full_size: number | string;
   latest_size: number | string;
@@ -33,7 +34,12 @@ export class FileEntity extends BaseFileEntity {
       created_at,
       FileVersion,
     });
-    this.folder = Folder ? new FolderWithMemberEntity(Folder) : null;
+    //TODO must refactor this entity 
+    this.folder = Folder?.UserFolder?.user
+      ? new FolderWithMemberEntity(Folder)
+      : Folder
+      ? new BaseFolderEntity(Folder)
+      : null;
     this.full_size = full_size ?? 'not_loaded_data';
     if (latest_size != null) {
       this.latest_size = latest_size;
