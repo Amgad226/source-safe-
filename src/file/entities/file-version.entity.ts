@@ -11,13 +11,14 @@ export class FileVersionEntity extends BaseEntity {
 
   created_at: Date;
 
-  constructor({ id, path, name, extension, size, User }) {
+  constructor({ id, path, name, extension, size, created_at, User }) {
     super();
     this.id = id;
     this.path = path;
     this.name = name;
     this.extension = extension;
     this.size = size;
+    this.created_at = created_at;
     this.user = User ? new UserEntity(User) : null;
   }
 }
