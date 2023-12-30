@@ -32,7 +32,7 @@ export class FileEntity extends BaseFileEntity {
       created_at,
       FileVersion,
     });
-    this.folder = Folder ?? null;
+    this.folder = new FolderWithMemberEntity(Folder) ?? null;
     this.full_size = full_size ?? 'not_loaded_data';
     this.latest_size = latest_size ?? 'not_loaded_data';
     this.file_versions = collectDataBy(FileVersionEntity, FileVersion);
