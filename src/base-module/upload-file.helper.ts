@@ -84,7 +84,7 @@ async function saveFile(
     '..',
     'upload',
     directoryPath,
-  );
+  );  
   // Specify your desired directory
   if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);

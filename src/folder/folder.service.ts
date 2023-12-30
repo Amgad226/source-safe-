@@ -271,7 +271,6 @@ export class FolderService {
     dynamicStringQuery += `
     GROUP BY extension_group
   `;
-    log(dynamicStringQuery);
     const queryAsArrayString = [dynamicStringQuery];
     let query = Prisma.sql(queryAsArrayString);
     const result = await this.prisma.$queryRaw(query);

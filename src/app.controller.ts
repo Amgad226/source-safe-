@@ -22,7 +22,9 @@ export class AppController {
   @Get('host-name')
   hostName(@Headers() headers,@Req() req: Request) {
     const upstreamServerInfo = req.headers['x-server-info'];
-    return `Hello! Request received from ${upstreamServerInfo}.`;
+  console.log(__dirname);
+
+    return `Hello! Request received from client.`;
 
     return headers.host +'  ' + req.hostname; ;
   }
