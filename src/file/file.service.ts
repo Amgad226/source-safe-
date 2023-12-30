@@ -111,6 +111,7 @@ export class FileService {
               take: 1,
               include: {
                 folder_role: true,
+                user:true
               },
             },
           },
