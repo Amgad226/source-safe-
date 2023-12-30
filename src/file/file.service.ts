@@ -301,7 +301,6 @@ export class FileService {
   async deleteCheckIn(file_id: number, user: UserTokenPayloadType) {
     await this.prisma.checkIn.deleteMany({
       where: {
-        user_id: user.id,
         file_id,
       },
     });
