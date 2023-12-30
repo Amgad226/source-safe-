@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { AppService } from './app.service';
-import { Public } from '../decorators/public.decorators';
+import { Public } from './decorators/public.decorators';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { Request } from 'express';
 
