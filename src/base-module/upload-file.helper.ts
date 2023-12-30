@@ -119,7 +119,7 @@ async function saveFile(
 export async function deleteFile(oldLocalFilePath: string): Promise<void> {
   oldLocalFilePath = path.join(
     __dirname,
-    '../',
+    // '../',
     '../',
     '../',
     oldLocalFilePath,

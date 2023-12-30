@@ -22,6 +22,8 @@ export class UtilsAfterJob {
     private fileService:FileService) {}
 
   async updateFilePathAfterUpload(data: AfterUploadDataType, link: string) {
+    console.log('start updateFilePathAfterUpload');
+
     if ('fileVersionId' in data) {
       const fileVersion = await this.prisma.fileVersion.update({
         where: {
@@ -47,6 +49,8 @@ export class UtilsAfterJob {
   }
 
   async updateFolderLogoAfterUpload(data: AfterUploadDataType, link: string) {
+    console.log('start updateFolderLogoAfterUpload');
+
     if ('folderId' in data) {
       const Folder = await this.prisma.folder.update({
         where: { id: data.folderId },
@@ -66,6 +70,8 @@ export class UtilsAfterJob {
     data: AfterUploadDataType,
     driveFolderID: string,
   ) {
+    console.log('start updateDriveFolderIDAfterUpload');
+
     if ('folderId' in data) {
       const Folder = await this.prisma.folder.update({
         where: { id: data.folderId },

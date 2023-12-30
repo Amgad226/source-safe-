@@ -24,6 +24,7 @@ export class GoogleDriveConsumer {
       originalname: job.data.originalname,
       afterUpload: job.data.afterUpload,
     };
+    console.log('start @Process(upload-file)');
     const link = await this.googleDriveService.uploadFileToDrive(file);
     
     await deleteFile(file.localPath);
@@ -40,6 +41,8 @@ export class GoogleDriveConsumer {
       parentFolderId: job.data.parentFolderId,
       afterUpload: job.data.afterUpload,
     };
+    console.log('start @Process(create-folder)');
+
     const folderDriveLink = await this.googleDriveService.createFolder(folder);
     await this.utilsAfterJob[folder.afterUpload.functionCall](
       folder.afterUpload.data,
