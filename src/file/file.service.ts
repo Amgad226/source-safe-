@@ -337,10 +337,7 @@ export class FileService {
       },
     });
   }
-  update(id: number, updateFileDto: UpdateFileDto) {
-    return `This action updates a #${id} file`;
-  }
-
+  
   async remove(id: number) {
     await this.prisma.file.update({
       where: { id },

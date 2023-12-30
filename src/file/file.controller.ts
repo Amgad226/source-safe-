@@ -373,11 +373,6 @@ export class FileController extends BaseModuleController {
     });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
-    return this.fileService.update(+id, updateFileDto);
-  }
-
   @Delete(':id')
   async remove(
     @Param('id') id: string,
