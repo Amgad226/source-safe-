@@ -178,7 +178,9 @@ export class FolderService {
       JOIN files ON file_versions.file_id = files.id
       join folders  on files.folder_id=  folders.id 
       join users_folders on users_folders.folder_id=folders.id
+      join folder_roles on folder_roles.id = users_folders.folder_role_id 
       where files.deleted_at is null 
+      and folder_roles.name= 'admin'
       and users_folders.user_id =  ${user_id} 
   `;
     let dynamicStringQuery = stringQuery;
@@ -246,7 +248,9 @@ export class FolderService {
     ) AS file_versions_last_size ON files.id = file_versions_last_size.file_id
     join folders  on files.folder_id=  folders.id 
     join users_folders on users_folders.folder_id=folders.id
+    join folder_roles on folder_roles.id = users_folders.folder_role_id 
     where deleted_at is null and
+    and folder_roles.name= 'admin'
     users_folders.user_id =  ${user_id} 
 
     `;
