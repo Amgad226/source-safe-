@@ -39,10 +39,11 @@ export class GoogleDriveService {
     originalname, // the file name with his mime type
   }: FileProps): Promise<string> {
     log('uploadFileToDrive')
-    if (!fs.existsSync(localPath)) {
-      console.error(`File not found: ${localPath}`);
-      return; // or throw an error, depending on your error handling strategy
-    }
+    log(localPath)
+    // if (!fs.existsSync(localPath)) {
+    //   console.error(`File not found: ${localPath}`);
+    //   return; // or throw an error, depending on your error handling strategy
+    // }
     const fileBuffer = await fs.readFileSync(localPath);
 
     const fileMetadata = {
