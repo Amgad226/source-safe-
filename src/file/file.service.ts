@@ -120,7 +120,6 @@ export class FileService {
           },
         },
       },
-      orderBy: { created_at: 'desc' },
       take: 10,
     });
     return collectDataBy(FileEntity, files);
