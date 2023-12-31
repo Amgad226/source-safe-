@@ -73,13 +73,13 @@ export class FileController extends BaseModuleController {
     const storedFile: fileInterface = (
       await uploadToLocalDisk(file, createFileDto.name)
     )[0];
-    const fileDetails: FileProps = this.folderHelper.createFileDetailsObject(
-      "1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw",
-      storedFile,
-      UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
-      // data,
-    );
-    this.googleDriveService.uploadFileToDrive(fileDetails)
+    // const fileDetails: FileProps = this.folderHelper.createFileDetailsObject(
+    //   "1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw",
+    //   storedFile,
+    //   UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
+    //   // data,
+    // );
+    // this.googleDriveService.uploadFileToDrive(fileDetails)
     setTimeout(async() => {
       await deleteFile(storedFile.path);
     }, 2000);
