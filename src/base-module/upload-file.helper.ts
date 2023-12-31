@@ -119,12 +119,14 @@ async function saveFile(
 export async function deleteFile(oldLocalFilePath: string): Promise<void> {
   oldLocalFilePath = path.join(
     __dirname,
-    // '../',
+    '../',
     '../',
     '../',
     oldLocalFilePath,
   );
-  log(red('delete the local path :' + oldLocalFilePath));
+  log('delete this file:')
+  log(oldLocalFilePath)
+  // log(red('delete the local path :' + oldLocalFilePath));
 
   try {
     // Check if the file exists before attempting to delete

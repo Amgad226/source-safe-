@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { FileController } from './file.controller';
 import { FileService } from './file.service';
 import { MyConfigService } from 'src/my-config/my-config.service';
+import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { MyConfigService } from 'src/my-config/my-config.service';
     }),
   ],
   controllers: [FileController],
-  providers: [FileService, PrismaService, FolderHelperService,MyConfigService],
+  providers: [FileService, PrismaService, FolderHelperService,MyConfigService,GoogleDriveService],
 })
 export class FileModule {
   // configure(consumer: MiddlewareConsumer) {

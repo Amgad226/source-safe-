@@ -27,6 +27,7 @@ import {
   UserTokenPayloadType,
 } from 'src/base-module/token-payload-interface';
 import {
+  deleteFile,
   fileInterface,
   uploadToLocalDisk,
 } from 'src/base-module/upload-file.helper';
@@ -47,6 +48,7 @@ import { UpdateFileDto } from './dto/update-file.dto';
 import { FileStatusEnum } from './enums/file-status.enum';
 import { FileService } from './file.service';
 import { MultiCheckInDto } from './dto/multi-check-in.dto';
+import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 
 @Controller('file')
 export class FileController extends BaseModuleController {
@@ -55,10 +57,35 @@ export class FileController extends BaseModuleController {
     private folderHelper: FolderHelperService,
     private prisma: PrismaService,
     private myConfigService: MyConfigService,
+    private googleDriveService: GoogleDriveService,
+
     @InjectQueue('google-drive') private readonly googleDriveQueue: Queue,
   ) {
     super();
   }
+  @Post('create-delete')
+  @UseInterceptors(FileInterceptor('file'))
+  async createDelete(
+    @Body() createFileDto: CreateFileDto,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @UploadedFile() file,
+  ) {
+    const storedFile: fileInterface = (
+      await uploadToLocalDisk(file, createFileDto.name)
+    )[0];
+    const fileDetails: FileProps = this.folderHelper.createFileDetailsObject(
+      "1T_0BsIBtv4nywGDHAB2yQocw9RRhceUw",
+      storedFile,
+      UtilsAfterJobFunctionEnum.updateFilePathAfterUpload,
+      // data,
+    );
+    this.googleDriveService.uploadFileToDrive(fileDetails)
+    setTimeout(async() => {
+      await deleteFile(storedFile.path);
+    }, 2000);
+    return 'file create and must deleted '
+  }
+
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
