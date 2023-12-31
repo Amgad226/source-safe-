@@ -23,30 +23,30 @@ export class UtilsAfterJob {
 
   async updateFilePathAfterUpload(data: AfterUploadDataType, link: string) {
     console.log('start updateFilePathAfterUpload');
-return ;
+// return ;
 //FIXME
-    // if ('fileVersionId' in data) {
-    //   const fileVersion = await this.prisma.fileVersion.update({
-    //     where: {
-    //       id: data.fileVersionId,
-    //     },
-    //     data: {
-    //       path: link,
-    //     },
-    //   });
-    //   await this.fileService.fileChangeStatus(
-    //     fileVersion.file_id,
-    //     data.user,
-    //     FileStatusEnum.CHECKED_OUT,
-    //   );
-    // }
-    // else {
-    //     error(
-    //       red(
-    //         '$$$$$$$$$$$$$$$$$$$fileVersionId not found$$$$$$$$$$$$$$$$ UtilsAfterJob updateFilePathAfterUpload',
-    //       ),
-    //     );
-    //   }
+    if ('fileVersionId' in data) {
+      const fileVersion = await this.prisma.fileVersion.update({
+        where: {
+          id: data.fileVersionId,
+        },
+        data: {
+          path: link,
+        },
+      });
+      await this.fileService.fileChangeStatus(
+        fileVersion.file_id,
+        data.user,
+        FileStatusEnum.CHECKED_OUT,
+      );
+    }
+    else {
+        error(
+          red(
+            '$$$$$$$$$$$$$$$$$$$fileVersionId not found$$$$$$$$$$$$$$$$ UtilsAfterJob updateFilePathAfterUpload',
+          ),
+        );
+      }
   }
 
   async updateFolderLogoAfterUpload(data: AfterUploadDataType, link: string) {
