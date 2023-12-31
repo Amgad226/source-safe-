@@ -64,12 +64,14 @@ export class FileService {
       model: this.prisma.file,
       ...params,
       relations: {
+        orderBy: { created_at: 'desc' },
         where: {
           deleted_at: null,
           folder_id,
         },
         include: {
           FileVersion: {
+            orderBy: { created_at: 'desc' },
             include: {
               User: true,
             },
@@ -97,6 +99,7 @@ export class FileService {
           },
         },
       },
+      orderBy: { created_at: 'desc' },
       include: {
         FileVersion: {
           orderBy: { created_at: 'desc' },
@@ -111,7 +114,7 @@ export class FileService {
               take: 1,
               include: {
                 folder_role: true,
-                user:true
+                user: true,
               },
             },
           },
@@ -174,6 +177,7 @@ export class FileService {
       model: this.prisma.file,
       ...params,
       relations: {
+        orderBy: { created_at: 'desc' },
         where: {
           CheckIn: {
             some: {
@@ -183,6 +187,7 @@ export class FileService {
         },
         include: {
           FileVersion: {
+            orderBy: { created_at: 'desc' },
             include: {
               User: true,
             },
@@ -212,7 +217,10 @@ export class FileService {
         deleted_at: null,
       },
       include: {
-        FileVersion: { include: { User: true } },
+        FileVersion: {
+          orderBy: { created_at: 'desc' },
+          include: { User: true },
+        },
         Folder: true,
         FileStatistic: {
           take: 1,
