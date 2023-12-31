@@ -365,6 +365,19 @@ export class FolderService {
     if (userFolderExist == null) {
       throw new NotFoundException('user not in this group');
     } else {
+      const haveCheckInFiles = await this.prisma.checkIn.findFirst({
+        where:{
+          user_id:user_id,
+          File:{
+            folder_id:id
+          }
+        }
+      });
+      if(haveCheckInFiles!=null){
+      throw new BadRequestException('you cant remove user form user because he has check in files');
+
+      }
+
       await this.prisma.userFolder.delete({
         where: {
           id: userFolderExist.id,
