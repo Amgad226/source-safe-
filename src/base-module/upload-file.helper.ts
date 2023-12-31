@@ -109,8 +109,8 @@ async function saveFile(
       if (err) {
         reject(err);
       } else {
-        log(`file store in disk :` + green('/upload/' + fileName));
-        resolve(`upload\\${fileName}`);
+        log(`file store in disk :` + green(path.join('upload',fileName)));
+        resolve(path.join('upload',fileName));
       }
     });
   });
