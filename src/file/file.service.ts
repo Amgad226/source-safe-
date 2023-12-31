@@ -240,7 +240,12 @@ export class FileService {
     }, 0);
     file['latest_size'] =
       file.FileVersion[file.FileVersion.length - 1]?.size ?? 'not_found_data';
-
+      //TODO must remove this code and re fix them
+    if (file.FileStatistic.length > 0) {
+      if (file.FileStatistic[0].status == 'processing') {
+        file.FileStatistic[0].status = 'check_out';
+      }
+    }
     return new FileEntity(file);
   }
 
