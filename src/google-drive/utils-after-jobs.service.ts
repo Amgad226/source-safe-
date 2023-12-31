@@ -23,8 +23,7 @@ export class UtilsAfterJob {
 
   async updateFilePathAfterUpload(data: AfterUploadDataType, link: string) {
     console.log('start updateFilePathAfterUpload');
-// return ;
-//FIXME
+
     if ('fileVersionId' in data) {
       const fileVersion = await this.prisma.fileVersion.update({
         where: {
