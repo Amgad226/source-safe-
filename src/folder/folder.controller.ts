@@ -53,7 +53,7 @@ export class FolderController extends BaseModuleController {
     return this.successResponse({
       message: 'folder created successfully and will upload it to cloud ',
       status: 200,
-      data: await this.folderService.fileRequests(+id),
+      data:{data: await this.folderService.fileRequests(+id)},
     });
   }
 
