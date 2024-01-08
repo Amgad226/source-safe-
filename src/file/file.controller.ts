@@ -243,7 +243,7 @@ export class FileController extends BaseModuleController {
     });
   }
 
-  @Get(':id/request-handle')
+  @Post(':id/request-handle')
   async fileRequestHandle(
     @Param('id', ParseIntPipe) id: number,
     @TokenPayload() tokenPayload: TokenPayloadType,
