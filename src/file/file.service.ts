@@ -37,7 +37,7 @@ export class FileService {
   ) {
     const userExistsInFolder = await this.prisma.userFolder.findFirst({
       where: {
-        folder_id,
+        folder_id:+folder_id,
         user_id: tokenPayload.user.id,
       },
     });
