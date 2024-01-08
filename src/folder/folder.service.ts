@@ -22,11 +22,26 @@ import { FilterParams } from 'src/base-module/filter.interface';
 import { Sql } from '@prisma/client/runtime/library';
 import { isNumber } from 'class-validator';
 import { log } from 'console';
+import { collectDataBy } from 'src/base-module/base-entity';
+import { BaseFileEntity } from 'src/file/entities/base-file.entity';
+import { folderRequestsFileEntity } from 'src/file/entities/folderRequestsFileEntity';
 
 @Injectable()
 export class FolderService {
   constructor(private prisma: PrismaService) {}
 
+  async fileRequests(id: number) {
+    const files = await this.prisma.file.findMany({
+      where: {
+        folder_id: id,
+        // hide: true,
+      },
+      include: {
+        FileVersion: true,
+      },
+    });
+    return collectDataBy(folderRequestsFileEntity, files);
+  }
   async create(
     { name, parentFolderIdDb },
     logoLocalPath: string,
@@ -366,16 +381,17 @@ export class FolderService {
       throw new NotFoundException('user not in this group');
     } else {
       const haveCheckInFiles = await this.prisma.checkIn.findFirst({
-        where:{
-          user_id:user_id,
-          File:{
-            folder_id:id
-          }
-        }
+        where: {
+          user_id: user_id,
+          File: {
+            folder_id: id,
+          },
+        },
       });
-      if(haveCheckInFiles!=null){
-      throw new BadRequestException('you cant remove user form user because he has check in files');
-
+      if (haveCheckInFiles != null) {
+        throw new BadRequestException(
+          'you cant remove user form user because he has check in files',
+        );
       }
 
       await this.prisma.userFolder.delete({

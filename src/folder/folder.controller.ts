@@ -47,6 +47,16 @@ export class FolderController extends BaseModuleController {
   ) {
     super();
   }
+
+  @Get(':id/file-requests')
+  async fileRequests(@Param('id') id: number) {
+    return this.successResponse({
+      message: 'folder created successfully and will upload it to cloud ',
+      status: 200,
+      data: await this.folderService.fileRequests(+id),
+    });
+  }
+
   @Post()
   @UseInterceptors(FileInterceptor('logo'))
   async create(
@@ -122,9 +132,11 @@ export class FolderController extends BaseModuleController {
   async showStatistic(
     @Query('folder_id') id: string,
     @TokenPayload() tokenPayload: TokenPayloadType,
-
   ) {
-    const folder = await this.folderService.showStatistic(+id,tokenPayload.user.id);
+    const folder = await this.folderService.showStatistic(
+      +id,
+      tokenPayload.user.id,
+    );
     return this.successResponse({
       message: 'folder show statistic by files',
       status: 200,
@@ -135,16 +147,18 @@ export class FolderController extends BaseModuleController {
   async showStatisticIncludeVersions(
     @Query('folder_id') id: string,
     @TokenPayload() tokenPayload: TokenPayloadType,
-
   ) {
-    const folder = await this.folderService.showStatisticIncludeVersions(+id,tokenPayload.user.id);
+    const folder = await this.folderService.showStatisticIncludeVersions(
+      +id,
+      tokenPayload.user.id,
+    );
     return this.successResponse({
       message: 'folder show statistic by versions',
       status: 200,
       data: folder,
     });
   }
-  
+
   @Get(':id')
   async findOne(
     @TokenPayload() tokenPayload: TokenPayloadType,
@@ -158,8 +172,6 @@ export class FolderController extends BaseModuleController {
       data: folder,
     });
   }
-
-
 
   @Put(':id/add-users')
   async addUsers(
