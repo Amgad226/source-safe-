@@ -6,6 +6,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Patch,
   Post,
@@ -50,6 +51,7 @@ import { FileService } from './file.service';
 import { MultiCheckInDto } from './dto/multi-check-in.dto';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 import { CheckOutDto } from './dto/check-out.dto';
+import { RequestFileDto } from './dto/request-file.dto';
 
 @Controller('file')
 export class FileController extends BaseModuleController {
@@ -129,6 +131,7 @@ export class FileController extends BaseModuleController {
   @Get()
   async findAll(
     @Query('folder_id', ParseIntPipe) folder_id: number,
+    @Query('hide', ParseBoolPipe) hide: boolean,
     @TokenPayload() tokenPayload: TokenPayloadType,
     @FindAllParams() params: QueryParamsInterface,
   ) {
@@ -136,7 +139,7 @@ export class FileController extends BaseModuleController {
       tokenPayload.user,
       +folder_id,
     );
-    const files = await this.fileService.findAll(params, folder_id);
+    const files = await this.fileService.findAll(params, folder_id, hide);
     return this.successResponse({
       status: 200,
       message: 'files in this folder ',
@@ -233,6 +236,29 @@ export class FileController extends BaseModuleController {
     return this.successResponse({
       status: 200,
       message: 'retrieve file info',
+      data: file,
+    });
+  }
+
+  @Get(':id/request-handle')
+  async fileRequestHandle(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayload() tokenPayload: TokenPayloadType,
+    @Body() requestFileDto: RequestFileDto,
+  ) {
+    await this.folderHelper.checkIfHasFilePermission(
+      tokenPayload.user,
+      +id,
+      'admin',
+    );
+
+    const file = await this.fileService.fileRequestHandle(
+      +id,
+      requestFileDto.status,
+    );
+    return this.successResponse({
+      status: 200,
+      message: 'change file hide status ',
       data: file,
     });
   }
@@ -344,7 +370,7 @@ export class FileController extends BaseModuleController {
       +id,
       tokenPayload.user,
       storedFile,
-      checkOutDto.version_name
+      checkOutDto.version_name,
     );
     await this.fileService.fileChangeStatus(
       +id,

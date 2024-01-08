@@ -70,7 +70,7 @@ export class FileService {
     return new FileEntity(file_);
   }
 
-  async findAll(params: QueryParamsInterface, folder_id: number) {
+  async findAll(params: QueryParamsInterface, folder_id: number,hide:boolean) {
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
       ...params,
@@ -79,6 +79,7 @@ export class FileService {
         where: {
           deleted_at: null,
           folder_id,
+          hide: hide,
         },
         include: {
           FileVersion: {
@@ -219,12 +220,28 @@ export class FileService {
     });
     return new PaginatorEntity(FileEntity, files);
   }
-
+  async fileRequestHandle(file_id: number, status: boolean) {
+    if (status == true) {
+      await this.prisma.file.update({
+        where: {
+          id: file_id,
+        },
+        data: {
+          hide: false,
+        },
+      });
+    } else {
+      await this.prisma.file.delete({
+        where: { id: file_id },
+      });
+    }
+  }
   async findOne(id: number) {
     const file = await this.prisma.file.findFirst({
       where: {
         id,
         deleted_at: null,
+        hide: false,
       },
       include: {
         FileVersion: {
