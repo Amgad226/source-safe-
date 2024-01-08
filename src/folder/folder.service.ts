@@ -34,7 +34,7 @@ export class FolderService {
     const files = await this.prisma.file.findMany({
       where: {
         folder_id: id,
-        // hide: true,
+        hide: true,
       },
       include: {
         FileVersion: true,
