@@ -4,7 +4,8 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { Folder } from '@prisma/client';
+import { Folder, Prisma, PrismaClient } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { log } from 'console';
 import {
   UserTokenPayloadType
@@ -96,6 +97,7 @@ export class FolderHelperService {
         ...whereAdmin,
       },
     });
+    
     if (userExistsInFolder == null) {
       throw new UnauthorizedException(
         `unauthorize action , you do not have access for this folder: ${folder_id}`,

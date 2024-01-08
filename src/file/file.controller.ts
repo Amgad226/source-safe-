@@ -97,7 +97,7 @@ export class FileController extends BaseModuleController {
     await this.folderHelper.checkIfHasFolderPermission(
       tokenPayload.user,
       +createFileDto.folder_id,
-      'admin',
+      'user',
     );
 
     const storedFile: fileInterface = (

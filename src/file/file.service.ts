@@ -35,8 +35,19 @@ export class FileService {
     file: fileInterface,
     tokenPayload: TokenPayloadType,
   ) {
+    const userExistsInFolder = await this.prisma.userFolder.findFirst({
+      where: {
+        folder_id,
+        user_id: tokenPayload.user.id,
+      },
+    });
+    const FolderRole = await this.prisma.folderRole.findFirst({
+      where: { id: userExistsInFolder.folder_role_id },
+    });
+
     const file_ = await this.prisma.file.create({
       data: {
+        hide: FolderRole.name == 'user' ? true : false,
         extension: file.mimetype,
         name: name,
         folder_id: +folder_id,

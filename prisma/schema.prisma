@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -70,6 +70,7 @@ model File {
   folder_id     Int
   Folder        Folder          @relation(fields: [folder_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   deleted_at    DateTime?
+  hide          Boolean         @default(false)
   FileStatistic FileStatistic[]
   FileVersion   FileVersion[]
   CheckIn       CheckIn[]
