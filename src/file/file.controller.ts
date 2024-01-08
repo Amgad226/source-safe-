@@ -49,6 +49,7 @@ import { FileStatusEnum } from './enums/file-status.enum';
 import { FileService } from './file.service';
 import { MultiCheckInDto } from './dto/multi-check-in.dto';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
+import { CheckOutDto } from './dto/check-out.dto';
 
 @Controller('file')
 export class FileController extends BaseModuleController {
@@ -80,12 +81,11 @@ export class FileController extends BaseModuleController {
     //   // data,
     // );
     // this.googleDriveService.uploadFileToDrive(fileDetails)
-    setTimeout(async() => {
+    setTimeout(async () => {
       await deleteFile(storedFile.path);
     }, 2000);
-    return 'file create and must deleted '
+    return 'file create and must deleted ';
   }
-
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -143,12 +143,8 @@ export class FileController extends BaseModuleController {
       data: files,
     });
   }
-  
   @Get('recent-activities')
-  async recentActivities(
-    @TokenPayload() tokenPayload: TokenPayloadType,
-  ) {
- 
+  async recentActivities(@TokenPayload() tokenPayload: TokenPayloadType) {
     const files = await this.fileService.recentActivities(tokenPayload.user);
     return this.successResponse({
       status: 200,
@@ -319,6 +315,7 @@ export class FileController extends BaseModuleController {
     @Param('id', ParseIntPipe) id: number,
     @TokenPayload() tokenPayload: TokenPayloadType,
     @UploadedFile() uploadedFile,
+    @Body() checkOutDto: CheckOutDto,
   ) {
     console.log(uploadedFile);
     await this.folderHelper.checkIfHasFilePermission(tokenPayload.user, +id);
@@ -347,6 +344,7 @@ export class FileController extends BaseModuleController {
       +id,
       tokenPayload.user,
       storedFile,
+      checkOutDto.version_name
     );
     await this.fileService.fileChangeStatus(
       +id,
