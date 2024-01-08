@@ -70,7 +70,11 @@ export class FileService {
     return new FileEntity(file_);
   }
 
-  async findAll(params: QueryParamsInterface, folder_id: number,hide:boolean) {
+  async findAll(
+    params: QueryParamsInterface,
+    folder_id: number,
+    hide: boolean,
+  ) {
     const files = await PaginatorHelper<Prisma.FileFindManyArgs>({
       model: this.prisma.file,
       ...params,
@@ -100,7 +104,7 @@ export class FileService {
     });
     return new PaginatorEntity(FileEntity, files);
   }
-  async recentActivities(user: UserTokenPayloadType) {
+  async recentActivities(user: UserTokenPayloadType, limit: number) {
     const files = await this.prisma.file.findMany({
       where: {
         Folder: {
@@ -132,7 +136,7 @@ export class FileService {
           },
         },
       },
-      take: 10,
+      take: limit,
     });
     return collectDataBy(FileEntity, files);
   }
