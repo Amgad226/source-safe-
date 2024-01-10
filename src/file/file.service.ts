@@ -160,7 +160,7 @@ export class FileService {
           },
           Folder: {
             UserFolder: {
-              every: {
+              some: {
                 folder_role_id: admin_folder_role.id,
                 user_id: tokenPayload.user.id,
               },
