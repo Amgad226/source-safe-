@@ -31,6 +31,9 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+    console.log('');
+    console.log('Check token');
+    console.log('');
     if (isPublic) {
       return true;
     }
@@ -51,12 +54,12 @@ export class AuthGuard implements CanActivate {
           id: payload.user.id,
         },
       });
-      
+
       if (user == null) {
         throw new UnauthorizedException();
       }
-      payload.user =user 
-      request['user'] =payload;
+      payload.user = user;
+      request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
     }
