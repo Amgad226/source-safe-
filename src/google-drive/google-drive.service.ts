@@ -121,9 +121,10 @@ export class GoogleDriveService {
   private getShareableLink(fileId: string): string {
     log(
       blue(`uploaded to drive :`) +
-        green(`https://drive.google.com/uc?id=${fileId}`),
+        green(`https://lh3.googleusercontent.com/d/${fileId}`),
     );
-    return `https://drive.google.com/uc?id=${fileId}`;
+    return `https://lh3.googleusercontent.com/d/${fileId}`
+    // return `https://drive.google.com/uc?id=${fileId}`;
   }
   private getDownloadLink(link: string): string {
     return link + '&export=download';
