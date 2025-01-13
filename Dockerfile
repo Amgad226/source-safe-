@@ -20,12 +20,13 @@ RUN npm install
 COPY . .
 
 # Build the app to the /dist folder
-RUN npm run build
 
 # Generate Prisma client
 RUN npx prisma generate
 # Run Prisma migrations
-RUN npx prisma migrate 
+# RUN npx prisma migrate 
+
+RUN npm run build
 ################
 ## PRODUCTION ##
 ################

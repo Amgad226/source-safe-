@@ -23,13 +23,13 @@ services:
 
   api:
     build:
-      dockerfile: Dockerfile
+      # dockerfile: Dockerfile
       context: .
-      target: development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run start:debug
+      # target: production
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
+    command: npm run start:prod
     depends_on:
       - postgres
       - redis
