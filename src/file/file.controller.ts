@@ -5,6 +5,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseBoolPipe,
   ParseIntPipe,
@@ -172,16 +173,20 @@ export class FileController extends BaseModuleController {
 
   @Public()
   @Get('download')
-  async downloadLink(@Query('link') link: string) {
+  async downloadLink(@Query('link') link: string,@Headers('host') host: string) {
+    if(link.startsWith('https://lh3.googleusercontent.com/d/')){
+      const id = link.split('https://lh3.googleusercontent.com/d/')[1]
+      return `https://drive.google.com/uc?id=${id}&export=download`
+    }
     if (link.startsWith('https://drive.google.com/uc?id='))
       return link + '&export=download';
     else {
-      const host = this.myConfigService.get(EnvEnum.HOST);
-      if (!host) {
-        throw new BadRequestException('add host to env');
-      }
+      // const host = this.myConfigService.get(EnvEnum.HOST);
+      // if (!host) {
+      //   throw new BadRequestException('add host to env');
+      // }
       return signUrl(
-        `${this.myConfigService.get(EnvEnum.HOST)}/file/disk-download`,
+        `${host}/file/disk-download`,
         link,
         90,
       );
