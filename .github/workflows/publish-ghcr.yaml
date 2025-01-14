@@ -1,4 +1,4 @@
-name: DOcker image ci for GHRC 
+name: Docker Image CI for GHCR
 
 on:
   push:
@@ -8,12 +8,65 @@ on:
 
 jobs:
   build_and_publish:
-     name: build_and_publish
-     runs-on: ubuntu-latest
-     steps:
-      - uses : actions/checkout@v3
-      - name : Build and push the image 
-        run: | 
-            docker login ghcr.io --username Amgad226 --password ${{secrets.GH_PAT}} 
-            docker build . --tag ghcr.io/amgad226/source-safe:latest
-            docker push ghcr.io/amgad226/source-safe:latest  
+    name: Build and Publish Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GH_PAT }}" | docker login ghcr.io -u Amgad226 --password-stdin
+        shell: bash
+
+      - name: Build and Push Docker Image
+        run: |
+          set -e
+          docker build . -t ghcr.io/amgad226/source-safe:latest
+          docker push ghcr.io/amgad226/source-safe:latest
+        shell: bash
+      - name: Notify Completion
+        if: success()
+        run: echo "Deployment completed successfully."
+        shell: bash
+
+      - name: Handle Failure
+        if: failure()
+        run: echo "Deployment failed. Check logs for details."
+        shell: bash
+
+  run_pull:
+    name: Pull and Deploy on Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Pull Latest Changes and Deploy
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+          set -e
+          cd ${{ secrets.WORK_DIR }}
+          docker compose pull
+          docker compose up -d
+          EOF
+        shell: bash
+
+      - name: Cleanup SSH Key
+        run: |
+          rm -rf ~/.ssh
+        shell: bash
+
+      - name: Notify Completion
+        if: success()
+        run: echo "pull completed successfully."
+        shell: bash
+
+      - name: Handle Failure
+        if: failure()
+        run: echo "pull failed. Check logs for details."
+        shell: bash
