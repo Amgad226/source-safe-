@@ -30,8 +30,9 @@ export class AppController {
   }
 
   @Get()
-  getUserByToken(@TokenPayload() tokenPayload) {
-    return tokenPayload;
+  @Public()
+  getUserByToken() {
+    return "HEY FROM TS";
   }
 
   @Post('/upload')
