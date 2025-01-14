@@ -54,13 +54,10 @@ jobs:
           cd ${{ secrets.WORK_DIR }}
           docker compose pull
           docker compose up -d
+          docker image prune --filter "dangling=true"  -f
           EOF
         shell: bash
         
-      - name: Remove untagged image 
-        run: | 
-         docker image prune --filter "dangling=true"  -f
-
       - name: Cleanup SSH Key
         run: |
           rm -rf ~/.ssh
