@@ -35,6 +35,7 @@ jobs:
         shell: bash
 
   run_pull:
+    needs: build_and_publish
     name: Pull and Deploy on Server
     runs-on: ubuntu-latest
     steps:
