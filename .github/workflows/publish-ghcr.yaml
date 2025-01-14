@@ -56,6 +56,10 @@ jobs:
           docker compose up -d
           EOF
         shell: bash
+        
+      - name: Remove untagged image 
+        run: | 
+         docker image prune --filter "dangling=true"  -f
 
       - name: Cleanup SSH Key
         run: |
