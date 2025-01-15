@@ -13,7 +13,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ff3366;
+            background: linear-gradient(116deg, #e61c5f 3.55%, #e61c5f 62.84%, #e61c5f 97.84%);
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
@@ -36,13 +36,13 @@
         .logo {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #ff3366;
+            color: #e61c5f;
             margin-bottom: 20px;
             letter-spacing: 2px;
         }
 
         .logo span {
-            color: #e62e5c;
+            color: #e61c5f;
         }
 
         .button-container {
@@ -55,7 +55,7 @@
             font-size: 1rem;
             font-weight: bold;
             color: white;
-            background-color: #ff3366;
+            background-color: #e61c5f;
             border: none;
             border-radius: 5px;
             text-decoration: none;
@@ -64,12 +64,12 @@
         }
 
         .button:hover {
-            background-color: #e22453;
+            background-color: #b6174c;
         }
 
         #timer {
             font-size: 1rem;
-            color: #ff3366;
+            color: #e61c5f;
             margin-top: 10px;
             font-weight: bold;
         }
@@ -91,7 +91,7 @@
 
 <body>
     <div class="container">
-        <div class="logo">Source <span>Saf<span onclick="stopRedirect()">e</span></span></div>
+        <div class="logo">Source-<span>Saf<span onclick="stopRedirect()">e</span></span></div>
         <div class="button-container">
             <a href="https://source-safe-frontend.vercel.app" class="button">Go to Source Safe Frontend</a>
             <div id="timer">Redirecting in <span id="countdown">5</span> seconds...</div>
@@ -106,7 +106,7 @@
             timer.textContent = "Redirecting stopped!";
         }
 
-        let countdown = 5; // Timer starts at 5 seconds
+        let countdown = 5; 
         const countdownElement = document.getElementById('countdown');
 
         const interval = setInterval(() => {
@@ -115,10 +115,9 @@
 
             if (countdown === 0) {
                 clearInterval(interval);
-                // Redirect to the specified URL
                 window.location.href = 'https://source-safe-frontend.vercel.app';
             }
-        }, 1000); // Update every second
+        }, 1000); 
     </script>
 </body>
 
