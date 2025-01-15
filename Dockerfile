@@ -41,7 +41,14 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 
 # Copy all from development stage
-COPY --from=development /usr/src/app/ .
+# COPY --from=development /usr/src/app/ .
+
+COPY --from=development /usr/src/app/dist/ dist
+COPY --from=development /usr/src/app/prisma/ prisma
+COPY --from=development /usr/src/app/upload/ upload
+COPY --from=development /usr/src/app/public/ public
+COPY --from=development /usr/src/app/node_modules/ node_modules
+COPY --from=development /usr/src/app/package.json package.json
 
 EXPOSE 8080
 

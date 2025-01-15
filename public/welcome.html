@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./favicon.ico">
+    <title>Source Safe</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ff3366;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: #f6f6f6;
+            padding: 60px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeInScale 1s ease-in-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-10px) scale(1.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff3366;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #e62e5c;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #ff3366;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #e22453;
+        }
+
+        #timer {
+            font-size: 1rem;
+            color: #ff3366;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">Source <span>Saf<span onclick="stopRedirect()">e</span></span></div>
+        <div class="button-container">
+            <a href="https://source-safe-frontend.vercel.app" class="button">Go to Source Safe Frontend</a>
+            <div id="timer">Redirecting in <span id="countdown">5</span> seconds...</div>
+        </div>
+    </div>
+
+    <script>
+        function stopRedirect() {
+            clearInterval(interval);
+            const timer = document.getElementById('timer');
+            console.log("stop redirecting");
+            timer.textContent = "Redirecting stopped!";
+        }
+
+        let countdown = 5; // Timer starts at 5 seconds
+        const countdownElement = document.getElementById('countdown');
+
+        const interval = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+
+            if (countdown === 0) {
+                clearInterval(interval);
+                // Redirect to the specified URL
+                window.location.href = 'https://source-safe-frontend.vercel.app';
+            }
+        }, 1000); // Update every second
+    </script>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import {
   Headers,
   Post,
   Req,
+  Res,
   UseInterceptors,
 } from '@nestjs/common';
 
@@ -13,6 +14,8 @@ import { AppService } from './app.service';
 import { Public } from './decorators/public.decorators';
 import { TokenPayload } from 'src/decorators/user-decorator';
 import { Request } from 'express';
+import { Response } from 'express';
+import { join } from 'path';
 
 @Controller()
 export class AppController {
@@ -31,8 +34,8 @@ export class AppController {
 
   @Get()
   @Public()
-  getUserByToken() {
-    return "HEY FROM TS";
+  serveHtml(@Res() res: Response) {
+    res.sendFile(join(__dirname, '..',  '..', 'public', 'welcome.html'));
   }
 
   @Post('/upload')
